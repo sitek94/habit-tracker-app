@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
 
-function App() {
+import {
+  createMuiTheme,
+  CssBaseline,
+  MuiThemeProvider,
+} from '@material-ui/core';
+
+import Router from 'components/router';
+import ErrorBoundary from 'components/error-boundary';
+import LaunchScreen from 'components/launch-screen';
+import Navbar from 'components/navbar';
+
+const theme = createMuiTheme();
+
+const App = () => {
+  const [isReady, setIsReady] = useState(true);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+
+      <ErrorBoundary>
+        {!isReady && <LaunchScreen />}
+
+        {isReady && (
+          <>
+            <Router navbar={<Navbar />} />
+          </>
+        )}
+      </ErrorBoundary>
+    </MuiThemeProvider>
   );
-}
+};
 
 export default App;

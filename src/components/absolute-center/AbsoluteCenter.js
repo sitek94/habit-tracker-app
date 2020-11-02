@@ -1,19 +1,25 @@
+import PropTypes from 'prop-types';
+
 import { Box } from '@material-ui/core';
 
-const AbsoluteCenter = props => {
+const AbsoluteCenter = ({ fullWidth, ...rest }) => {
   return (
     <Box
       position="absolute"
-      width="100%"
+      width={fullWidth}
       top="50%"
       left="50%"
       style={{
         transform: "translate(-50%, -50%)"
       }}
       textAlign="center"
-      {...props}
+      {...rest}
     />
   );
 };
+
+AbsoluteCenter.propTypes = {
+  fullWidth: PropTypes.bool
+}
 
 export default AbsoluteCenter;

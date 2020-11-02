@@ -6,26 +6,35 @@ const EmptyState = ({
   type = 'page',
   size = 'medium',
   padding = 2,
+  image,
   title,
   description,
   button,
 }) => {
-  let variant;
+  let imageWidth, imageHeight, variant;
 
   switch (size) {
     case 'small':
+      imageWidth = 40;
+      imageHeight = 40;
       variant = 'h6';
       break;
 
     case 'medium':
+      imageWidth = 60;
+      imageHeight = 60;
       variant = 'h5';
       break;
 
     case 'large':
+      imageWidth = 100;
+      imageHeight = 100;
       variant = 'h4';
       break;
 
     default:
+      imageWidth = 60;
+      imageHeight = 60;
       variant = 'h5';
       break;
   }
@@ -39,6 +48,17 @@ const EmptyState = ({
         left="50%"
         textAlign="center"
       >
+        {image && (
+          <Box
+            clone
+            mb={title || description ? 2 : 0}
+            width={`${imageWidth}%`}
+            height={`${imageHeight}%`}
+          >
+            {image}
+          </Box>
+        )}
+
         {title && (
           <Box mb={!description && button ? 2 : 0}>
             <Typography variant={variant}>{title}</Typography>
@@ -82,6 +102,7 @@ EmptyState.propTypes = {
   size: PropTypes.string,
   padding: PropTypes.number,
 
+  image: PropTypes.element,
   title: PropTypes.string,
   description: PropTypes.string,
   button: PropTypes.element,

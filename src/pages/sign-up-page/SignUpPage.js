@@ -1,17 +1,19 @@
 import {
-  Avatar,
   Button,
-  TextField,
-  Link,
-  Grid,
-  Typography,
-  makeStyles,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
   Container,
-  CircularProgress,
+  Divider,
+  Grid,
+  Hidden,
+  makeStyles,
+  TextField
 } from '@material-ui/core';
-import { LockOutlined as LockIcon } from '@material-ui/icons';
-import { useState } from 'react';
-import axios from 'axios';
+import { FirebaseContext } from 'api/firebase-context';
+import AuthProviderList from 'components/auth-provider-list';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -41,278 +43,283 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   progress: {
     position: 'absolute',
   },
+  divider: {
+    margin: 'auto',
+  },
 }));
 
-const SignUp = () => {
+const SignUpPage = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  // First name
-  const [firstName, setFirstName] = useState('');
-  const handleFirstNameChange = e => setFirstName(e.target.value);
-
-  // Last name
-  const [lastName, setLastName] = useState('');
-  const handleLastNameChange = e => setLastName(e.target.value);
-
-  // Phone number
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const handlePhoneNumberChange = e => setPhoneNumber(e.target.value);
-
-  // Country
-  const [country, setCountry] = useState('');
-  const handleCountryChange = e => setCountry(e.target.value);
-
-  // Username
-  const [username, setUsername] = useState('');
-  const handleUsernameChange = e => setUsername(e.target.value);
-
   // Email
   const [email, setEmail] = useState('');
-  const handleEmailChange = e => setEmail(e.target.value);
+  const handleEmailAddressChange = e => setEmail(e.target.value);
+
+  const [emailConfirmation, setEmailConfirmation] = useState('');
+  const handleEmailConfirmationChange = e =>
+    setEmailConfirmation(e.target.value);
 
   // Password
   const [password, setPassword] = useState('');
   const handlePasswordChange = e => setPassword(e.target.value);
 
   // Confirm password
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const handleConfirmPasswordChange = e => setConfirmPassword(e.target.value);
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const handlePasswordConfirmationChange = e =>
+    setPasswordConfirmation(e.target.value);
 
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  /**
+   * ### TODO: Use validate.js to validate the fields before sending request
+   *
+   */
+  const { auth } = useContext(FirebaseContext);
 
-    setIsLoading(true);
-
-    const newUserData = {
-      firstName,
-      lastName,
-      phoneNumber,
-      country,
-      username,
-      email,
-      password,
-      confirmPassword,
-    };
-
+  const signUp = async () => {
     try {
-      const res = await axios.post('/signup', newUserData);
+      setErrors(null);
+      setIsLoading(true);
 
-      localStorage.setItem('AuthToken', `${res.data.token}`);
-      setIsLoading(false);
+      await auth.createUserWithEmailAndPassword(email, password);
 
-      history.push('/');
+      history.push('/protected');
     } catch (err) {
-      console.log('Error when signing up:', err);
-
-      setErrors(err.response.data);
+      /**
+       * ### TODO: Handle errors
+       *
+       * Display them as helper texts
+       */
+      console.log(err);
+    } finally {
       setIsLoading(false);
+
+      /**
+       * ### TODO: Reset fields after wrong try
+       *
+       */
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
+    <Container maxWidth="sm">
+      <Card raised>
+        <CardHeader title="Sign up for an account" />
 
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              {/* FIRST NAME */}
-              <TextField
-                type="text"
-                id="firstName"
-                name="firstName"
-                autoComplete="firstName"
-                label="First Name"
-                autoFocus
-                required
-                error={errors.firstName ? true : false}
-                helperText={errors.firstName}
-                onChange={handleFirstNameChange}
-                variant="outlined"
-                fullWidth
-              />
+        <Hidden xsDown>
+          <CardContent>
+            <Grid container direction="row">
+              <Grid item xs={4}>
+                <AuthProviderList
+                  onAuthProviderClick={() => console.log('TODO')}
+                />
+              </Grid>
+
+              <Grid item xs={1}>
+                <Divider className={classes.divider} orientation="vertical" />
+              </Grid>
+
+              <Grid item xs={7}>
+                <Grid container direction="column" spacing={2}>
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="email"
+                      // disabled={performingAction}
+                      error={!!(errors && errors.email)}
+                      fullWidth
+                      helperText={errors && errors.email ? errors.email[0] : ''}
+                      label="E-mail address"
+                      placeholder="john@doe.com"
+                      required
+                      type="email"
+                      value={email}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={handleEmailAddressChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="email"
+                      //  disabled={performingAction}
+                      error={!!(errors && errors.emailConfirmation)}
+                      fullWidth
+                      helperText={
+                        errors && errors.emailConfirmation
+                          ? errors.emailConfirmation[0]
+                          : ''
+                      }
+                      label="E-mail address confirmation"
+                      placeholder="john@doe.com"
+                      required
+                      type="email"
+                      value={emailConfirmation}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={handleEmailConfirmationChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="new-password"
+                      // disabled={performingAction}
+                      error={!!(errors && errors.password)}
+                      fullWidth
+                      helperText={
+                        errors && errors.password ? errors.password[0] : ''
+                      }
+                      label="Password"
+                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      required
+                      type="password"
+                      value={password}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={handlePasswordChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs>
+                    <TextField
+                      autoComplete="password"
+                      // disabled={performingAction}
+                      error={!!(errors && errors.passwordConfirmation)}
+                      fullWidth
+                      helperText={
+                        errors && errors.passwordConfirmation
+                          ? errors.passwordConfirmation[0]
+                          : ''
+                      }
+                      label="Password confirmation"
+                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      required
+                      type="password"
+                      value={passwordConfirmation}
+                      variant="outlined"
+                      InputLabelProps={{ required: false }}
+                      onChange={handlePasswordConfirmationChange}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
+          </CardContent>
+        </Hidden>
 
-            {/* LAST NAME */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                type="text"
-                id="lastName"
-                name="lastName"
-                autoComplete="lastName"
-                label="Last Name"
-                autoFocus
-                required
-                error={errors.lastName ? true : false}
-                helperText={errors.lastName}
-                onChange={handleLastNameChange}
-                variant="outlined"
-                fullWidth
-              />
+        <Hidden smUp>
+          <CardContent>
+            <AuthProviderList onAuthProviderClick={() => console.log('TODO')} />
+
+            <Grid container direction="column" spacing={2}>
+              <Grid item xs>
+                <TextField
+                  autoComplete="email"
+                  // disabled={performingAction}
+                  error={!!(errors && errors.email)}
+                  fullWidth
+                  helperText={errors && errors.email ? errors.email[0] : ''}
+                  label="E-mail address"
+                  placeholder="john@doe.com"
+                  required
+                  type="email"
+                  value={email}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={handleEmailAddressChange}
+                />
+              </Grid>
+
+              <Grid item xs>
+                <TextField
+                  autoComplete="email"
+                  //  disabled={performingAction}
+                  error={!!(errors && errors.emailConfirmation)}
+                  fullWidth
+                  helperText={
+                    errors && errors.emailConfirmation
+                      ? errors.emailConfirmation[0]
+                      : ''
+                  }
+                  label="E-mail address confirmation"
+                  placeholder="john@doe.com"
+                  required
+                  type="email"
+                  value={emailConfirmation}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={handleEmailConfirmationChange}
+                />
+              </Grid>
+
+              <Grid item xs>
+                <TextField
+                  autoComplete="new-password"
+                  // disabled={performingAction}
+                  error={!!(errors && errors.password)}
+                  fullWidth
+                  helperText={
+                    errors && errors.password ? errors.password[0] : ''
+                  }
+                  label="Password"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  required
+                  type="password"
+                  value={password}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={handlePasswordChange}
+                />
+              </Grid>
+
+              <Grid item xs>
+                <TextField
+                  autoComplete="password"
+                  // disabled={performingAction}
+                  error={!!(errors && errors.passwordConfirmation)}
+                  fullWidth
+                  helperText={
+                    errors && errors.passwordConfirmation
+                      ? errors.passwordConfirmation[0]
+                      : ''
+                  }
+                  label="Password confirmation"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  required
+                  type="password"
+                  value={passwordConfirmation}
+                  variant="outlined"
+                  InputLabelProps={{ required: false }}
+                  onChange={handlePasswordConfirmationChange}
+                />
+              </Grid>
             </Grid>
+          </CardContent>
+        </Hidden>
 
-            {/* USERNAME */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                type="text"
-                id="username"
-                name="username"
-                autoComplete="username"
-                label="Username"
-                autoFocus
-                required
-                error={errors.username ? true : false}
-                helperText={errors.username}
-                onChange={handleUsernameChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
-            {/* PHONE NUMBER */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
-                autoComplete="phoneNumber"
-                label="Phone Number"
-
-                // # TODO telephone number pattern
-                pattern="\d+"
-                autoFocus
-                required
-                error={errors.phoneNumber ? true : false}
-                helperText={errors.phoneNumber}
-                onChange={handlePhoneNumberChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
-            {/* EMAIL ADDRESS */}
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                id="email"
-                name="email"
-                autoComplete="email"
-                label="Email Address"
-                autoFocus
-                required
-                error={errors.email ? true : false}
-                helperText={errors.email}
-                onChange={handleEmailChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
-            {/* COUNTRY */}
-            <Grid item xs={12}>
-              <TextField
-                type="text"
-                id="country"
-                name="country"
-                autoComplete="country"
-                label="Country"
-                autoFocus
-                required
-                error={errors.country ? true : false}
-                helperText={errors.country}
-                onChange={handleCountryChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
-            {/* PASSWORD */}
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                id="password"
-                name="password"
-                autoComplete="current-password"
-                label="Password"
-                autoFocus
-                required
-                error={errors.password ? true : false}
-                helperText={errors.password}
-                onChange={handlePasswordChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-
-            {/* CONFIRM PASSWORD */}
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                autoComplete="current-password"
-                label="Confrim Password"
-                autoFocus
-                required
-                error={errors.confirmPassword ? true : false}
-                helperText={errors.confirmPassword}
-                onChange={handleConfirmPasswordChange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-          </Grid>
+        <CardActions>
           <Button
-            type="submit"
-            className={classes.submit}
-            onClick={handleSubmit}
+            style={{ marginLeft: 'auto' }}
             color="primary"
             variant="contained"
-            fullWidth
             disabled={
-              isLoading || [
-                firstName,
-                lastName,
-                phoneNumber,
-                country,
-                username,
-                email,
-                password,
-                confirmPassword,
-              ].some(i => !i)
+              isLoading ||
+              !email ||
+              !emailConfirmation ||
+              !password ||
+              !passwordConfirmation
             }
+            onClick={signUp}
           >
-            Sign Up
-            {isLoading && (
-              <CircularProgress size={30} className={classes.progress} />
-            )}
+            Sign up
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-          {errors.general && (
-            <Typography variant="body2" className={classes.customError}>
-              {errors.general}
-            </Typography>
-          )}
-        </form>
-      </div>
+        </CardActions>
+      </Card>
     </Container>
   );
 };
 
-export default SignUp;
+export default SignUpPage;

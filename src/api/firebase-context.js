@@ -7,7 +7,7 @@ export const FirebaseContext = createContext(null);
 
 // Provider
 export const FirebaseProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
 
   // Watch auth state change
   useEffect(() => {

@@ -70,7 +70,7 @@ const SignInPage = () => {
   const classes = useStyles();
 
   return (
-    <AbsoluteCenter>
+    <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
         <Card raised>
           <CardHeader title="Sign in to your account" />

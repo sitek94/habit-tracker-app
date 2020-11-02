@@ -85,7 +85,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <AbsoluteCenter>
+    <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
         <Card raised>
           <CardHeader title="Sign up for an account" />

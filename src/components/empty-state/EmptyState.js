@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 
 import { Box, Typography } from '@material-ui/core';
 
+import AbsoluteCenter from 'components/absolute-center';
+
 const EmptyState = ({
   type = 'page',
   size = 'medium',
@@ -41,13 +43,7 @@ const EmptyState = ({
 
   if (type === 'page') {
     return (
-      <Box
-        style={{ transform: 'translate(-50%, -50%)' }}
-        position="absolute"
-        top="50%"
-        left="50%"
-        textAlign="center"
-      >
+      <AbsoluteCenter>
         {image && (
           <Box
             clone
@@ -72,7 +68,7 @@ const EmptyState = ({
         )}
 
         {button && button}
-      </Box>
+      </AbsoluteCenter>
     );
   }
 

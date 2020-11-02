@@ -23,7 +23,7 @@ const AuthProviderButton = ({ color, ...rest }) => {
 const AuthProviderList = ({
   // Properties
   gutterBottom,
-  performingAction,
+  disabled,
 
   // Events
   onAuthProviderClick,
@@ -31,7 +31,7 @@ const AuthProviderList = ({
   return (
     <Box mb={gutterBottom ? 3 : 0}>
       <ButtonGroup
-        disabled={performingAction}
+        disabled={disabled}
         fullWidth
         orientation="vertical"
         variant="outlined"
@@ -53,13 +53,13 @@ const AuthProviderList = ({
 
 AuthProviderList.defaultProps = {
   gutterBottom: false,
-  performingAction: false,
+  disabled: false,
 };
 
 AuthProviderList.propTypes = {
   // Properties
   gutterBottom: PropTypes.bool,
-  performingAction: PropTypes.bool,
+  disabled: PropTypes.bool,
 
   // Events
   onAuthProviderClick: PropTypes.func.isRequired,

@@ -1,30 +1,15 @@
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-
-import { Link, useHistory } from 'react-router-dom';
-import { Button } from '@material-ui/core';
 import { useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
+import { AppBar, Box, Button, ButtonGroup, Toolbar, Typography } from '@material-ui/core';
+
 import { FirebaseContext } from 'api/firebase-context';
 
-const useStyles = makeStyles(theme => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
-
 const Navbar = () => {
-  const classes = useStyles();
-
   const history = useHistory();
   const { user, auth } = useContext(FirebaseContext);
 
   const handleLogoutClick = async () => {
-
     try {
       await auth.signOut();
 
@@ -33,15 +18,20 @@ const Navbar = () => {
     } catch (err) {
       console.log(err);
     }
-
-  }
+  };
 
   return (
-    <AppBar position="static">
+    <AppBar>
       <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          Habit tracker
-        </Typography>
+        <Box flexGrow={1}>
+          {user && <Typography variant="h6">Hello, {user.email}</Typography>}
+
+          {!user && (
+            <Button component={Link} to="/" color="inherit">
+              Habit Tracker
+            </Button>
+          )}
+        </Box>
 
         {user && (
           <Button color="inherit" onClick={handleLogoutClick}>
@@ -50,17 +40,16 @@ const Navbar = () => {
         )}
 
         {!user && (
-          <>
-            <Button color="inherit" component={Link} to="/login">
+          <ButtonGroup variant="outlined" color="inherit">
+            <Button component={Link} to="/signin">
               Login
             </Button>
 
-            <Button color="inherit" component={Link} to="/signup">
+            <Button component={Link} to="/signup">
               Sign up
             </Button>
-          </>
+          </ButtonGroup>
         )}
-
       </Toolbar>
     </AppBar>
   );

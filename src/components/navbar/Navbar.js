@@ -1,7 +1,14 @@
 import { useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { AppBar, Box, Button, ButtonGroup, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Box,
+  Button,
+  ButtonGroup,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 
 import { FirebaseContext } from 'api/firebase-context';
 
@@ -21,7 +28,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar>
+    <AppBar position="sticky">
       <Toolbar>
         <Box flexGrow={1}>
           {user && <Typography variant="h6">Hello, {user.email}</Typography>}
@@ -33,12 +40,6 @@ const Navbar = () => {
           )}
         </Box>
 
-        {user && (
-          <Button color="inherit" onClick={handleLogoutClick}>
-            Logout
-          </Button>
-        )}
-
         {!user && (
           <ButtonGroup variant="outlined" color="inherit">
             <Button component={Link} to="/signin">
@@ -49,6 +50,22 @@ const Navbar = () => {
               Sign up
             </Button>
           </ButtonGroup>
+        )}
+
+        {user && (
+          <>
+            <Button component={Link} to="/add-habit" color="inherit">
+              Create habit
+            </Button>
+
+            <Button component={Link} to="/habits" color="inherit">
+              All habits
+            </Button>
+
+            <Button color="inherit" onClick={handleLogoutClick}>
+              Logout
+            </Button>
+          </>
         )}
       </Toolbar>
     </AppBar>

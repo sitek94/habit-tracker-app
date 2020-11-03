@@ -17,7 +17,7 @@ export const FirebaseProvider = ({ children }) => {
   let firebase = {
     app,
     auth,
-    firestore,
+    db: firestore,
     user,
   }
 

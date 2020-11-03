@@ -6,7 +6,7 @@ const AbsoluteCenter = ({ fullWidth, ...rest }) => {
   return (
     <Box
       position="absolute"
-      width={fullWidth}
+      width={fullWidth ? "100%" : null}
       top="50%"
       left="50%"
       style={{

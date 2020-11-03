@@ -11,6 +11,7 @@ import ErrorBoundary from 'components/error-boundary';
 import LaunchScreen from 'components/launch-screen';
 import Navbar from 'components/navbar';
 import { FirebaseContext } from 'api/firebase-context';
+import Snackbar, { SnackbarProvider } from 'components/snackbar';
 
 const theme = createMuiTheme();
 
@@ -27,19 +28,48 @@ const App = () => {
     }
   }, [user]);
 
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    message: '',
+    severity: 'warning',
+  });
+  const openSnackbar = (severity, message) => {
+    setSnackbar({
+      isOpen: true,
+      message,
+      severity,
+    });
+  };
+  const closeSnackbar = () => {
+    setSnackbar({
+      isOpen: false,
+      message: '',
+      severity: 'info',
+    });
+  };
+
   return (
     <MuiThemeProvider theme={theme}>
-      <CssBaseline />
+      <SnackbarProvider openSnackbar={openSnackbar}>
+        <CssBaseline />
 
-      <ErrorBoundary>
-        {!isReady && <LaunchScreen />}
+        <ErrorBoundary>
+          {!isReady && <LaunchScreen />}
 
-        {isReady && (
-          <>
-            <Router navbar={<Navbar />} />
-          </>
-        )}
-      </ErrorBoundary>
+          {isReady && (
+            <>
+              <Router navbar={<Navbar />} />
+            </>
+          )}
+          <Snackbar
+            autoHideDuration={6000}
+            message={snackbar.message}
+            severity={snackbar.severity}
+            open={snackbar.isOpen}
+            onClose={closeSnackbar}
+          />
+        </ErrorBoundary>
+      </SnackbarProvider>
     </MuiThemeProvider>
   );
 };

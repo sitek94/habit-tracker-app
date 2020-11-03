@@ -11,9 +11,12 @@ import {
 import LandingPage from 'pages/landing-page';
 import SignInPage from 'pages/sign-in-page';
 import SignUpPage from 'pages/sign-up-page';
+import AddHabitPage from 'pages/add-habit-page';
 import NotFoundPage from 'pages/not-found-page';
 
 import { FirebaseContext } from 'api/firebase-context';
+import HabitsPage from 'pages/habits-page';
+import EditHabitPage from 'pages/edit-habit-page';
 
 const Router = ({ navbar }) => {
   const { user } = useContext(FirebaseContext);
@@ -37,6 +40,18 @@ const Router = ({ navbar }) => {
 
         <PrivateRoute exact path="/protected">
           <h1>Protected</h1>
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/add-habit">
+          <AddHabitPage />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/habits">
+          <HabitsPage />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/habits/:habitId">
+          <EditHabitPage />
         </PrivateRoute>
 
         <Route>

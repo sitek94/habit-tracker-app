@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 
 import EmptyState from "../empty-state";
 
+import { ReactComponent as BugFixing } from 'svgs/bug-fixing.svg';
+
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +45,7 @@ class ErrorBoundary extends Component {
     if (hasError) {
       return (
         <EmptyState
+          image={<BugFixing />}
           title="Something went wrong"
           description="The app failed to load"
         />

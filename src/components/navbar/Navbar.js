@@ -10,11 +10,12 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { FirebaseContext } from 'api/firebase-context';
+import { useFirebase } from 'api/firebase-context';
 
 const Navbar = () => {
   const history = useHistory();
-  const { user, auth } = useContext(FirebaseContext);
+
+  const { user, auth } = useFirebase();
 
   const handleLogoutClick = async () => {
     try {
@@ -54,11 +55,11 @@ const Navbar = () => {
 
         {user && (
           <>
-            <Button component={Link} to="/add-habit" color="inherit">
+            <Button component={Link} to="/dashboard/add-habit" color="inherit" replace>
               Create habit
             </Button>
 
-            <Button component={Link} to="/habits" color="inherit">
+            <Button component={Link} to="/dashboard/habits" color="inherit">
               All habits
             </Button>
 

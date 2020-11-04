@@ -17,12 +17,15 @@ import {
   TextField,
 } from '@material-ui/core';
 
-import { FirebaseContext } from 'api/firebase-context';
-
 import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 
+import { FirebaseContext } from 'api/firebase-context';
 import { SnackbarContext } from 'components/snackbar';
+
+import { useFormDays, useFormFields } from 'hooks';
+
+import daysOfTheWeek from 'data/days-of-the-week';
 
 const useStyles = makeStyles({
   actions: {
@@ -36,25 +39,6 @@ const useStyles = makeStyles({
   },
 });
 
-const dayNames = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
-const initialDays = {
-  Monday: false,
-  Tuesday: false,
-  Wednesday: false,
-  Thursday: false,
-  Friday: false,
-  Saturday: false,
-  Sunday: false,
-};
-
 const AddHabitPage = () => {
   const classes = useStyles();
 
@@ -64,35 +48,29 @@ const AddHabitPage = () => {
   const { db, user } = useContext(FirebaseContext);
   const { openSnackbar } = useContext(SnackbarContext);
 
-  // Title
-  const [title, setTitle] = useState('');
-  const handleTitleChange = e => setTitle(e.target.value);
-
-  // Description
-  const [description, setDescription] = useState('');
-  const handleDescriptionChange = e => setDescription(e.target.value);
+  // Title and Description
+  const [fields, handleFieldChange, resetFields] = useFormFields({
+    title: '',
+    description: '',
+  });
+  const { title, description } = fields;
 
   // Days
-  const [days, setDays] = useState(initialDays);
-
-  const toggleDay = day => {
-    setDays({ ...days, [day]: !days[day] });
-  };
-
-  const toggleAllDays = () => {
-    const toggledDays = {};
-    dayNames.forEach(day => (toggledDays[day] = !days[day]));
-    setDays(toggledDays);
-  };
-
-  const validateDays = () => Object.values(days).some(Boolean);
+  const {
+    days,
+    toggleDay,
+    toggleAllDays,
+    resetDays,
+    validateDays,
+  } = useFormDays(daysOfTheWeek);
 
   // Add new habit
   const addHabit = async () => {
     setIsLoading(true);
 
     try {
-      const trackedDays = dayNames.filter(day => days[day]);
+      const trackedDays = days.filter(d => d.checked).map(d => d.day);
+      console.log(trackedDays);
 
       const newHabit = {
         uid: user.uid,
@@ -112,9 +90,8 @@ const AddHabitPage = () => {
     } finally {
       setIsLoading(false);
 
-      setTitle('');
-      setDescription('');
-      setDays(initialDays);
+      resetFields();
+      resetDays();
     }
   };
 
@@ -144,12 +121,13 @@ const AddHabitPage = () => {
             <Grid container direction="column" spacing={2}>
               <Grid item xs>
                 <TextField
+                  id="title"
                   label="Title"
                   placeholder="Make your bed"
                   variant="outlined"
                   InputLabelProps={{ required: true }}
                   value={title}
-                  onChange={handleTitleChange}
+                  onChange={handleFieldChange}
                   disabled={isLoading}
                   fullWidth
                 />
@@ -157,12 +135,13 @@ const AddHabitPage = () => {
 
               <Grid item xs>
                 <TextField
+                  id="description"
                   label="Description (optional)"
                   placeholder="First thing in the morning, right after getting out of the bed"
                   variant="outlined"
                   InputLabelProps={{ required: false }}
                   value={description}
-                  onChange={handleDescriptionChange}
+                  onChange={handleFieldChange}
                   disabled={isLoading}
                   fullWidth
                 />
@@ -181,15 +160,15 @@ const AddHabitPage = () => {
                     Frequency
                   </FormLabel>
                   <FormGroup row>
-                    {dayNames.map(day => (
+                    {days.map(({ id, day, checked}) => (
                       <FormControlLabel
-                        key={day}
+                        key={id}
                         label={day.slice(0, 3)}
                         labelPlacement="bottom"
                         control={
                           <Checkbox
-                            checked={days[day]}
-                            onChange={() => toggleDay(day)}
+                            checked={checked}
+                            onChange={() => toggleDay(id)}
                           />
                         }
                       />

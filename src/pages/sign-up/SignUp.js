@@ -11,7 +11,7 @@ import {
   makeStyles,
   TextField,
 } from '@material-ui/core';
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 import AuthProviderList from 'components/auth-provider-list';
 import AbsoluteCenter from 'components/absolute-center';
 import { useContext, useState } from 'react';

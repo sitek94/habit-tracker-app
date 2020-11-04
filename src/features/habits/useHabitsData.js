@@ -1,4 +1,4 @@
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 import { useEffect, useState } from 'react';
 
 function useHabitsData() {

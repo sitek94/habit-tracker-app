@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 
 const Navbar = () => {
   const history = useHistory();

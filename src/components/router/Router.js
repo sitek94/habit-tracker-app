@@ -13,7 +13,7 @@ import SignUpPage from 'pages/sign-up';
 import NotFoundPage from 'pages/not-found';
 import DashboardPage from 'pages/dashboard';
 
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 import ErrorPage from 'pages/error';
 
 const Router = ({ navbar }) => {

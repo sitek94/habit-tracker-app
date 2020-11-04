@@ -20,7 +20,7 @@ import {
 import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 import { SnackbarContext } from 'components/snackbar';
 
 import { useFormDays, useFormFields } from 'hooks';

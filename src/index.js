@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { FirebaseProvider } from 'api/firebase-context';
+import { FirebaseProvider } from 'features/firebase';
 
 ReactDOM.render(
   <FirebaseProvider>

@@ -1,6 +1,6 @@
 import SignUpPage from './SignUp';
 import { render, screen } from '@testing-library/react';
-import { FirebaseProvider } from 'api/firebase-context';
+import { FirebaseProvider } from 'features/firebase';
 
 it('renders without crashing', () => {
   render(

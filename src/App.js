@@ -13,7 +13,7 @@ import Navbar from 'components/navbar';
 
 import Snackbar, { SnackbarProvider } from 'components/snackbar';
 
-import { useFirebase } from 'api/firebase-context';
+import { useFirebase } from 'features/firebase';
 
 const theme = createMuiTheme();
 

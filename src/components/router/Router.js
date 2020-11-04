@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
 
 import {
   BrowserRouter,
@@ -9,17 +8,16 @@ import {
 } from 'react-router-dom';
 
 import LandingPage from 'pages/landing-page';
-import SignInPage from 'pages/sign-in-page';
-import SignUpPage from 'pages/sign-up-page';
-import AddHabitPage from 'pages/add-habit-page';
-import NotFoundPage from 'pages/not-found-page';
+import SignInPage from 'pages/sign-in';
+import SignUpPage from 'pages/sign-up';
+import NotFoundPage from 'pages/not-found';
+import DashboardPage from 'pages/dashboard';
 
-import { FirebaseContext } from 'api/firebase-context';
-import HabitsPage from 'pages/habits-page';
-import EditHabitPage from 'pages/edit-habit-page';
+import { useFirebase } from 'api/firebase-context';
+import ErrorPage from 'pages/error';
 
 const Router = ({ navbar }) => {
-  const { user } = useContext(FirebaseContext);
+  const { user } = useFirebase();
 
   return (
     <BrowserRouter>
@@ -31,28 +29,20 @@ const Router = ({ navbar }) => {
         </Route>
 
         <Route exact path="/signin">
-          {user ? <Redirect to="/protected" /> : <SignInPage />}
+          {user ? <Redirect to="/dashboard" /> : <SignInPage />}
         </Route>
 
         <Route exact path="/signup">
-          <SignUpPage open={true} />
+          <SignUpPage />
         </Route>
 
-        <PrivateRoute exact path="/protected">
-          <h1>Protected</h1>
+        <PrivateRoute path="/dashboard">
+          <DashboardPage />
         </PrivateRoute>
 
-        <PrivateRoute exact path="/add-habit">
-          <AddHabitPage />
-        </PrivateRoute>
-
-        <PrivateRoute exact path="/habits">
-          <HabitsPage />
-        </PrivateRoute>
-
-        <PrivateRoute exact path="/habits/:habitId">
-          <EditHabitPage />
-        </PrivateRoute>
+        <Route exact path="/error">
+          <ErrorPage />
+        </Route>
 
         <Route>
           <NotFoundPage />
@@ -66,11 +56,8 @@ Router.propTypes = {
   user: PropTypes.object,
 };
 
-
-
-
 function PrivateRoute({ children, ...rest }) {
-  const { user } = useContext(FirebaseContext);
+  const { user } = useFirebase();
 
   return (
     <Route

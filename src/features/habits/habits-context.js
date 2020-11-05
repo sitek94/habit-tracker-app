@@ -8,19 +8,13 @@ const HabitsContext = createContext();
 
 const HabitsProvider = ({ children }) => {
   const [habits, isLoading, isError] = useHabitsData();
-
-  const state = {
-    habits,
-    isLoading,
-    isError,
-  }
   
   if (isLoading) return <LaunchScreen />
 
   if (isError) return <Redirect to="/error" />
 
   return (
-    <HabitsContext.Provider value={state}>{children}</HabitsContext.Provider>
+    <HabitsContext.Provider value={habits}>{children}</HabitsContext.Provider>
   );
 };
 

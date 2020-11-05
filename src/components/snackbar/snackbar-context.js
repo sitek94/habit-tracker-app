@@ -1,8 +1,8 @@
-const { createContext } = require('react');
+const { createContext, useContext } = require('react');
 
-export const SnackbarContext = createContext();
+const SnackbarContext = createContext();
 
-export const SnackbarProvider = ({ children, openSnackbar }) => {
+const SnackbarProvider = ({ children, openSnackbar }) => {
   const value = {
     openSnackbar
   }
@@ -13,3 +13,15 @@ export const SnackbarProvider = ({ children, openSnackbar }) => {
     </SnackbarContext.Provider>
   )
 }
+
+function useSnackbar() {
+  const context = useContext(SnackbarContext);
+
+  if (context === undefined) {
+    throw new Error('useSnackbar must be used within HabitsProvider');
+  }
+
+  return context;
+}
+
+export { SnackbarProvider, useSnackbar };

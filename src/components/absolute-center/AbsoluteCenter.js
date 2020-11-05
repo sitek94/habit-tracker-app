@@ -12,7 +12,6 @@ const AbsoluteCenter = ({ fullWidth, ...rest }) => {
       style={{
         transform: "translate(-50%, -50%)"
       }}
-      textAlign="center"
       {...rest}
     />
   );

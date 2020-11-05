@@ -21,7 +21,7 @@ import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 
 import { useFirebase } from 'features/firebase';
-import { SnackbarContext } from 'components/snackbar';
+import { useSnackbar } from 'components/snackbar';
 
 import { useFormDays, useFormFields } from 'hooks';
 
@@ -46,7 +46,7 @@ const AddHabitPage = () => {
 
   // Contexts
   const { db, user } = useFirebase();
-  const { openSnackbar } = useContext(SnackbarContext);
+  const { openSnackbar } = useSnackbar();
 
   // Title and Description
   const [fields, handleFieldChange, resetFields] = useFormFields({

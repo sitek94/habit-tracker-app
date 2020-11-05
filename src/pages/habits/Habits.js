@@ -46,7 +46,7 @@ const HabitItem = ({ habit: { id, title, description } }) => {
 };
 
 const HabitsPage = () => {
-  const { habits } = useHabits();
+  const habits = useHabits();
 
   return (
     <List>

@@ -1,5 +1,6 @@
-import { useFirebase } from 'features/firebase';
 import { useEffect, useState } from 'react';
+
+import { useFirebase } from 'features/firebase';
 
 function useHabitsData() {
   const [habits, setHabits] = useState([]);

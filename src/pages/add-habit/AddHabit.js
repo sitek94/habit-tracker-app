@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
   Grid,
   makeStyles,
@@ -23,9 +24,11 @@ import ButtonProgress from 'components/button-progress';
 import { useFirebase } from 'features/firebase';
 import { useSnackbar } from 'components/snackbar';
 
-import { useFormDays, useFormFields } from 'hooks';
+import { daysOfTheWeek } from 'data/days-of-the-week';
 
-import daysOfTheWeek from 'data/days-of-the-week';
+import { useForm } from 'react-hook-form';
+
+import { yupResolver, newHabitSchema } from 'libraries/yup';
 
 const useStyles = makeStyles({
   actions: {
@@ -33,9 +36,8 @@ const useStyles = makeStyles({
   },
   formLabel: {
     cursor: 'pointer',
-  },
-  helperText: {
-    textAlign: 'center',
+    // 14px is a value taken from .MuiOutlinedInput-input
+    padding: '0 14px',
   },
 });
 
@@ -48,34 +50,24 @@ const AddHabitPage = () => {
   const { db, user } = useFirebase();
   const { openSnackbar } = useSnackbar();
 
-  // Title and Description
-  const [fields, handleFieldChange, resetFields] = useFormFields({
-    title: '',
-    description: '',
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(newHabitSchema),
   });
-  const { title, description } = fields;
 
-  // Days
-  const {
-    days,
-    toggleDay,
-    toggleAllDays,
-    resetDays,
-    validateDays,
-  } = useFormDays(daysOfTheWeek);
+  const onSubmit = data => {
+    addHabit(data);
+  };
 
-  // Add new habit
-  const addHabit = async () => {
+  //Add new habit
+  const addHabit = async ({ title, description, trackedDays }) => {
     setIsLoading(true);
 
     try {
-      // const trackedDays = days.filter(d => d.checked).map(d => d.id);
-
       const newHabit = {
         uid: user.uid,
         title,
         description,
-        trackedDays: days,
+        trackedDays,
         createdAt: new Date().toISOString(),
       };
 
@@ -88,45 +80,28 @@ const AddHabitPage = () => {
       openSnackbar('error', 'Something went wrong when adding the habit.');
     } finally {
       setIsLoading(false);
-
-      resetFields();
-      resetDays();
-    }
-  };
-
-  // Key down handler
-  const handleKeyDown = ({ key, altKey, ctrlKey, metaKey, shiftKey }) => {
-    if (!title || !validateDays()) {
-      return;
-    }
-
-    if (altKey || ctrlKey || metaKey || shiftKey) {
-      return;
-    }
-
-    if (key === 'Enter') {
-      console.log('added habit');
-      addHabit();
     }
   };
 
   return (
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
-        <Card raised onKeyDown={handleKeyDown}>
+        <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
           <CardHeader title="Create a new habit" />
 
           <CardContent>
             <Grid container direction="column" spacing={2}>
               <Grid item xs>
                 <TextField
-                  id="title"
+                  inputRef={register}
+                  name="title"
                   label="Title"
                   placeholder="Make your bed"
+                  error={!!(errors && errors.title)}
+                  helperText={
+                    errors && errors.title ? errors.title.message : ' '
+                  }
                   variant="outlined"
-                  InputLabelProps={{ required: true }}
-                  value={title}
-                  onChange={handleFieldChange}
                   disabled={isLoading}
                   fullWidth
                 />
@@ -134,13 +109,11 @@ const AddHabitPage = () => {
 
               <Grid item xs>
                 <TextField
-                  id="description"
+                  inputRef={register}
+                  name="description"
                   label="Description (optional)"
                   placeholder="First thing in the morning, right after getting out of the bed"
                   variant="outlined"
-                  InputLabelProps={{ required: false }}
-                  value={description}
-                  onChange={handleFieldChange}
                   disabled={isLoading}
                   fullWidth
                 />
@@ -150,29 +123,32 @@ const AddHabitPage = () => {
                 <FormControl
                   component="fieldset"
                   className={classes.formControl}
+                  error={!!(errors && errors.trackedDays)}
                 >
-                  <FormLabel
-                    component="legend"
-                    className={classes.formLabel}
-                    onClick={toggleAllDays}
-                  >
+                  <FormLabel component="legend" className={classes.formLabel}>
                     Frequency
                   </FormLabel>
                   <FormGroup row>
-                    {days.map(({ id, day, checked}) => (
+                    {daysOfTheWeek.map((day, i) => (
                       <FormControlLabel
-                        key={id}
+                        key={day}
                         label={day.slice(0, 3)}
                         labelPlacement="bottom"
                         control={
                           <Checkbox
-                            checked={checked}
-                            onChange={() => toggleDay(id)}
+                            inputRef={register}
+                            name="trackedDays"
+                            value={day}
                           />
                         }
                       />
                     ))}
                   </FormGroup>
+                  <FormHelperText>
+                    {errors && errors.trackedDays
+                      ? errors.trackedDays.message
+                      : ' '}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>
@@ -180,10 +156,10 @@ const AddHabitPage = () => {
 
           <CardActions className={classes.actions}>
             <Button
+              type="submit"
               color="primary"
               variant="contained"
-              disabled={isLoading || !title || !validateDays()}
-              onClick={addHabit}
+              disabled={isLoading}
             >
               Add habit
               {isLoading && <ButtonProgress />}

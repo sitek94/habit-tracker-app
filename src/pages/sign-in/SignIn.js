@@ -60,6 +60,8 @@ const SignInPage = () => {
 
       history.push('/dashboard');
     } catch ({ code, message }) {
+      setIsLoading(false);
+
       switch (code) {
         case 'auth/invalid-email':
         case 'auth/user-disabled':
@@ -72,8 +74,6 @@ const SignInPage = () => {
           openSnackbar('error', message);
           return;
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -7,14 +7,14 @@ import useHabitsData from './useHabitsData';
 const HabitsContext = createContext();
 
 const HabitsProvider = ({ children }) => {
-  const [habits, isLoading, isError] = useHabitsData();
+  const [{habits, isLoading, isError}, setHabits] = useHabitsData();
   
   if (isLoading) return <LaunchScreen />
 
   if (isError) return <Redirect to="/error" />
 
   return (
-    <HabitsContext.Provider value={habits}>{children}</HabitsContext.Provider>
+    <HabitsContext.Provider value={{ habits, setHabits }}>{children}</HabitsContext.Provider>
   );
 };
 

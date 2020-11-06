@@ -1,15 +1,40 @@
-const { createContext, useContext } = require('react');
+import { createContext, useContext, useRef, useState } from 'react';
+
+import Snackbar from './Snackbar';
 
 const SnackbarContext = createContext();
 
-const SnackbarProvider = ({ children, openSnackbar }) => {
-  const value = {
-    openSnackbar
-  }
+const defaultSeverity = 'info';
+
+const SnackbarProvider = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState(defaultSeverity);
+  
+  const openSnackbar = (severity, message) => {
+    setIsOpen(true);
+    setSeverity(severity);
+    setMessage(message);
+  };
+
+  const closeSnackbar = () => {
+    setIsOpen(false);
+    setSeverity(defaultSeverity);
+    setMessage(message);
+  };
+
+  const contextValue = useRef({ openSnackbar })
 
   return (
-    <SnackbarContext.Provider value={value}>
+    <SnackbarContext.Provider value={contextValue.current}>
       {children}
+      <Snackbar
+        autoHideDuration={2000}
+        message={message}
+        severity={severity}
+        open={isOpen}
+        onClose={closeSnackbar}
+      />
     </SnackbarContext.Provider>
   )
 }

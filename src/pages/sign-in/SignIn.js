@@ -21,16 +21,16 @@ import ButtonProgress from 'components/button-progress';
 import AbsoluteCenter from 'components/absolute-center';
 import { useSnackbar } from 'components/snackbar';
 import { useFirebase } from 'features/firebase';
-import { yupResolver, userSchema } from 'libraries/yup';
+import { yupResolver, signInSchema } from 'libraries/yup';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   actions: {
     justifyContent: 'flex-end',
   },
   divider: {
     margin: 'auto',
   },
-}));
+});
 
 const SignInPage = () => {
   const history = useHistory();
@@ -41,7 +41,7 @@ const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, errors, reset } = useForm({
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(signInSchema),
   });
 
   const onSubmit = data => {
@@ -57,17 +57,14 @@ const SignInPage = () => {
       await auth.signInWithEmailAndPassword(email, password);
 
       openSnackbar('success', 'Logged in successfully!');
-      setIsLoading(false);
 
       history.push('/dashboard');
     } catch ({ code, message }) {
-      setIsLoading(false);
-
       switch (code) {
-        case "auth/invalid-email":
-        case "auth/user-disabled":
-        case "auth/user-not-found":
-        case "auth/wrong-password":
+        case 'auth/invalid-email':
+        case 'auth/user-disabled':
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
           openSnackbar('error', message);
           return;
 
@@ -75,6 +72,8 @@ const SignInPage = () => {
           openSnackbar('error', message);
           return;
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 

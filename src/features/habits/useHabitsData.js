@@ -21,18 +21,18 @@ function useHabitsData() {
         const snapshot = await habitsRef.where('uid', '==', user.uid).get();
 
         if (snapshot.empty) {
-          console.log('No matching documents.');
+          console.log(`User doesn't have any habits yet.`);
           return;
         }
 
         let fetchedHabits = [];
 
         snapshot.forEach(doc => {
-          const { uid, ...habit } = doc.data();
+          const habit = doc.data();
 
           fetchedHabits.push({
             id: doc.id,
-            ...habit,
+            ...habit
           });
         });
 
@@ -57,7 +57,7 @@ function useHabitsData() {
     }
   }, [db, user]);
 
-  return [habits, isLoading, isError];
+  return [{ habits, isLoading, isError }, setHabits];
 }
 
 export default useHabitsData;

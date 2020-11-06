@@ -23,11 +23,9 @@ import ButtonProgress from 'components/button-progress';
 
 import { useFirebase } from 'features/firebase';
 import { useSnackbar } from 'components/snackbar';
-
+import { useHabits } from 'features/habits';
 import { daysOfTheWeek } from 'data/days-of-the-week';
-
-import { useForm } from 'react-hook-form';
-
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver, newHabitSchema } from 'libraries/yup';
 
 const useStyles = makeStyles({
@@ -41,6 +39,12 @@ const useStyles = makeStyles({
   },
 });
 
+const defaultHabit = {
+  title: '',
+  description: '',
+  trackedDays: [],
+};
+
 const AddHabitPage = () => {
   const classes = useStyles();
 
@@ -49,13 +53,29 @@ const AddHabitPage = () => {
   // Contexts
   const { db, user } = useFirebase();
   const { openSnackbar } = useSnackbar();
+  const { habits, setHabits } = useHabits();
 
-  const { register, handleSubmit, errors } = useForm({
-    resolver: yupResolver(newHabitSchema),
-  });
+  const { control, register, handleSubmit, errors, getValues, reset } = useForm(
+    {
+      defaultValues: defaultHabit,
+      resolver: yupResolver(newHabitSchema),
+    }
+  );
+
+  const handleCheck = checkedDay => {
+    const { trackedDays: days } = getValues();
+
+    const newDays = days?.includes(checkedDay)
+      ? days?.filter(day => day !== checkedDay)
+      : [...(days ?? []), checkedDay];
+
+    return newDays;
+  };
 
   const onSubmit = data => {
     addHabit(data);
+
+    reset(defaultHabit);
   };
 
   //Add new habit
@@ -71,7 +91,17 @@ const AddHabitPage = () => {
         createdAt: new Date().toISOString(),
       };
 
-      await db.collection('habits').add(newHabit);
+      // If habit was successfully added to database,
+      // add it to local habits as well
+      const { id } = await db.collection('habits').add(newHabit);
+
+      setHabits([
+        ...habits,
+        {
+          ...newHabit,
+          id,
+        },
+      ]);
 
       openSnackbar('success', 'Successfully created a habit!');
     } catch (error) {
@@ -96,7 +126,6 @@ const AddHabitPage = () => {
                   inputRef={register}
                   name="title"
                   label="Title"
-                  placeholder="Make your bed"
                   error={!!(errors && errors.title)}
                   helperText={
                     errors && errors.title ? errors.title.message : ' '
@@ -112,7 +141,6 @@ const AddHabitPage = () => {
                   inputRef={register}
                   name="description"
                   label="Description (optional)"
-                  placeholder="First thing in the morning, right after getting out of the bed"
                   variant="outlined"
                   disabled={isLoading}
                   fullWidth
@@ -129,20 +157,27 @@ const AddHabitPage = () => {
                     Frequency
                   </FormLabel>
                   <FormGroup row>
-                    {daysOfTheWeek.map((day, i) => (
-                      <FormControlLabel
-                        key={day}
-                        label={day.slice(0, 3)}
-                        labelPlacement="bottom"
-                        control={
-                          <Checkbox
-                            inputRef={register}
-                            name="trackedDays"
-                            value={day}
+                    <Controller
+                      name="trackedDays"
+                      control={control}
+                      render={props =>
+                        daysOfTheWeek.map(day => (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onChange={() =>
+                                  props.onChange(handleCheck(day))
+                                }
+                                checked={props.value.includes(day)}
+                              />
+                            }
+                            key={day}
+                            label={day.slice(0, 3)}
+                            labelPlacement="bottom"
                           />
-                        }
-                      />
-                    ))}
+                        ))
+                      }
+                    />
                   </FormGroup>
                   <FormHelperText>
                     {errors && errors.trackedDays

@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+
 import {
   Button,
   Card,
@@ -11,13 +15,14 @@ import {
   makeStyles,
   TextField,
 } from '@material-ui/core';
-import { useFirebase } from 'features/firebase';
-import AuthProviderList from 'components/auth-provider-list';
-import AbsoluteCenter from 'components/absolute-center';
-import { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
+import AbsoluteCenter from 'components/absolute-center';
+import AuthProviderList from 'components/auth-provider-list';
+import { useSnackbar } from 'components/snackbar';
+import { useFirebase } from 'features/firebase';
+import { userSchema, yupResolver } from 'libraries/yup';
+
+const useStyles = makeStyles({
   actions: {
     justifyContent: 'flex-end',
   },
@@ -27,67 +32,63 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   divider: {
     margin: 'auto',
   },
-}));
+});
 
 const SignUpPage = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  // Email
-  const [email, setEmail] = useState('');
-  const handleEmailChange = e => setEmail(e.target.value);
+  const { auth } = useFirebase();
+  const { openSnackbar } = useSnackbar();
 
-  const [emailConfirmation, setEmailConfirmation] = useState('');
-  const handleEmailConfirmationChange = e =>
-    setEmailConfirmation(e.target.value);
-
-  // Password
-  const [password, setPassword] = useState('');
-  const handlePasswordChange = e => setPassword(e.target.value);
-
-  // Confirm password
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const handlePasswordConfirmationChange = e =>
-    setPasswordConfirmation(e.target.value);
-
-  const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  /**
-   * ### TODO: Use validate.js to validate the fields before sending request
-   *
-   */
-  const { auth } = useFirebase();
+  const { register, handleSubmit, errors, reset } = useForm({
+    resolver: yupResolver(userSchema),
+  });
 
-  const signUp = async () => {
+  const onSubmit = data => {
+    signUp(data);
+    reset();
+  };
+
+  const signUp = async ({ email, password }) => {
     try {
-      setErrors(null);
       setIsLoading(true);
 
       await auth.createUserWithEmailAndPassword(email, password);
 
-      history.push('/protected');
-    } catch (err) {
       /**
-       * ### TODO: Handle errors
+       * ### TODO: signed in as 'User name' / email
        *
-       * Display them as helper texts
+       *
        */
-      console.log(err);
+
+      openSnackbar('success', `Successfully signed up! You're now logged in.`);
+
+      history.push('/dashboard');
+    } catch ({ code, message }) {
+      switch (code) {
+        case 'auth/email-already-in-use':
+        case 'auth/invalid-email':
+        case 'auth/operation-not-allowed':
+        case 'auth/weak-password':
+          openSnackbar('error', message);
+          return;
+
+        default:
+          openSnackbar('error', message);
+          return;
+      }
     } finally {
       setIsLoading(false);
-
-      /**
-       * ### TODO: Reset fields after wrong try
-       *
-       */
     }
   };
 
   return (
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
-        <Card raised>
+        <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
           <CardHeader title="Sign up for an account" />
 
           <CardContent>
@@ -108,85 +109,65 @@ const SignUpPage = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="email"
                         autoComplete="email"
-                        disabled={isLoading}
-                        error={!!(errors && errors.email)}
-                        fullWidth
-                        helperText={
-                          errors && errors.email ? errors.email[0] : ''
-                        }
-                        label="E-mail address"
+                        label="Email address"
                         placeholder="john@doe.com"
-                        required
-                        type="email"
-                        value={email}
+                        error={!!errors?.email}
+                        helperText={errors?.email?.message || ' '}
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handleEmailChange}
+                        fullWidth
                       />
                     </Grid>
 
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="emailConfirmation"
                         autoComplete="email"
-                        disabled={isLoading}
-                        error={!!(errors && errors.emailConfirmation)}
-                        fullWidth
-                        helperText={
-                          errors && errors.emailConfirmation
-                            ? errors.emailConfirmation[0]
-                            : ''
-                        }
-                        label="E-mail address confirmation"
+                        label="Email address confirmation"
                         placeholder="john@doe.com"
-                        required
-                        type="email"
-                        value={emailConfirmation}
+                        error={!!errors?.emailConfirmation}
+                        helperText={errors?.emailConfirmation?.message || ' '}
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handleEmailConfirmationChange}
+                        fullWidth
                       />
                     </Grid>
 
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="password"
+                        type="password"
                         autoComplete="new-password"
-                        disabled={isLoading}
-                        error={!!(errors && errors.password)}
-                        fullWidth
-                        helperText={
-                          errors && errors.password ? errors.password[0] : ''
-                        }
                         label="Password"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                        required
-                        type="password"
-                        value={password}
+                        error={!!errors?.password}
+                        helperText={errors?.password?.message || ' '}
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handlePasswordChange}
+                        fullWidth
                       />
                     </Grid>
 
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="passwordConfirmation"
+                        type="password"
                         autoComplete="password"
-                        disabled={isLoading}
-                        error={!!(errors && errors.passwordConfirmation)}
-                        fullWidth
-                        helperText={
-                          errors && errors.passwordConfirmation
-                            ? errors.passwordConfirmation[0]
-                            : ''
-                        }
                         label="Password confirmation"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                        required
-                        type="password"
-                        value={passwordConfirmation}
+                        error={!!errors?.passwordConfirmation}
+                        helperText={
+                          errors?.passwordConfirmation?.message || ' '
+                        }
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handlePasswordConfirmationChange}
+                        fullWidth
                       />
                     </Grid>
                   </Grid>
@@ -202,83 +183,63 @@ const SignUpPage = () => {
               <Grid container direction="column" spacing={2}>
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="email"
                     autoComplete="email"
-                    disabled={isLoading}
-                    error={!!(errors && errors.email)}
-                    fullWidth
-                    helperText={errors && errors.email ? errors.email[0] : ''}
-                    label="E-mail address"
+                    label="Email address"
                     placeholder="john@doe.com"
-                    required
-                    type="email"
-                    value={email}
+                    error={!!errors?.email}
+                    helperText={errors?.email?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handleEmailChange}
+                    fullWidth
                   />
                 </Grid>
 
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="emailConfirmation"
                     autoComplete="email"
-                    disabled={isLoading}
-                    error={!!(errors && errors.emailConfirmation)}
-                    fullWidth
-                    helperText={
-                      errors && errors.emailConfirmation
-                        ? errors.emailConfirmation[0]
-                        : ''
-                    }
-                    label="E-mail address confirmation"
+                    label="Email address confirmation"
                     placeholder="john@doe.com"
-                    required
-                    type="email"
-                    value={emailConfirmation}
+                    error={!!errors?.emailConfirmation}
+                    helperText={errors?.emailConfirmation?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handleEmailConfirmationChange}
+                    fullWidth
                   />
                 </Grid>
 
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="password"
+                    type="password"
                     autoComplete="new-password"
-                    disabled={isLoading}
-                    error={!!(errors && errors.password)}
-                    fullWidth
-                    helperText={
-                      errors && errors.password ? errors.password[0] : ''
-                    }
                     label="Password"
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                    required
-                    type="password"
-                    value={password}
+                    error={!!errors?.password}
+                    helperText={errors?.password?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handlePasswordChange}
+                    fullWidth
                   />
                 </Grid>
 
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="passwordConfirmation"
+                    type="password"
                     autoComplete="password"
-                    disabled={isLoading}
-                    error={!!(errors && errors.passwordConfirmation)}
-                    fullWidth
-                    helperText={
-                      errors && errors.passwordConfirmation
-                        ? errors.passwordConfirmation[0]
-                        : ''
-                    }
                     label="Password confirmation"
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                    required
-                    type="password"
-                    value={passwordConfirmation}
+                    error={!!errors?.passwordConfirmation}
+                    helperText={errors?.passwordConfirmation?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handlePasswordConfirmationChange}
+                    fullWidth
                   />
                 </Grid>
               </Grid>
@@ -287,16 +248,10 @@ const SignUpPage = () => {
 
           <CardActions className={classes.actions}>
             <Button
+              type="submit"
               color="primary"
               variant="contained"
-              disabled={
-                isLoading ||
-                !email ||
-                !emailConfirmation ||
-                !password ||
-                !passwordConfirmation
-              }
-              onClick={signUp}
+              disabled={isLoading}
             >
               Sign up
             </Button>

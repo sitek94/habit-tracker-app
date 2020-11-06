@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+
 import {
   Button,
   Card,
@@ -11,12 +15,13 @@ import {
   makeStyles,
   TextField,
 } from '@material-ui/core';
-import { useFirebase } from 'features/firebase';
+
 import AuthProviderList from 'components/auth-provider-list';
 import ButtonProgress from 'components/button-progress';
 import AbsoluteCenter from 'components/absolute-center';
-import { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'components/snackbar';
+import { useFirebase } from 'features/firebase';
+import { yupResolver, signInSchema } from 'libraries/yup';
 
 const useStyles = makeStyles(theme => ({
   actions: {
@@ -31,33 +36,45 @@ const SignInPage = () => {
   const history = useHistory();
 
   const { auth } = useFirebase();
+  const { openSnackbar } = useSnackbar();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState([]);
 
-  // Email
-  const [email, setEmailAddress] = useState('');
-  const handleEmailChange = e => setEmailAddress(e.target.value);
+  const { register, handleSubmit, errors, reset } = useForm({
+    resolver: yupResolver(signInSchema),
+  });
 
-  // Password
-  const [password, setPassword] = useState('');
-  const handlePasswordChange = e => setPassword(e.target.value);
+  const onSubmit = data => {
+    signIn(data);
+    reset();
+  };
 
   // Sign in
-  const signIn = async () => {
+  const signIn = async ({ email, password }) => {
     setIsLoading(true);
 
     try {
       await auth.signInWithEmailAndPassword(email, password);
 
-      console.log('Logged in successfully!');
-      setIsLoading(false);
-      history.push('/dashboard');
-    } catch (error) {
-      setErrors(error);
+      openSnackbar('success', 'Logged in successfully!');
       setIsLoading(false);
 
-      console.log(`Error when logging in, ${error}`);
+      history.push('/dashboard');
+    } catch ({ code, message }) {
+      setIsLoading(false);
+
+      switch (code) {
+        case "auth/invalid-email":
+        case "auth/user-disabled":
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          openSnackbar('error', message);
+          return;
+
+        default:
+          openSnackbar('error', message);
+          return;
+      }
     }
   };
 
@@ -72,7 +89,7 @@ const SignInPage = () => {
   return (
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
-        <Card raised>
+        <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
           <CardHeader title="Sign in to your account" />
 
           <CardContent>
@@ -92,41 +109,32 @@ const SignInPage = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="email"
                         autoComplete="email"
-                        disabled={isLoading}
-                        error={!!(errors && errors.email)}
-                        fullWidth
-                        helperText={
-                          errors && errors.email ? errors.email[0] : ''
-                        }
-                        label="E-mail address"
+                        label="Email address"
                         placeholder="john@doe.com"
-                        required
-                        type="email"
-                        value={email}
+                        error={!!errors?.email}
+                        helperText={errors?.email?.message || ' '}
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handleEmailChange}
+                        fullWidth
                       />
                     </Grid>
 
                     <Grid item xs>
                       <TextField
+                        inputRef={register}
+                        name="password"
+                        type="password"
                         autoComplete="current-password"
-                        disabled={isLoading}
-                        error={!!(errors && errors.password)}
-                        fullWidth
-                        helperText={
-                          errors && errors.password ? errors.password[0] : ''
-                        }
                         label="Password"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                        required
-                        type="password"
-                        value={password}
+                        error={!!errors?.password}
+                        helperText={errors?.password?.message || ' '}
+                        disabled={isLoading}
                         variant="outlined"
-                        InputLabelProps={{ required: false }}
-                        onChange={handlePasswordChange}
+                        fullWidth
                       />
                     </Grid>
                   </Grid>
@@ -144,39 +152,32 @@ const SignInPage = () => {
               <Grid container direction="column" spacing={2}>
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="email"
                     autoComplete="email"
-                    disabled={isLoading}
-                    error={!!(errors && errors.email)}
-                    fullWidth
-                    helperText={errors && errors.email ? errors.email[0] : ''}
-                    label="E-mail address"
+                    label="Email address"
                     placeholder="john@doe.com"
-                    required
-                    type="email"
-                    value={email}
+                    error={!!errors?.email}
+                    helperText={errors?.email?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handleEmailChange}
+                    fullWidth
                   />
                 </Grid>
 
                 <Grid item xs>
                   <TextField
+                    inputRef={register}
+                    name="password"
+                    type="password"
                     autoComplete="current-password"
-                    disabled={isLoading}
-                    error={!!(errors && errors.password)}
-                    fullWidth
-                    helperText={
-                      errors && errors.password ? errors.password[0] : ''
-                    }
                     label="Password"
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                    required
-                    type="password"
-                    value={password}
+                    error={!!errors?.password}
+                    helperText={errors?.password?.message || ' '}
+                    disabled={isLoading}
                     variant="outlined"
-                    InputLabelProps={{ required: false }}
-                    onChange={handlePasswordChange}
+                    fullWidth
                   />
                 </Grid>
               </Grid>
@@ -187,17 +188,17 @@ const SignInPage = () => {
             <Button
               color="primary"
               variant="outlined"
-              disabled={isLoading || !email}
+              disabled={isLoading}
               onClick={() => console.log('TODO: Reset password')}
             >
               Reset password
             </Button>
 
             <Button
+              type="submit"
               color="primary"
               variant="contained"
-              disabled={isLoading || !email || !password}
-              onClick={signIn}
+              disabled={isLoading}
             >
               Sign In
               {isLoading && <ButtonProgress />}

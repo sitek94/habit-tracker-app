@@ -21,13 +21,12 @@ import {
 
 import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
-
 import { useFirebase } from 'features/firebase';
 import { useSnackbar } from 'components/snackbar';
 import { useHabits } from 'features/habits';
 import { daysOfTheWeek } from 'data/days-of-the-week';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver, editedHabitSchema } from 'libraries/yup';
+import { yupResolver, habitSchema } from 'libraries/yup';
 
 const useStyles = makeStyles({
   actions: {
@@ -57,7 +56,7 @@ const EditHabitPage = ({ habit }) => {
   const { control, register, handleSubmit, errors, getValues } = useForm(
     {
       defaultValues: { title, description, trackedDays },
-      resolver: yupResolver(editedHabitSchema),
+      resolver: yupResolver(habitSchema),
     }
   );
 

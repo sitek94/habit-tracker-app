@@ -21,7 +21,7 @@ import ButtonProgress from 'components/button-progress';
 import AbsoluteCenter from 'components/absolute-center';
 import { useSnackbar } from 'components/snackbar';
 import { useFirebase } from 'features/firebase';
-import { yupResolver, signInSchema } from 'libraries/yup';
+import { yupResolver, userSchema } from 'libraries/yup';
 
 const useStyles = makeStyles(theme => ({
   actions: {
@@ -41,7 +41,7 @@ const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, errors, reset } = useForm({
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(userSchema),
   });
 
   const onSubmit = data => {

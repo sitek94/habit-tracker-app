@@ -26,7 +26,7 @@ import { useSnackbar } from 'components/snackbar';
 import { useHabits } from 'features/habits';
 import { daysOfTheWeek } from 'data/days-of-the-week';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver, newHabitSchema } from 'libraries/yup';
+import { yupResolver, habitSchema } from 'libraries/yup';
 
 const useStyles = makeStyles({
   actions: {
@@ -58,7 +58,7 @@ const AddHabitPage = () => {
   const { control, register, handleSubmit, errors, getValues, reset } = useForm(
     {
       defaultValues: defaultHabit,
-      resolver: yupResolver(newHabitSchema),
+      resolver: yupResolver(habitSchema),
     }
   );
 

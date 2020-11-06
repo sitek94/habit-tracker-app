@@ -20,7 +20,7 @@ import AbsoluteCenter from 'components/absolute-center';
 import AuthProviderList from 'components/auth-provider-list';
 import { useSnackbar } from 'components/snackbar';
 import { useFirebase } from 'features/firebase';
-import { userSchema, yupResolver } from 'libraries/yup';
+import { signUpSchema, yupResolver } from 'libraries/yup';
 
 const useStyles = makeStyles({
   actions: {
@@ -44,7 +44,7 @@ const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, errors, reset } = useForm({
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(signUpSchema),
   });
 
   const onSubmit = data => {

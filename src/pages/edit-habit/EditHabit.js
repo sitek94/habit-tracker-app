@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
   Button,
@@ -12,6 +12,7 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
   Grid,
   makeStyles,
@@ -22,12 +23,11 @@ import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 
 import { useFirebase } from 'features/firebase';
-import { SnackbarContext } from 'components/snackbar';
-
-import { useFormDays, useFormFields } from 'hooks';
-import daysOfTheWeek from 'data/days-of-the-week';
-
-import { HabitsContext } from 'pages/dashboard/Dashboard';
+import { useSnackbar } from 'components/snackbar';
+import { useHabits } from 'features/habits';
+import { daysOfTheWeek } from 'data/days-of-the-week';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver, editedHabitSchema } from 'libraries/yup';
 
 const useStyles = makeStyles({
   actions: {
@@ -41,173 +41,159 @@ const useStyles = makeStyles({
   },
 });
 
-const EditHabitPage = (props) => {
+const EditHabitPage = ({ habit }) => {
   const classes = useStyles();
 
-
-
-  const { habitId } = useParams();
+  const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // # TODO: Go back to all habits after saving the habit ???
-  const [habit, setHabit] = useState();
+  const { db } = useFirebase();
+  const { openSnackbar } = useSnackbar();
+  const { habits, setHabits } = useHabits();
 
-   // Contexts
-   const { db, user } = useFirebase();
-   const { openSnackbar } = useContext(SnackbarContext);
- 
-   const habits = useContext(HabitsContext)
+  const { id, title, description, trackedDays } = habit;
 
-   console.log(habits);
-  //  // Title and Description
-  //  const [fields, handleFieldChange, resetFields] = useFormFields({
-  //   title: '',
-  //   description: '',
-  // });
-  // const { title, description } = fields;
+  const { control, register, handleSubmit, errors, getValues } = useForm(
+    {
+      defaultValues: { title, description, trackedDays },
+      resolver: yupResolver(editedHabitSchema),
+    }
+  );
 
-  // // Days
-  // const {
-  //   days,
-  //   dayNames,
-  //   toggleDay,
-  //   toggleAllDays,
-  //   resetDays,
-  //   validateDays,
-  //   getDays
-  // } = useFormDays();
+  const handleCheck = checkedDay => {
+    const { trackedDays: days } = getValues();
 
-  
+    const newDays = days?.includes(checkedDay)
+      ? days?.filter(day => day !== checkedDay)
+      : [...(days ?? []), checkedDay];
 
-  // useEffect(() => {
-  //   const fetchHabit = async () => {
-  //     try {
-  //       const habitRef = db.collection('habits').doc(habitId);
-  //       const doc = await habitRef.get();
+    return newDays;
+  };
 
-  //       if (!doc.exists) {
-  //         console.log('No such document!');
-  //       } else {
+  const onSubmit = data => {
+    updateHabit(data);
+  };
 
-  //         const data = doc.data();
-         
-  //         setHabit(data);
-  //         console.log('Document data: ', doc.data());
-  //       }
+  const updateHabit = async updatedHabit => {
+    setIsLoading(true);
 
-  //     } catch (error) {
-  //       console.log('Error when fetching the habit for editing: ', error);
-  //     }
-  //   }
-  //   fetchHabit();
-  // }, [db, habitId]);
+    try {
+      const habitRef = db.collection('habits').doc(id);
 
-  
+      // Update the habit in database
+      await habitRef.update(updatedHabit);
 
+      // If the habit was successufully updated, update the habit locally
+      setHabits(
+        habits.map(habit =>
+          habit.id === id ? { ...habit, ...updatedHabit } : habit
+        )
+      );
 
-// Key down handler
-const handleKeyDown = ({ key, altKey, ctrlKey, metaKey, shiftKey }) => {
-    // if (!title || !validateDays()) {
-    //   return;
-    // }
+      setIsLoading(false);
+      openSnackbar('success', 'Successfully updated the habit!');
+    } catch (error) {
+      console.log(error);
 
-    // if (altKey || ctrlKey || metaKey || shiftKey) {
-    //   return;
-    // }
+      openSnackbar('error', 'Failed to update the habit');
+    } finally {
+      setIsLoading(false);
 
-    // if (key === 'Enter') {
-    //   console.log('added habit');
-    //   addHabit();
-    // }
-};
-
-  if (!habit) return <h1>No data</h1>
-
-  const { title, description, trackedDays } = habit;
+      // Redirect the user back to all habits
+      history.push('/dashboard/habits');
+    }
+  };
 
   return (
     <AbsoluteCenter fullWidth>
-    <Container maxWidth="sm">
-      <Card raised onKeyDown={handleKeyDown}>
-        <CardHeader title="Create a new habit" />
+      <Container maxWidth="sm">
+        <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
+          <CardHeader title="Create a new habit" />
 
-        <CardContent>
-          <Grid container direction="column" spacing={2}>
-            <Grid item xs>
-              <TextField
-                label="New Title"
-                placeholder="Make your bed"
-                variant="outlined"
-                InputLabelProps={{ required: false }}
-                // value={title}
-                // onChange={handleFieldChange}
-                disabled={isLoading}
-                fullWidth
-              />
-            </Grid>
+          <CardContent>
+            <Grid container direction="column" spacing={2}>
+              <Grid item xs>
+                <TextField
+                  inputRef={register}
+                  name="title"
+                  label="New Title"
+                  placeholder={title}
+                  error={!!errors?.title}
+                  helperText={errors?.title?.message || ' '}
+                  variant="outlined"
+                  disabled={isLoading}
+                  fullWidth
+                />
+              </Grid>
 
-            <Grid item xs>
-              <TextField
-                label="New Description"
-                placeholder="First thing in the morning, right after getting out of the bed"
-                variant="outlined"
-                InputLabelProps={{ required: false }}
-                // value={description}
-                // onChange={handleFieldChange}
-                disabled={isLoading}
-                fullWidth
-              />
-            </Grid>
+              <Grid item xs>
+                <TextField
+                  inputRef={register}
+                  name="description"
+                  label="Description (optional)"
+                  placeholder={description}
+                  variant="outlined"
+                  disabled={isLoading}
+                  fullWidth
+                />
+              </Grid>
 
-            <Grid item xs>
-              <FormControl
-                component="fieldset"
-                className={classes.formControl}
-              >
-                <FormLabel
-                  component="legend"
-                  className={classes.formLabel}
-                //  onClick={toggleAllDays}
+              <Grid item xs>
+                <FormControl
+                  component="fieldset"
+                  className={classes.formControl}
+                  error={!!(errors && errors.trackedDays)}
                 >
-                  Frequency
-                </FormLabel>
-                <FormGroup row>
-                  {trackedDays.map(({ id, day, checked }) => (
-                    <FormControlLabel
-                      key={id}
-                      label={day.slice(0, 3)}
-                      labelPlacement="bottom"
-                      control={
-                        <Checkbox
-                          defaultChecked={checked}
-                          
-                          onChange={() => {}}
-                        />
+                  <FormLabel component="legend" className={classes.formLabel}>
+                    Frequency
+                  </FormLabel>
+                  <FormGroup row>
+                    <Controller
+                      name="trackedDays"
+                      control={control}
+                      render={props =>
+                        daysOfTheWeek.map(day => (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onChange={() =>
+                                  props.onChange(handleCheck(day))
+                                }
+                                checked={props.value.includes(day)}
+                              />
+                            }
+                            key={day}
+                            label={day.slice(0, 3)}
+                            labelPlacement="bottom"
+                          />
+                        ))
                       }
                     />
-                  ))}
-                </FormGroup>
-              </FormControl>
+                  </FormGroup>
+                  <FormHelperText>
+                    {errors?.trackedDays?.message || ' '}
+                  </FormHelperText>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
-        </CardContent>
+          </CardContent>
 
-        <CardActions className={classes.actions}>
-          <Button
-            color="primary"
-            variant="contained"
-         //   disabled={isLoading || !title || !validateDays()}
-            //onClick={addHabit}
-          >
-            Add habit
-            {isLoading && <ButtonProgress />}
-          </Button>
-        </CardActions>
-      </Card>
-    </Container>
-  </AbsoluteCenter>
-  )
-}
+          <CardActions className={classes.actions}>
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              disabled={isLoading}
+            >
+              Sava changes
+              {isLoading && <ButtonProgress />}
+            </Button>
+          </CardActions>
+        </Card>
+      </Container>
+    </AbsoluteCenter>
+  );
+};
 
 export default EditHabitPage;

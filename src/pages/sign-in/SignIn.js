@@ -56,7 +56,7 @@ const SignInPage = () => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
 
-      openSnackbar('success', 'Logged in successfully!');
+      openSnackbar('success', 'Signed in!');
 
       history.push('/dashboard');
     } catch ({ code, message }) {

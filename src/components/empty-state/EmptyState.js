@@ -43,7 +43,7 @@ const EmptyState = ({
 
   if (type === 'page') {
     return (
-      <AbsoluteCenter>
+      <AbsoluteCenter textAlign="center">
         {image && (
           <Box
             clone

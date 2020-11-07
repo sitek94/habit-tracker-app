@@ -1,20 +1,24 @@
 import PropTypes from 'prop-types';
-
-import {
-  BrowserRouter,
-  Switch,
-  Redirect,
-  Route,
-} from 'react-router-dom';
-
-import LandingPage from 'pages/landing-page';
-import SignInPage from 'pages/sign-in';
-import SignUpPage from 'pages/sign-up';
-import NotFoundPage from 'pages/not-found';
-import DashboardPage from 'pages/dashboard';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'features/firebase';
+import { HabitsProvider } from 'features/habits';
+
+import LandingPage from 'pages/landing-page';
+
+import SignInPage from 'pages/sign-in';
+import SignUpPage from 'pages/sign-up';
+
+import DashboardPage from 'pages/dashboard';
+import AddHabitPage from 'pages/add-habit';
+import EditHabitPage from 'pages/edit-habit';
+import HabitsPage from 'pages/habits';
+
+import NotFoundPage from 'pages/not-found';
 import ErrorPage from 'pages/error';
+
+import PrivateRoute from './PrivateRoute';
+import WithHabitRoute from './WithHabitRoute';
 
 const Router = ({ navbar }) => {
   const { user } = useFirebase();
@@ -37,7 +41,27 @@ const Router = ({ navbar }) => {
         </Route>
 
         <PrivateRoute path="/dashboard">
-          <DashboardPage />
+          <HabitsProvider>
+            <Switch>
+              <Route exact path="/dashboard">
+                <DashboardPage />
+              </Route>
+
+              <Route exact path="/dashboard/add-habit">
+                <AddHabitPage />
+              </Route>
+
+              <Route exact path="/dashboard/habits">
+                <HabitsPage />
+              </Route>
+
+              <WithHabitRoute
+                exact
+                path="/dashboard/habits/:habitId"
+                component={EditHabitPage}
+              />
+            </Switch>
+          </HabitsProvider>
         </PrivateRoute>
 
         <Route exact path="/error">
@@ -55,27 +79,5 @@ const Router = ({ navbar }) => {
 Router.propTypes = {
   user: PropTypes.object,
 };
-
-function PrivateRoute({ children, ...rest }) {
-  const { user } = useFirebase();
-
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        user ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/signin',
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    />
-  );
-}
 
 export default Router;

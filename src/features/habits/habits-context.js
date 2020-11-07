@@ -1,6 +1,7 @@
-import LaunchScreen from 'components/loader';
 import { createContext, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
+
+import Loader from 'components/loader';
 
 import useHabitsData from './useHabitsData';
 
@@ -9,7 +10,7 @@ const HabitsContext = createContext();
 const HabitsProvider = ({ children }) => {
   const [{habits, isLoading, isError}, setHabits] = useHabitsData();
   
-  if (isLoading) return <LaunchScreen />
+  if (isLoading) return <Loader />
 
   if (isError) return <Redirect to="/error" />
 

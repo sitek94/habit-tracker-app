@@ -10,6 +10,30 @@ function useHabitsData() {
   const { db, user } = useFirebase();
 
   useEffect(() => {
+    const query =  db.collection('habits')
+    .where('uid', '==', user.uid)
+
+    const observer = query.onSnapshot(querySnapshot => {
+      console.log(`Received query snapshot of size ${querySnapshot.size}`);
+      // ...
+    }, err => {
+      console.log(`Encountered error: ${err}`);
+    });
+    
+    // db
+    //   .collection('habits')
+    //   .where('uid', '==', user.uid)
+    //   .onSnapshot(
+    //     snapshot => {
+    //       console.log(snapshot.data());
+    //     },
+    //     error => {
+    //       console.log(error);
+    //     }
+    //   )
+  }, [db, user])
+
+  useEffect(() => {
     let _isMounted = true;
 
     const fetchHabits = async () => {

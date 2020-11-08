@@ -1,28 +1,37 @@
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
-
-import HabitsPage from 'pages/habits-list';
-import EditHabitPage from 'pages/edit-habit';
-import AddHabitPage from 'pages/add-habit';
-
-import { HabitsProvider } from 'features/habits';
+import daysOfTheWeek from 'data/days-of-the-week';
+import { DatesRangeController } from 'features/dates-range';
+import { useHabits } from 'features/habits';
+import HabitItem from './HabitItem';
 
 const Dashboard = () => {
-  const { path } = useRouteMatch();
+  const { habits } = useHabits();
 
   return (
-    <HabitsProvider>
-      <Switch>
-        <Route exact path={`${path}/add-habit`}>
-          <AddHabitPage />
-        </Route>
-        <Route exact path={`${path}/habits`}>
-          <HabitsPage />
-        </Route>
-        <Route exact path={`${path}/habits/:habitId`}>
-          <EditHabitPage />
-        </Route>
-      </Switch>
-    </HabitsProvider>
+    <>
+      <DatesRangeController />
+      <table>
+        <thead>
+          <tr>
+            <th>Habit name</th>
+            {daysOfTheWeek.map(day => (
+              <th key={day}>{day.slice(0, 3)}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {habits.map(({ id, title, trackedDays }) => (
+            <HabitItem
+              key={id}
+              id={id}
+              title={title}
+              trackedDays={trackedDays}
+            />
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
+
 export default Dashboard;

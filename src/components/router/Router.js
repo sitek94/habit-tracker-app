@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'features/firebase';
 import { HabitsProvider } from 'features/habits';
+import { DatesRangeProvider } from 'features/dates-range';
 
 import LandingPage from 'pages/landing-page';
 
@@ -44,7 +45,9 @@ const Router = ({ navbar }) => {
           <HabitsProvider>
             <Switch>
               <Route exact path="/dashboard">
-                <DashboardPage />
+                <DatesRangeProvider>
+                  <DashboardPage />
+                </DatesRangeProvider>
               </Route>
 
               <Route exact path="/dashboard/add-habit">

@@ -20,7 +20,8 @@ import ErrorPage from 'pages/error';
 
 import PrivateRoute from './PrivateRoute';
 import WithHabitRoute from './WithHabitRoute';
-
+import { HabitsList } from 'features/habits/HabitsList';
+import { AddHabitForm } from 'features/habits/AddHabitForm';
 const Router = ({ navbar }) => {
   const { user } = useFirebase();
 
@@ -29,6 +30,14 @@ const Router = ({ navbar }) => {
       {navbar}
 
       <Switch>
+        <Route exact path="/">
+          <HabitsList />
+        </Route>
+
+        <Route exact path="/add">
+          <AddHabitForm />
+        </Route>
+
         <Route exact path="/">
           <LandingPage />
         </Route>

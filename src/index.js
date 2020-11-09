@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import store from 'app/store';
+import { Provider } from 'react-redux';
 import { FirebaseProvider } from 'features/firebase';
 
 ReactDOM.render(
   <FirebaseProvider>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </FirebaseProvider>,
   document.getElementById('root')
 );

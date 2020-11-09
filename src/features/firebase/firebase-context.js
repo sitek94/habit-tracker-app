@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import app, { auth, firestore } from './firebase-init';
+import app, { auth, database, firestore } from './firebase-init';
 
 // Context
 const FirebaseContext = createContext(null);
@@ -18,6 +18,7 @@ const FirebaseProvider = ({ children }) => {
     app,
     auth,
     db: firestore,
+    database,
     user,
   }
 

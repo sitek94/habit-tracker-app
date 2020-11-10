@@ -1,6 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 
 const PrivateRoute = ({ children, ...rest }) => {
   const { user } = useFirebase();

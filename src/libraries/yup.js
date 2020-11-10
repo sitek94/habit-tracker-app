@@ -7,12 +7,12 @@ import { object, string, array, ref } from 'yup';
  */
 const title = string().required('Title is required.');
 const description = string().notRequired();
-const trackedDays = array().required('You have to select at least one day.');
+const frequencyValue = array().required('You have to select at least one day.');
 
 const habitSchema = object().shape({
   title,
   description,
-  trackedDays,
+  frequencyValue,
 });
 
 /**

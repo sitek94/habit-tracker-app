@@ -21,7 +21,7 @@ import {
 
 import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 import { useSnackbar } from 'components/snackbar';
 import { useHabits } from 'features/habits';
 import { daysOfTheWeek } from 'data/days-of-the-week';

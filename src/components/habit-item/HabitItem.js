@@ -21,7 +21,7 @@ import {
 import daysOfTheWeek from 'data/days-of-the-week';
 import { useDialog } from 'components/dialog/dialog-context';
 import { useSnackbar } from 'components/snackbar';
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 import { useHabits } from 'features/habits';
 
 const useStyles = makeStyles(({ spacing }) => ({

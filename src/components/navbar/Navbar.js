@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 import { useDialog } from 'components/dialog/dialog-context';
 import { useSnackbar } from 'components/snackbar';
 

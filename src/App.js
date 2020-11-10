@@ -13,7 +13,7 @@ import Navbar from 'components/navbar';
 
 import { SnackbarProvider } from 'components/snackbar';
 import { DialogProvider } from 'components/dialog/dialog-context';
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 
 const theme = createMuiTheme();
 

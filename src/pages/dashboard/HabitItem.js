@@ -3,7 +3,7 @@ import dayjs from 'libraries/dayjs';
 import { TableCell, TableRow } from '@material-ui/core';
 
 import { useDatesRangeState } from 'features/dates-range';
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 
 import HabitCheckbox from './HabitCheckbox';
 import { useEffect, useState } from 'react';

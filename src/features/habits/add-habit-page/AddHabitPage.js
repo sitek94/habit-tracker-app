@@ -183,14 +183,14 @@ const AddHabitPage = () => {
                       name="frequencyValue"
                       control={control}
                       render={props =>
-                        daysOfTheWeek.map(day => (
+                        daysOfTheWeek.map((day, weekdayNum) => (
                           <FormControlLabel
                             control={
                               <Checkbox
                                 onChange={() =>
-                                  props.onChange(handleCheck(day))
+                                  props.onChange(handleCheck(weekdayNum))
                                 }
-                                checked={props.value.includes(day)}
+                                checked={props.value.includes(weekdayNum)}
                               />
                             }
                             key={day}

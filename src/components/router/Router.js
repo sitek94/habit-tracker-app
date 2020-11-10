@@ -1,25 +1,26 @@
 import PropTypes from 'prop-types';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { useFirebase } from 'features/firebase';
+import { useFirebase } from 'services/firebase';
 import { HabitsProvider } from 'features/habits';
 import { DatesRangeProvider } from 'features/dates-range';
 
 import LandingPage from 'pages/landing-page';
 
-import SignInPage from 'pages/sign-in';
-import SignUpPage from 'pages/sign-up';
+import SignInPage from 'features/auth/sign-in-page';
+import SignUpPage from 'features/auth/sign-up-page';
 
 import DashboardPage from 'pages/dashboard';
-import AddHabitPage from 'pages/add-habit';
+import AddHabitPage from 'features/habits/add-habit-page';
 import EditHabitPage from 'pages/edit-habit';
-import HabitsPage from 'pages/habits';
 
 import NotFoundPage from 'pages/not-found';
 import ErrorPage from 'pages/error';
 
 import PrivateRoute from './PrivateRoute';
 import WithHabitRoute from './WithHabitRoute';
+import Checkmark from 'Checkmark';
+import HabitsListPage from 'features/habits/habits-list-page';
 
 const Router = ({ navbar }) => {
   const { user } = useFirebase();
@@ -29,6 +30,11 @@ const Router = ({ navbar }) => {
       {navbar}
 
       <Switch>
+      
+        <Route exact path="/test">
+          <Checkmark date="09-11-2020" habitId="1" />
+        </Route>
+
         <Route exact path="/">
           <LandingPage />
         </Route>
@@ -55,7 +61,7 @@ const Router = ({ navbar }) => {
               </Route>
 
               <Route exact path="/dashboard/habits">
-                <HabitsPage />
+                <HabitsListPage />
               </Route>
 
               <WithHabitRoute

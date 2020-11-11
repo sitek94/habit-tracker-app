@@ -20,9 +20,9 @@ import {
 
 import { useDialog } from 'components/dialog/dialog-context';
 import { useSnackbar } from 'components/snackbar';
-import { useFirebase } from 'services/firebase';
 
-import weekdays from 'data/days-of-the-week';
+import { useFirebase } from 'services/firebase';
+import dayjs from 'services/dayjs';
 
 const useStyles = makeStyles({
   // A trick to set width of the table cell to its content
@@ -108,6 +108,7 @@ const HabitItem = ({ habit }) => {
       // Weekdays - render a list of `Chips`, higlight the days that
       // are tracked
       case 'weekdays':
+        const weekdays = dayjs.weekdays(dayjs());
         const trackedWeekdays = value;
         // Weekdays are stored as numbers 0-6, so we can use indexes
         // to check if the given day index is in the tracked array

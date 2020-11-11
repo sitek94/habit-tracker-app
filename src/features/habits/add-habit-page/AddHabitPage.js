@@ -16,7 +16,10 @@ import {
   FormHelperText,
   FormLabel,
   Grid,
+  InputLabel,
   makeStyles,
+  MenuItem,
+  Select,
   TextField,
 } from '@material-ui/core';
 
@@ -33,6 +36,9 @@ import { habitSchema } from 'data/constraints';
 const useStyles = makeStyles({
   actions: {
     justifyContent: 'flex-end',
+  },
+  formControl: {
+    width: '100%',
   },
   frequencyLabel: {
     cursor: 'pointer',
@@ -100,7 +106,7 @@ const AddHabitPage = () => {
   const addHabit = async ({
     name,
     description,
-    frequencyType = 'weekdays',
+    frequencyType,
     frequencyValue,
   }) => {
     setIsLoading(true);
@@ -141,7 +147,7 @@ const AddHabitPage = () => {
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
         <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
-          <CardHeader name="Create a new habit" />
+          <CardHeader title="Create a new habit" />
 
           <CardContent>
             <Grid container direction="column" spacing={2}>
@@ -151,9 +157,7 @@ const AddHabitPage = () => {
                   name="name"
                   label="Name"
                   error={!!(errors && errors.name)}
-                  helperText={
-                    errors && errors.name ? errors.name.message : ' '
-                  }
+                  helperText={errors && errors.name ? errors.name.message : ' '}
                   variant="outlined"
                   disabled={isLoading}
                   fullWidth
@@ -165,10 +169,49 @@ const AddHabitPage = () => {
                   inputRef={register}
                   name="description"
                   label="Question (optional)"
+                  error={!!(errors && errors.description)}
+                  helperText={
+                    errors && errors.description
+                      ? errors.description.message
+                      : ' '
+                  }
                   variant="outlined"
                   disabled={isLoading}
                   fullWidth
                 />
+              </Grid>
+              
+              <Grid item xs>
+                <FormControl
+                  variant="outlined"
+                  className={classes.formControl}
+                  error={!!(errors && errors.frequencyType)}
+                >
+                  <InputLabel id="frequency-type-label">
+                    Frequency type
+                  </InputLabel>
+                  <Controller
+                    name="frequencyType"
+                    control={control}
+                    as={
+                      <Select
+                        labelId="frequency-type-label"
+                        label="Frequency type"
+                      >
+                        <MenuItem value="weekdays">Weekdays</MenuItem>
+                        <MenuItem value="repeat">
+                          TODO: Repeat every X days
+                        </MenuItem>
+                        <MenuItem value="custom">TODO: Custom</MenuItem>
+                      </Select>
+                    }
+                  />
+                  <FormHelperText>
+                    {errors && errors.frequencyType
+                      ? errors.frequencyType.message
+                      : ' '}
+                  </FormHelperText>
+                </FormControl>
               </Grid>
 
               <Grid item xs>

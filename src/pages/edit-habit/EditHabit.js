@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Button,
@@ -23,10 +24,9 @@ import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 import { useFirebase } from 'services/firebase';
 import { useSnackbar } from 'components/snackbar';
-import { useHabits } from 'features/habits';
 import { daysOfTheWeek } from 'data/days-of-the-week';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver, habitSchema } from 'libraries/yup';
+import { habitSchema } from 'data/constraints';
 
 const useStyles = makeStyles({
   actions: {
@@ -49,7 +49,6 @@ const EditHabitPage = ({ habit }) => {
 
   const { db } = useFirebase();
   const { openSnackbar } = useSnackbar();
-  const { habits, setHabits } = useHabits();
 
   const { id, title, description, trackedDays } = habit;
 
@@ -84,11 +83,11 @@ const EditHabitPage = ({ habit }) => {
       await habitRef.update(updatedHabit);
 
       // If the habit was successufully updated, update the habit locally
-      setHabits(
-        habits.map(habit =>
-          habit.id === id ? { ...habit, ...updatedHabit } : habit
-        )
-      );
+      // setHabits(
+      //   habits.map(habit =>
+      //     habit.id === id ? { ...habit, ...updatedHabit } : habit
+      //   )
+      // );
 
       setIsLoading(false);
       openSnackbar('success', 'Successfully updated the habit!');

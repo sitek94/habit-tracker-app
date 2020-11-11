@@ -23,15 +23,14 @@ import { useSnackbar } from 'components/snackbar';
 import { useFirebase } from 'services/firebase';
 
 import weekdays from 'data/days-of-the-week';
-import dayjs from 'libraries/dayjs';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles({
   // A trick to set width of the table cell to its content
   minWidth: {
     width: '1%',
     whiteSpace: 'nowrap',
   },
-}));
+});
 
 const HabitItem = ({ habit }) => {
   const { title, frequency } = habit;
@@ -42,7 +41,6 @@ const HabitItem = ({ habit }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { db } = useFirebase();
-  // const { habits, setHabits } = useHabits();
 
   const { openDialog, closeDialog } = useDialog();
   const { openSnackbar } = useSnackbar();

@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from 'react';
 
-import dayjs from 'libraries/dayjs';
+import dayjs from 'services/dayjs';
 
 // Contexts
 const DatesRangeStateContext = createContext();

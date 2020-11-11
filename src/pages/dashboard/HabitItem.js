@@ -1,4 +1,4 @@
-import dayjs from 'libraries/dayjs';
+import dayjs from 'services/dayjs';
 
 import { TableCell, TableRow } from '@material-ui/core';
 

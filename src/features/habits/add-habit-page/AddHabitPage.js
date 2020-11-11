@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Button,
@@ -24,8 +26,7 @@ import ButtonProgress from 'components/button-progress';
 import { useFirebase } from 'services/firebase';
 import { useSnackbar } from 'components/snackbar';
 import { daysOfTheWeek } from 'data/days-of-the-week';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver, habitSchema } from 'libraries/yup';
+import { habitSchema } from 'data/constraints';
 
 // Styles
 const useStyles = makeStyles({
@@ -96,7 +97,7 @@ const AddHabitPage = () => {
 
   //Add new habit
   const addHabit = async ({
-    title,
+    name,
     description,
     frequencyType = 'weekdays',
     frequencyValue,
@@ -107,7 +108,7 @@ const AddHabitPage = () => {
       // Create a new habit object
       const newHabit = {
         user: user.uid,
-        title,
+        name,
         description,
         frequency: {
           type: frequencyType,
@@ -116,7 +117,7 @@ const AddHabitPage = () => {
         createdAt: new Date().toISOString(),
       };
 
-      // Get a key for new habit
+      // Get a key (ID) for new habit
       const newHabitKey = db.ref().child('habits').push().key;
 
       // Add habit to the database.
@@ -136,18 +137,18 @@ const AddHabitPage = () => {
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
         <Card raised component="form" onSubmit={handleSubmit(onSubmit)}>
-          <CardHeader title="Create a new habit" />
+          <CardHeader name="Create a new habit" />
 
           <CardContent>
             <Grid container direction="column" spacing={2}>
               <Grid item xs>
                 <TextField
                   inputRef={register}
-                  name="title"
+                  name="name"
                   label="Title"
-                  error={!!(errors && errors.title)}
+                  error={!!(errors && errors.name)}
                   helperText={
-                    errors && errors.title ? errors.title.message : ' '
+                    errors && errors.name ? errors.name.message : ' '
                   }
                   variant="outlined"
                   disabled={isLoading}

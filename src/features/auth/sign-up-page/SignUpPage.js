@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Button,
@@ -20,7 +21,7 @@ import AbsoluteCenter from 'components/absolute-center';
 import AuthProviderList from 'components/auth-provider-list';
 import { useSnackbar } from 'components/snackbar';
 import { useFirebase } from 'services/firebase';
-import { signUpSchema, yupResolver } from 'libraries/yup';
+import { signUpSchema } from 'data/constraints';
 
 const useStyles = makeStyles({
   actions: {

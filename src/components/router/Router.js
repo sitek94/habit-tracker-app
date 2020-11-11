@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'services/firebase';
-import { HabitsProvider } from 'features/habits';
 import { DatesRangeProvider } from 'features/dates-range';
 
 import LandingPage from 'pages/landing-page';
@@ -18,7 +17,6 @@ import NotFoundPage from 'pages/not-found';
 import ErrorPage from 'pages/error';
 
 import PrivateRoute from './PrivateRoute';
-import WithHabitRoute from './WithHabitRoute';
 import Checkmark from 'Checkmark';
 import HabitsListPage from 'features/habits/habits-list-page';
 
@@ -30,7 +28,6 @@ const Router = ({ navbar }) => {
       {navbar}
 
       <Switch>
-      
         <Route exact path="/test">
           <Checkmark date="09-11-2020" habitId="1" />
         </Route>
@@ -48,29 +45,25 @@ const Router = ({ navbar }) => {
         </Route>
 
         <PrivateRoute path="/dashboard">
-          <HabitsProvider>
-            <Switch>
-              <Route exact path="/dashboard">
-                <DatesRangeProvider>
-                  <DashboardPage />
-                </DatesRangeProvider>
-              </Route>
+          <Switch>
+            <Route exact path="/dashboard">
+              <DatesRangeProvider>
+                <DashboardPage />
+              </DatesRangeProvider>
+            </Route>
 
-              <Route exact path="/dashboard/add-habit">
-                <AddHabitPage />
-              </Route>
+            <Route exact path="/dashboard/add-habit">
+              <AddHabitPage />
+            </Route>
 
-              <Route exact path="/dashboard/habits">
-                <HabitsListPage />
-              </Route>
+            <Route exact path="/dashboard/habits">
+              <HabitsListPage />
+            </Route>
 
-              <WithHabitRoute
-                exact
-                path="/dashboard/habits/:habitId"
-                component={EditHabitPage}
-              />
-            </Switch>
-          </HabitsProvider>
+            <Route exact path="/dashboard/habits/:habitId">
+              <EditHabitPage />
+            </Route>
+          </Switch>
         </PrivateRoute>
 
         <Route exact path="/error">

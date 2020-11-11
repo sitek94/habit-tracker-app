@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Box, Fab, Table, TableBody, TableContainer } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
-import { ReactComponent as EmptyBox } from 'svgs/empty-box.svg';
+import { Table, TableBody, TableContainer } from '@material-ui/core';
 
-import ErrorPage from 'pages/error';
-
-import EmptyState from 'components/empty-state';
-import HabitItem from '../habit-item';
 import Loader from 'components/loader';
+import ErrorPage from 'components/error-page';
 
 import { useFirebase } from 'services/firebase';
 
-const HabitsListPage = () => {
+import NoHabits from '../no-habits';
+import HabitItem from './habit-item';
+
+const HabitList = () => {
   const { db, user } = useFirebase();
 
   const [habits, setHabits] = useState([]);
@@ -34,16 +31,16 @@ const HabitsListPage = () => {
           .once('value');
 
         let fetchedHabits = snapshot.val();
-        
+
         // User doesn't have any habits
-        if (!fetchedHabits) {  
+        if (!fetchedHabits) {
           return;
         }
-        
+
         // Fetched habits is an object so we need to convert it to an array
         fetchedHabits = Object.entries(fetchedHabits).map(([id, habit]) => ({
           id,
-          ...habit
+          ...habit,
         }));
 
         setHabits(fetchedHabits);
@@ -61,7 +58,7 @@ const HabitsListPage = () => {
 
   const deleteHabit = habitId => {
     setHabits(habits.filter(h => h.id !== habitId));
-  }
+  };
 
   // Fetching habits from the database
   if (isLoading) {
@@ -78,29 +75,9 @@ const HabitsListPage = () => {
     );
   }
 
-  // User doesn't have any habits yet, render a page with
-  // a link to `Add habit` page
+  // User doesn't have any habits yet
   if (habits.length === 0) {
-    return (
-      <EmptyState
-        image={<EmptyBox />}
-        title="No habits"
-        description="It looks like you don't have any habits yet"
-        button={
-          <Fab
-            variant="extended"
-            color="primary"
-            component={Link}
-            to="/dashboard/add-habit"
-          >
-            <Box clone mr={1}>
-              <AddIcon />
-            </Box>
-            Create habit
-          </Fab>
-        }
-      />
-    );
+    return <NoHabits />;
   }
 
   // Render user's habits
@@ -121,4 +98,4 @@ const HabitsListPage = () => {
   );
 };
 
-export default HabitsListPage;
+export default HabitList;

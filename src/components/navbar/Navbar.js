@@ -104,6 +104,10 @@ const Navbar = () => {
               Create habit
             </Button>
 
+            <Button component={Link} to="/dashboard" color="inherit" disabled={isLoading}>
+              Dashboard
+            </Button>
+
             <Button component={Link} to="/dashboard/habits" color="inherit" disabled={isLoading}>
               All habits
             </Button>

@@ -11,7 +11,7 @@ import SignUpPage from 'features/auth/sign-up-page';
 
 import DashboardPage from 'pages/dashboard';
 import AddHabitPage from 'features/habits/add-habit-page';
-import EditHabitPage from 'pages/edit-habit';
+import EditHabitPage from 'features/habits/edit-habit-page';
 
 import NotFoundPage from 'pages/not-found';
 import ErrorPage from 'pages/error';

@@ -32,8 +32,8 @@ const useStyles = makeStyles({
   },
 });
 
-const HabitItem = ({ habit }) => {
-  const { title, frequency } = habit;
+const HabitItem = ({ habit, onDeleteClick }) => {
+  const { id, name, frequency } = habit;
 
   const classes = useStyles();
   const history = useHistory();
@@ -46,31 +46,42 @@ const HabitItem = ({ habit }) => {
   const { openSnackbar } = useSnackbar();
 
   // Removes the habit from the database, if success removes it locally
-  // const deleteHabit = async () => {
-  //   setIsLoading(true);
+  const deleteHabit = async () => {
+    setIsLoading(true);
 
-  //   try {
-  //     await db.collection('habits').doc(id).delete();
+    try {
+      const updates = {};
 
-  //     setHabits(habits.filter(habit => habit.id !== id));
+      // Delete the habit
+      updates[`/habits/${id}`] = null;
+      // Delete all the checkmarks associated with the habit
+      updates[`/habitCheckmarks/${id}`] = null;
 
-  //     openSnackbar('success', 'Habit deleted!');
-  //   } catch ({ message }) {
-  //     openSnackbar('error', message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      await db.ref().update(updates);
 
-  // Takes the user to `Edit habit` page
-  // const handleEditClick = () => {
-  //   history.push(`/dashboard/habits/${id}`);
-  // };
+      openSnackbar('success', 'Habit removed!');
+
+      // Invoke the event handler that will remove the habit locally
+      // and cause a rerender
+      onDeleteClick();
+    } catch (error) {
+      console.log('Something went wrong when deleting a habit', error);
+
+      openSnackbar('error', 'Something went wrong when deleting the habit');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditClick = () => {
+    // Takes the user to `Edit habit` page
+    history.push(`/dashboard/habits/${id}`);
+  };
 
   // Displays the alert dialog to get a confirmation, then deletes the habit
   const handleDeleteClick = () => {
     openDialog({
-      title: `Delete "${title}" habit?`,
+      title: `Delete "${name}" habit?`,
       contentText: `Deleted habit can't be recovered. All data associated with this habit will be deleted.`,
       actions: (
         <>
@@ -80,8 +91,8 @@ const HabitItem = ({ habit }) => {
           <Button
             onClick={() => {
               // Delete the habit and close the dialog
+              deleteHabit();
               closeDialog();
-              // deleteHabit();
             }}
             color="secondary"
             variant="contained"
@@ -139,14 +150,14 @@ const HabitItem = ({ habit }) => {
         align="left"
         className={classes.minWidth}
       >
-        <Typography variant="body1">{title}</Typography>
+        <Typography variant="body1">{name}</Typography>
       </TableCell>
 
       <TableCell align="left">{renderFrequency()}</TableCell>
 
       <TableCell align="right" className={classes.minWidth}>
         <IconButton
-          //  onClick={handleEditClick}
+          onClick={handleEditClick}
           aria-label="Edit habit"
           disabled={isLoading}
         >

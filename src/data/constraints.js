@@ -1,87 +1,58 @@
-const constraints = {
-  firstName: {
-    presence: {
-      allowEmpty: false,
-    },
+import { object, string, array, ref } from 'yup';
 
-    type: "string",
-  },
+/**
+ * HABIT
+ */
+const habit = {
+  name: string().required('Title is required.'),
+  description: string().notRequired(),
+  frequencyType: string().required(),
+  frequencyValue: array().required('You have to select at least one day.'),
+}
 
-  lastName: {
-    presence: {
-      allowEmpty: false,
-    },
+// Habit schema
+const habitSchema = object().shape({
+  name: habit.name,
+  description: habit.description,
+  frequencyType: habit.frequencyType,
+  frequencyValue: habit.frequencyValue,
+});
 
-    type: "string",
-  },
+/**
+ * USER
+ */
+const user = {
+  email: string()
+    .email('Email address is invalid')
+    .required('Email address is required.'),
+  
+  emailConfirmation: string()
+    .email('Email address confirmation is invalid')
+    .oneOf([ref('email'), null], `Email addresses don't match.`)
+    .required('Email address confirmation is required.'),
+  
+  password: string()
+    .min(6, 'Password must be at least 6 characters.')
+    .required('You have to enter the password.'),
+  
+  passwordConfirmation: string()
+    .min(6, 'Password must be at least 6 characters.')
+    .oneOf([ref('password'), null], `Passwords don't match.`)
+    .required('You have to enter the password confirmation.'),
+}
 
-  username: {
-    length: {
-      minimum: 2,
-      maximum: 20,
-    },
+// Sign in schema
+const signInSchema = object().shape({
+  email: user.email,
+  password: user.password
+});
 
-    presence: {
-      allowEmpty: false,
-    },
+// Sign up schema
+const signUpSchema = object().shape({
+  email: user.email,
+  emailConfirmation: user.emailConfirmation,
+  password: user.password,
+  passwordConfirmation: user.passwordConfirmation,
+})
 
-    type: "string",
-  },
-
-  emailAddress: {
-    email: {
-      message: "^E-mail address is invalid",
-    },
-
-    presence: {
-      allowEmpty: false,
-    },
-
-    type: "string",
-  },
-
-  emailAddressConfirmation: {
-    email: {
-      message: "^E-mail address confirmation is invalid",
-    },
-
-    equality: {
-      attribute: "emailAddress",
-      message: "^E-mail address confirmation is not equal to e-mail address",
-    },
-
-    presence: {
-      allowEmpty: false,
-    },
-
-    type: "string",
-  },
-
-  password: {
-    length: {
-      minimum: 6,
-    },
-
-    presence: {
-      allowEmpty: false,
-    },
-
-    type: "string",
-  },
-
-  passwordConfirmation: {
-    equality: "password",
-
-    length: {
-      minimum: 6,
-    },
-
-    presence: {
-      allowEmpty: false,
-    },
-
-    type: "string",
-  },
-};
-
-export default constraints;
+export { habitSchema, signInSchema, signUpSchema };

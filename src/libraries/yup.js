@@ -5,14 +5,18 @@ import { object, string, array, ref } from 'yup';
 /**
  * HABIT
  */
-const title = string().required('Title is required.');
-const description = string().notRequired();
-const frequencyValue = array().required('You have to select at least one day.');
+const habit = {
+  name: string().required('Title is required.'),
+  description: string().notRequired(),
+  frequencyType: string().required(),
+  frequencyValue: array().required('You have to select at least one day.'),
+}
 
 const habitSchema = object().shape({
-  title,
-  description,
-  frequencyValue,
+  name: habit.name,
+  description: habit.description,
+  frequencyType: habit.frequencyType,
+  frequencyValue: habit.frequencyValue,
 });
 
 /**

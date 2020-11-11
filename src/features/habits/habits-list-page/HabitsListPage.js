@@ -59,12 +59,14 @@ const HabitsListPage = () => {
     fetchHabits();
   }, [db, user]);
 
+  const deleteHabit = habitId => {
+    setHabits(habits.filter(h => h.id !== habitId));
+  }
+
   // Fetching habits from the database
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log(habits);
 
   // Error
   if (isError) {
@@ -110,6 +112,7 @@ const HabitsListPage = () => {
             <HabitItem
               key={habit.id}
               habit={habit}
+              onDeleteClick={() => deleteHabit(habit.id)}
             />
           ))}
         </TableBody>

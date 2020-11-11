@@ -4,21 +4,20 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { useFirebase } from 'services/firebase';
 import { DatesRangeProvider } from 'features/dates-range';
 
-import LandingPage from 'pages/landing-page';
+import LandingPage from 'components/landing-page';
 
 import SignInPage from 'features/auth/sign-in-page';
 import SignUpPage from 'features/auth/sign-up-page';
 
-import DashboardPage from 'pages/dashboard';
 import AddHabitPage from 'features/habits/add-habit-page';
 import EditHabitPage from 'features/habits/edit-habit-page';
 
-import NotFoundPage from 'pages/not-found';
-import ErrorPage from 'pages/error';
+import NotFoundPage from 'components/not-found-page';
+import ErrorPage from 'components/error-page';
 
 import PrivateRoute from './PrivateRoute';
-import Checkmark from 'Checkmark';
 import HabitsListPage from 'features/habits/habits-list-page';
+import DashboardPage from 'features/habits/habits-dashboard';
 
 const Router = ({ navbar }) => {
   const { user } = useFirebase();
@@ -28,10 +27,6 @@ const Router = ({ navbar }) => {
       {navbar}
 
       <Switch>
-        <Route exact path="/test">
-          <Checkmark date="09-11-2020" habitId="1" />
-        </Route>
-
         <Route exact path="/">
           <LandingPage />
         </Route>

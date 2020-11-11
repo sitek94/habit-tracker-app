@@ -23,9 +23,10 @@ import {
 import AbsoluteCenter from 'components/absolute-center';
 import ButtonProgress from 'components/button-progress';
 
+import dayjs from 'services/dayjs';
+
 import { useFirebase } from 'services/firebase';
 import { useSnackbar } from 'components/snackbar';
-import { daysOfTheWeek } from 'data/days-of-the-week';
 import { habitSchema } from 'data/constraints';
 
 // Styles
@@ -133,6 +134,9 @@ const AddHabitPage = () => {
     }
   };
 
+  // ['Monday', ... , 'Sunday']
+  const weekdays = dayjs.weekdays(dayjs());
+
   return (
     <AbsoluteCenter fullWidth>
       <Container maxWidth="sm">
@@ -145,7 +149,7 @@ const AddHabitPage = () => {
                 <TextField
                   inputRef={register}
                   name="name"
-                  label="Title"
+                  label="Name"
                   error={!!(errors && errors.name)}
                   helperText={
                     errors && errors.name ? errors.name.message : ' '
@@ -160,7 +164,7 @@ const AddHabitPage = () => {
                 <TextField
                   inputRef={register}
                   name="description"
-                  label="Description (optional)"
+                  label="Question (optional)"
                   variant="outlined"
                   disabled={isLoading}
                   fullWidth
@@ -184,18 +188,18 @@ const AddHabitPage = () => {
                       name="frequencyValue"
                       control={control}
                       render={props =>
-                        daysOfTheWeek.map((day, weekdayNum) => (
+                        weekdays.map((name, number) => (
                           <FormControlLabel
                             control={
                               <Checkbox
                                 onChange={() =>
-                                  props.onChange(handleCheck(weekdayNum))
+                                  props.onChange(handleCheck(number))
                                 }
-                                checked={props.value.includes(weekdayNum)}
+                                checked={props.value.includes(number)}
                               />
                             }
-                            key={day}
-                            label={day.slice(0, 3)}
+                            key={name}
+                            label={name.slice(0, 3)}
                             labelPlacement="bottom"
                           />
                         ))

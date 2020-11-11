@@ -41,7 +41,6 @@ const useStyles = makeStyles({
     width: '100%',
   },
   frequencyLabel: {
-    cursor: 'pointer',
     // 14px is a value taken from .MuiOutlinedInput-input
     // so that the label is aligned equally to other labels
     padding: '0 14px',
@@ -129,7 +128,7 @@ const AddHabitPage = () => {
 
       // Add habit to the database.
       await db.ref(`habits/${newHabitKey}`).set(newHabit);
-
+      
       openSnackbar('success', 'Successfully created a habit!');
     } catch (error) {
       console.log('Error when adding a new habit: ', error);
@@ -180,7 +179,7 @@ const AddHabitPage = () => {
                   fullWidth
                 />
               </Grid>
-              
+
               <Grid item xs>
                 <FormControl
                   variant="outlined"

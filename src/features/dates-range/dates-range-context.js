@@ -56,8 +56,13 @@ function DatesRangeProvider({ children }) {
   const { startDate, endDate } = state;
   const datesRange = createDatesRange(startDate, endDate);
 
+  const stateValue = {
+    ...state,
+    datesRange,
+  }
+
   return (
-    <DatesRangeStateContext.Provider value={{ ...state, datesRange }}>
+    <DatesRangeStateContext.Provider value={stateValue}>
       <DatesRangeDispatchContext.Provider value={dispatch}>
         {children}
       </DatesRangeDispatchContext.Provider>

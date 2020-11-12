@@ -1,8 +1,8 @@
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 
-import databaseFormats from 'data/database-formats';
+import { DATE_FORMAT } from 'data/constants';
 import { useDatesRangeState } from 'features/dates-range';
-import Checkmark from './Checkmark';
+import Checkmark from './checkmark/checkmark';
 
 const useStyles = makeStyles({
   // A trick to set width of the table cell to its content
@@ -11,8 +11,6 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
   },
 });
-
-const { checkmark } = databaseFormats;
 
 const HabitItem = ({ habit: { id, name } }) => {
   const classes = useStyles();
@@ -32,7 +30,7 @@ const HabitItem = ({ habit: { id, name } }) => {
 
       <TableCell align="left">
         {datesRange.map(date => (
-          <Checkmark habitId={id} date={date.format(checkmark.date)} />
+          <Checkmark key={date.toISOString()} habitId={id} date={date.format(DATE_FORMAT)} />
         ))}
       </TableCell>
 

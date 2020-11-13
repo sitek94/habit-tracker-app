@@ -31,6 +31,10 @@ export function getCheckmarkLabel(value) {
 export function getNextCheckmarkValue(currentValue) {
   const values = CHECKMARK_VALUES;
 
+  if (!values.includes(currentValue)) {
+    throw new Error(`Unhandled value ${currentValue}`);
+  }
+
   const nextIndex = (values.indexOf(currentValue) + 1) % values.length;
   const nextValue = values[nextIndex];
 

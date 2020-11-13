@@ -8,7 +8,7 @@ import HabitItem from './HabitItem';
 import { useHabits } from '../useHabits';
 import { DatesRangeController } from 'features/dates-range';
 
-const HabitsDashboard = () => {
+function HabitsDashboard() {
   const [{ habits, isLoading, isError }] = useHabits();
 
   // Fetching habits from the database
@@ -38,8 +38,8 @@ const HabitsDashboard = () => {
       <TableContainer>
         <Table>
           <TableBody>
-            {habits.map(habit => (
-              <HabitItem key={habit.id} habit={habit} />
+            {habits.map(({ id, name }) => (
+              <HabitItem key={id} id={id} name={name} />
             ))}
           </TableBody>
         </Table>

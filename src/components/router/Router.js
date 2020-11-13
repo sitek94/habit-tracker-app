@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'services/firebase';
 import { DatesRangeProvider } from 'features/dates-range';
+import { HabitsProvider } from 'context';
 
 import LandingPage from 'components/landing-page';
 
@@ -40,25 +41,27 @@ const Router = ({ navbar }) => {
         </Route>
 
         <PrivateRoute path="/dashboard">
-          <Switch>
-            <Route exact path="/dashboard">
-              <DatesRangeProvider>
-                <DashboardPage />
-              </DatesRangeProvider>
-            </Route>
+          <HabitsProvider>
+            <Switch>
+              <Route exact path="/dashboard">
+                <DatesRangeProvider>
+                  <DashboardPage />
+                </DatesRangeProvider>
+              </Route>
 
-            <Route exact path="/dashboard/add-habit">
-              <AddHabitPage />
-            </Route>
+              <Route exact path="/dashboard/add-habit">
+                <AddHabitPage />
+              </Route>
 
-            <Route exact path="/dashboard/habits">
-              <HabitsListPage />
-            </Route>
+              <Route exact path="/dashboard/habits">
+                <HabitsListPage />
+              </Route>
 
-            <Route exact path="/dashboard/habits/:habitId">
-              <EditHabitPage />
-            </Route>
-          </Switch>
+              <Route exact path="/dashboard/habits/:habitId">
+                <EditHabitPage />
+              </Route>
+            </Switch>
+          </HabitsProvider>
         </PrivateRoute>
 
         <Route exact path="/error">

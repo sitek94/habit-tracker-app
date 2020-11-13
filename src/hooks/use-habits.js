@@ -10,18 +10,20 @@ export function useHabits() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchHabits = async () => {
-      setStatus('pending');
+    let _isMounted = true;
 
-      try {
-        const snapshot = await db
-          .ref('habits')
-          .orderByChild('user')
-          .equalTo(user.uid)
-          .once('value');
+    setStatus('pending');
 
-        // Update habits only if there was a value in database
-        if (snapshot.exists()) {
+    db
+      .ref('habits')
+      .orderByChild('user')
+      .equalTo(user.uid)
+      .on(
+        'value',
+        snapshot => {
+          // Update habits only if there was a value in database
+          if (!snapshot.exists()) return;
+
           let fetchedHabits = snapshot.val();
 
           // Fetched habits is an object so we need to convert it to an array
@@ -30,19 +32,24 @@ export function useHabits() {
             ...habit,
           }));
 
-          setHabits(fetchedHabits);
+          if (_isMounted) {
+            setHabits(fetchedHabits);
+            setStatus('resolved');
+          }
+        },
+        error => {
+          console.log('Error when fetching habits', error);
+
+          if (_isMounted) {
+            setStatus('error');
+            setError(error);
+          }
         }
+      );
 
-        setStatus('resolved');
-      } catch (error) {
-        console.log('Error when fetching habits', error);
-
-        setStatus('error');
-        setError(error);
-      }
+    return () => {
+      _isMounted = false;
     };
-
-    fetchHabits();
   }, [db, user]);
 
   const isLoading = status === 'idle' || status === 'pending';

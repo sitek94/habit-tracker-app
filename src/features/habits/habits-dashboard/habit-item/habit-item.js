@@ -40,3 +40,20 @@ const HabitItem = ({ habit: { id, name } }) => {
 };
 
 export default HabitItem;
+
+/* 
+
+    const weekdayName = date.format('dddd');
+
+    // Tracked days of the habit are stored as string (Monday, Tuesday, etc.)
+    // Use weekday name to check whether given date should be tracked.
+    const isDateTracked = trackedDays.includes(weekdayName);
+
+    // If date is in the future the checkbox should be disabled
+    const isDateFuture = date.isAfter(dayjs(), 'day');
+
+    // Find matching day in the days fetched from database
+    const matchingDay = fetchedDays.find(d => {
+      return dayjs(d.date).isSame(date, 'day');
+    });
+*/

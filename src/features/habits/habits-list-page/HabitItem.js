@@ -119,8 +119,13 @@ const HabitItem = ({ habit, onDeleteClick }) => {
       // Weekdays - render a list of `Chips`, higlight the days that
       // are tracked
       case 'weekdays':
+        if (!Array.isArray(value)) {
+          throw new Error('For type "weekdays" value must be an array');
+        }
+      
         const weekdays = dayjs.weekdays(dayjs());
         const trackedWeekdays = value;
+
         // Weekdays are stored as numbers 0-6, so we can use indexes
         // to check if the given day index is in the tracked array
         return weekdays.map((name, i) => (

@@ -6,7 +6,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import CheckmarkIcon from './checkmark-icon';
 
 import { getNextCheckmarkLabel } from 'helpers';
-import { useCheckmarkValue } from './hooks';
+import { useCheckmarkValue } from 'hooks';
 
 function Checkmark({ habitId, date }) {
   const { status, value, updateValue } = useCheckmarkValue(

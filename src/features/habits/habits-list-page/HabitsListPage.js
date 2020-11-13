@@ -5,10 +5,10 @@ import ErrorPage from 'components/error-page';
 import NoHabits from '../no-habits';
 import HabitItem from './HabitItem';
 
-import { useHabits } from '../useHabits';
+import { useHabits } from 'hooks';
 
 const HabitList = () => {
-  const [{ habits, isLoading, isError }, setHabits] = useHabits();
+  const { habits, isLoading, isError, setHabits} = useHabits();
 
   const deleteHabit = habitId => {
     setHabits(habits.filter(h => h.id !== habitId));

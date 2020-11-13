@@ -1,1 +1,1 @@
-export { default } from './HabitsDashboard';
+export { default } from './habits-dashboard';

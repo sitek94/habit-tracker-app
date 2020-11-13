@@ -1,15 +1,13 @@
-import { Table, TableBody, TableContainer } from '@material-ui/core';
-
 import Loader from 'components/loader';
 import ErrorPage from 'components/error-page';
 import NoHabits from '../no-habits';
-import HabitItem from './HabitItem';
 
-import { useHabits } from '../useHabits';
+import { useHabits } from 'hooks';
 import { DatesRangeController } from 'features/dates-range';
+import DashboardList from './dashboard-list';
 
 function HabitsDashboard() {
-  const [{ habits, isLoading, isError }] = useHabits();
+  const { habits, isLoading, isError } = useHabits();
 
   // Fetching habits from the database
   if (isLoading) {
@@ -35,15 +33,7 @@ function HabitsDashboard() {
   return (
     <>
       <DatesRangeController />
-      <TableContainer>
-        <Table>
-          <TableBody>
-            {habits.map(({ id, name }) => (
-              <HabitItem key={id} id={id} name={name} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <DashboardList list={habits} />
     </>
   );
 };

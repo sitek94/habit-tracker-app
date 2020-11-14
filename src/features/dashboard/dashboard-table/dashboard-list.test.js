@@ -1,6 +1,6 @@
 import { render, screen } from 'utils/test-utils';
 
-import DashboardList from './dashboard-list';
+import DashboardList from './dashboard-table';
 
 const HABITS = [
   {

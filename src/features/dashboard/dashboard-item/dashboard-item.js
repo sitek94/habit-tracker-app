@@ -15,34 +15,37 @@ const useStyles = makeStyles({
   },
 });
 
-function DashboardItem({ habitId, habitName }) {
+function DashboardItem({ id, name, position }) {
   const classes = useStyles();
 
   const { datesRange } = useDatesRangeState();
 
   return (
     <TableRow hover>
+      <TableCell  align="center" className={classes.minWidth}>
+        {position}
+      </TableCell>
       <TableCell
         component="th"
         scope="row"
         align="left"
         className={classes.minWidth}
       >
-        <Typography variant="body1">{habitName}</Typography>
+        <Typography variant="body1">{name}</Typography>
       </TableCell>
 
-      <TableCell align="left">
-        {datesRange.map(date => (
-          <Checkmark key={date.toISOString()} habitId={habitId} date={date.format(DATE_FORMAT)} />
-        ))}
-      </TableCell>
+      {datesRange.map(date => (
+        <TableCell align="left" key={date.toISOString()}>
+          <Checkmark habitId={id} date={date.format(DATE_FORMAT)} />
+        </TableCell>
+      ))}
     </TableRow>
   );
-};
+}
 
 DashboardItem.propTypes = {
-  habitId: PropTypes.string.isRequired,
-  habitName: PropTypes.string.isRequired,
-}
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+};
 
 export default DashboardItem;

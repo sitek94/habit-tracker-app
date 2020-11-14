@@ -9,46 +9,61 @@ export function useCheckmarkValue(habitId, date) {
   const [error, setError] = useState(null);
   const [value, setValue] = useState(EMPTY);
 
-  const { db } = useFirebase();
+  const { db, user } = useFirebase();
 
+  // Initial fetch of the checkmark value
   useEffect(() => {
+    let _isMounted = true;
+
     async function fetchValue() {
       setStatus('pending');
 
       try {
         const snapshot = await db
-          .ref(`habitCheckmarks/${habitId}/${date}`)
+          .ref(`checkmarks/${user.uid}/${habitId}/${date}`)
           .once('value');
 
-        setStatus('resolved');
-
+        let fetchedValue = EMPTY;
+        
         if (snapshot.exists()) {
           // Update there is data in the database
-          setValue(snapshot.val());
+          fetchedValue = snapshot.val();
+        }
+
+        if (_isMounted) {
+          setValue(fetchedValue);
+          setStatus('resolved');
         }
       } catch (error) {
-        setStatus('error');
-        setError(error);
-
         console.log('Error when fetching checkmark value', error);
+
+        if (_isMounted) {
+          setStatus('error');
+          setError(error);
+        }
       }
     }
 
     fetchValue();
-  }, [db, date, habitId]);
 
+    return () => {
+      _isMounted = false;
+    }
+  }, [db, user, date, habitId]);
+
+  // Updates the value of the checkmark to the next value
   const updateValue = async () => {
     setStatus('pending');
 
     try {
-      const checkmarkRef = db.ref(`habitCheckmarks/${habitId}/${date}`);
+      const checkmarkRef = db.ref(`checkmarks/${user.uid}/${habitId}/${date}`);
       const nextValue = getNextCheckmarkValue(value);
-
+      
       // When user sets a checkmark back to `empty` we remove the checkmark in the database
-      if (value === 0) {
+      if (nextValue === EMPTY) {
         await checkmarkRef.remove();
       } else {
-        await checkmarkRef.set(value);
+        await checkmarkRef.set(nextValue);
       }
 
       setStatus('resolved');

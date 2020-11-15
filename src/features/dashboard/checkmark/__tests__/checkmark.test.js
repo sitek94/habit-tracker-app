@@ -3,6 +3,7 @@ import Checkmark from '../Checkmark';
 import { render, screen, cleanup } from '@testing-library/react';
 
 import { useCheckmarkValue } from 'hooks';
+import { EMPTY } from 'data/constants';
 
 jest.mock('hooks', () => ({
   useCheckmarkValue: jest.fn(),
@@ -19,7 +20,7 @@ describe('<Checkmark />', () => {
     useCheckmarkValue.mockImplementation(() => ({
       status: 'idle',
       error: null,
-      value: 0,
+      value: EMPTY,
     }));
 
     render(<Checkmark habitId="123" date="11-11-2020" />);
@@ -31,7 +32,7 @@ describe('<Checkmark />', () => {
     useCheckmarkValue.mockImplementation(() => ({
       status: 'error',
       error: true,
-      value: 0,
+      value: EMPTY,
     }));
 
     render(<Checkmark habitId="123" date="11-11-2020" />);

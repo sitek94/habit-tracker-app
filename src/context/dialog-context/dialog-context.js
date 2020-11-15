@@ -2,8 +2,10 @@ import  { createContext, useContext, useState, useRef } from 'react';
 
 import DialogContainer from './Dialog';
 
+// Context
 const DialogContext = createContext();
 
+// Provider
 const DialogProvider = ({ children }) => {
   const [dialogs, setDialogs] = useState([]);
 
@@ -35,6 +37,7 @@ const DialogProvider = ({ children }) => {
   );
 };
 
+// Hook
 function useDialog() {
   const context = useContext(DialogContext);
 

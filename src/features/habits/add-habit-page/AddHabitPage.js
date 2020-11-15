@@ -29,8 +29,9 @@ import ButtonProgress from 'components/button-progress';
 import dayjs from 'services/dayjs';
 
 import { useFirebase } from 'services/firebase';
-import { useSnackbar } from 'components/snackbar';
+import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
+import { useHabits } from 'context';
 
 // Styles
 const useStyles = makeStyles({
@@ -76,6 +77,7 @@ const AddHabitPage = () => {
   // Contexts
   const { db, user } = useFirebase();
   const { openSnackbar } = useSnackbar();
+  const { habits } = useHabits();
 
   // Form
   const { control, register, handleSubmit, errors, getValues, reset } = useForm(
@@ -114,6 +116,8 @@ const AddHabitPage = () => {
       // Create a new habit object
       const newHabit = {
         user: user.uid,
+        // Add 1 to the position so that the minimum position is 1
+        position: habits.length + 1,
         name,
         description,
         frequency: {

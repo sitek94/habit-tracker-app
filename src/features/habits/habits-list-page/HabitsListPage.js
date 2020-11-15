@@ -5,7 +5,7 @@ import ErrorPage from 'components/error-page';
 import NoHabits from '../no-habits';
 import HabitItem from './HabitItem';
 
-import { useHabits } from 'hooks';
+import { useHabits } from 'context';
 
 const HabitList = () => {
   const { habits, isLoading, isError, setHabits} = useHabits();

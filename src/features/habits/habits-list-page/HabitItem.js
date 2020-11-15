@@ -18,8 +18,8 @@ import {
   Folder as FolderIcon,
 } from '@material-ui/icons';
 
-import { useDialog } from 'components/dialog/dialog-context';
-import { useSnackbar } from 'components/snackbar';
+import { useDialog } from 'context/dialog-context/dialog-context';
+import { useSnackbar } from 'context/snackbar-context';
 
 import { useFirebase } from 'services/firebase';
 import dayjs from 'services/dayjs';

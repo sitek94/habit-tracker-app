@@ -1,23 +1,32 @@
 import { createContext, useContext } from 'react';
 
-import { useHabits } from 'hooks';
+import { useHabitsData } from 'hooks';
 
 // Context
 const HabitsContext = createContext(null);
 
 // Provider
 const HabitsProvider = ({ children }) => {
-  const habitsObject = useHabits();
+  const {
+    habits,
+    setHabits,
+    status,
+    error,
+    isLoading,
+    isError,
+  } = useHabitsData();
 
   return (
-    <HabitsContext.Provider value={habitsObject}>
+    <HabitsContext.Provider
+      value={{ habits, setHabits, status, error, isLoading, isError }}
+    >
       {children}
     </HabitsContext.Provider>
-  )
-}
+  );
+};
 
 // Hook
-function useHabitsValue() {
+function useHabits() {
   const context = useContext(HabitsContext);
 
   if (context === undefined) {
@@ -27,4 +36,4 @@ function useHabitsValue() {
   return context;
 }
 
-export { HabitsProvider, useHabitsValue };
+export { HabitsProvider, useHabits };

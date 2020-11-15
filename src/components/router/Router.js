@@ -3,7 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'services/firebase';
 import { DatesRangeProvider } from 'features/dates-range';
-import { HabitsProvider } from 'context';
+import { CheckmarksProvider, HabitsProvider } from 'context';
 
 import LandingPage from 'components/landing-page';
 
@@ -18,7 +18,7 @@ import ErrorPage from 'components/error-page';
 
 import PrivateRoute from './PrivateRoute';
 import HabitsListPage from 'features/habits/habits-list-page';
-import DashboardPage from 'features/habits/habits-dashboard';
+import DashboardPage from 'features/dashboard';
 
 const Router = ({ navbar }) => {
   const { user } = useFirebase();
@@ -42,25 +42,27 @@ const Router = ({ navbar }) => {
 
         <PrivateRoute path="/dashboard">
           <HabitsProvider>
-            <Switch>
-              <Route exact path="/dashboard">
-                <DatesRangeProvider>
-                  <DashboardPage />
-                </DatesRangeProvider>
-              </Route>
+            <CheckmarksProvider>
+              <Switch>
+                <Route exact path="/dashboard">
+                  <DatesRangeProvider>
+                    <DashboardPage />
+                  </DatesRangeProvider>
+                </Route>
 
-              <Route exact path="/dashboard/add-habit">
-                <AddHabitPage />
-              </Route>
+                <Route exact path="/dashboard/add-habit">
+                  <AddHabitPage />
+                </Route>
 
-              <Route exact path="/dashboard/habits">
-                <HabitsListPage />
-              </Route>
+                <Route exact path="/dashboard/habits">
+                  <HabitsListPage />
+                </Route>
 
-              <Route exact path="/dashboard/habits/:habitId">
-                <EditHabitPage />
-              </Route>
-            </Switch>
+                <Route exact path="/dashboard/habits/:habitId">
+                  <EditHabitPage />
+                </Route>
+              </Switch>
+            </CheckmarksProvider>
           </HabitsProvider>
         </PrivateRoute>
 

@@ -11,8 +11,8 @@ import ErrorBoundary from 'components/error-boundary';
 import LaunchScreen from 'components/loader';
 import Navbar from 'components/navbar';
 
-import { SnackbarProvider } from 'components/snackbar';
-import { DialogProvider } from 'components/dialog/dialog-context';
+import { SnackbarProvider } from 'context/snackbar-context';
+import { DialogProvider } from 'context/dialog-context';
 import { useFirebase } from 'services/firebase';
 
 const theme = createMuiTheme();

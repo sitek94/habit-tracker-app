@@ -19,7 +19,7 @@ import {
 
 import AbsoluteCenter from 'components/absolute-center';
 import AuthProviderList from 'components/auth-provider-list';
-import { useSnackbar } from 'components/snackbar';
+import { useSnackbar } from 'context/snackbar-context';
 import { useFirebase } from 'services/firebase';
 import { signUpSchema } from 'data/constraints';
 

@@ -31,7 +31,7 @@ import Loader from 'components/loader';
 import dayjs from 'services/dayjs';
 
 import { useFirebase } from 'services/firebase';
-import { useSnackbar } from 'components/snackbar';
+import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 
 // Styles

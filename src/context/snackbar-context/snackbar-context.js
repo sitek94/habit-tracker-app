@@ -2,10 +2,12 @@ import { createContext, useContext, useRef, useState } from 'react';
 
 import Snackbar from './Snackbar';
 
+// Context
 const SnackbarContext = createContext();
 
 const defaultSeverity = 'info';
 
+// Provider
 const SnackbarProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -39,6 +41,7 @@ const SnackbarProvider = ({ children }) => {
   )
 }
 
+// Hook
 function useSnackbar() {
   const context = useContext(SnackbarContext);
 

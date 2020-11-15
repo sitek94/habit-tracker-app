@@ -20,7 +20,7 @@ import {
 import AuthProviderList from 'components/auth-provider-list';
 import ButtonProgress from 'components/button-progress';
 import AbsoluteCenter from 'components/absolute-center';
-import { useSnackbar } from 'components/snackbar';
+import { useSnackbar } from 'context/snackbar-context';
 import { useFirebase } from 'services/firebase';
 import { signInSchema } from 'data/constraints';
 

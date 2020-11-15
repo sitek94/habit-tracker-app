@@ -11,8 +11,8 @@ import {
 } from '@material-ui/core';
 
 import { useFirebase } from 'services/firebase';
-import { useDialog } from 'components/dialog/dialog-context';
-import { useSnackbar } from 'components/snackbar';
+import { useDialog } from 'context/dialog-context';
+import { useSnackbar } from 'context/snackbar-context';
 
 const Navbar = () => {
   const history = useHistory();

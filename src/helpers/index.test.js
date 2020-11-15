@@ -3,19 +3,19 @@ import { COMPLETED, SKIPPED, FAILED, EMPTY, CHECKMARK_VALUES } from 'data/consta
 
 // Get checkmark label
 describe('getCheckmarkLabel function', () => {
-  it('returns "empty" when called with 0', () => {
+  it(`returns "empty" when called with ${EMPTY}`, () => {
     expect(getCheckmarkLabel(EMPTY)).toBe('empty');
   });
 
-  it('returns "completed" when called with 1', () => {
+  it(`returns "completed" when called with ${COMPLETED}`, () => {
     expect(getCheckmarkLabel(COMPLETED)).toBe('completed');
   });
 
-  it('returns "skipped" when called with 2', () => {
+  it(`returns "skipped" when called with ${SKIPPED}`, () => {
     expect(getCheckmarkLabel(SKIPPED)).toBe('skipped');
   });
 
-  it('returns "failed" when called with 3', () => {
+  it(`returns "failed" when called with ${FAILED}`, () => {
     expect(getCheckmarkLabel(FAILED)).toBe('failed');
   });
   

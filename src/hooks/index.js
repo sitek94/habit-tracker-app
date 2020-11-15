@@ -1,2 +1,3 @@
 export { useCheckmarkValue } from './use-checkmark-value';
-export { useHabits } from './use-habits';
+export { useHabitsData } from './use-habits-data';
+export { useCheckmarksData } from './use-checkmarks-data';

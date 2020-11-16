@@ -1,9 +1,7 @@
 import { render } from '@testing-library/react';
 
-import { DatesRangeProvider } from 'features/dates-range';
-
 function AllTheProviders({ children }) {
-  return <DatesRangeProvider>{children}</DatesRangeProvider>;
+  return children;
 }
 
 function customRender(ui, options) {

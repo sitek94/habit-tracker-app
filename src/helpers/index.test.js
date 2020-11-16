@@ -1,5 +1,5 @@
 import { getCheckmarkLabel, getNextCheckmarkValue } from '.';
-import { COMPLETED, SKIPPED, FAILED, EMPTY, CHECKMARK_VALUES } from 'data/constants';
+import { COMPLETED, FAILED, EMPTY, CHECKMARK_VALUES } from 'data/constants';
 
 // Get checkmark label
 describe('getCheckmarkLabel function', () => {
@@ -9,10 +9,6 @@ describe('getCheckmarkLabel function', () => {
 
   it(`returns "completed" when called with ${COMPLETED}`, () => {
     expect(getCheckmarkLabel(COMPLETED)).toBe('completed');
-  });
-
-  it(`returns "skipped" when called with ${SKIPPED}`, () => {
-    expect(getCheckmarkLabel(SKIPPED)).toBe('skipped');
   });
 
   it(`returns "failed" when called with ${FAILED}`, () => {

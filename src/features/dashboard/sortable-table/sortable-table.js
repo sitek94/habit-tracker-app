@@ -43,6 +43,7 @@ function SortableTable({ rows, dates }) {
     <TableContainer data-testid="table">
       <Table>
         <SortableTableHead
+          dates={dates}
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}

@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { useFirebase } from 'services/firebase';
-import { SKIPPED } from 'data/constants';
 
 export function useCheckmarksData() {
   const { db, user } = useFirebase();
 
-  const [checkmarks, setCheckmarks] = useState([]);
+  const [checkmarks, setCheckmarks] = useState({});
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
 
@@ -18,37 +17,15 @@ export function useCheckmarksData() {
     db.ref(`checkmarks/${user.uid}`).on(
       'value',
       snapshot => {
-        let checkmarks = [];
+        let fetchedCheckmarks = {};
 
         if (snapshot.exists()) {
-          let dataObject = snapshot.val();
-
-          // Convert object fetched from database to array
-          Object.entries(dataObject).forEach(([habitId, habitCheckmarks]) => {
-
-            // Convert habit checkmarks from object to an array
-            let habitCheckmarksArray = [];
-
-            Object.entries(habitCheckmarks).forEach(([day, value]) => {
-
-              // Skipped days are not included in visualization because they're skipped :O
-              // It might be changed in the future but at the moment I'm not sure what could
-              // be a good way to visualize that.
-              if (value !== SKIPPED) {
-                habitCheckmarksArray.push({ day, value });
-              }
-            });
-
-            checkmarks.push({
-              id: habitId,
-              checkmarks: habitCheckmarksArray,
-            })
-          });
+          fetchedCheckmarks = snapshot.val();
         }
 
         if (_isMounted) {
           setStatus('resolved');
-          setCheckmarks(checkmarks);
+          setCheckmarks(fetchedCheckmarks);
         }
       },
       error => {

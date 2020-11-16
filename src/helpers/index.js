@@ -1,4 +1,4 @@
-import { COMPLETED, SKIPPED, FAILED, EMPTY, CHECKMARK_VALUES } from 'data/constants';
+import { COMPLETED, FAILED, EMPTY, CHECKMARK_VALUES } from 'data/constants';
 
 /**
  * Returns a label for given value of the checkmark.
@@ -10,8 +10,6 @@ export function getCheckmarkLabel(value) {
   switch (value) {
     case COMPLETED:
       return 'completed';
-    case SKIPPED:
-      return 'skipped';
     case FAILED:
       return 'failed';
     case EMPTY:

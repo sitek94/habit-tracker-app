@@ -20,7 +20,7 @@ export function useCheckmarkValue(habitId, date) {
 
       try {
         const snapshot = await db
-          .ref(`checkmarks/${user.uid}/${habitId}/${date}`)
+          .ref(`checkmarks/${user.uid}/${date}/${habitId}`)
           .once('value');
 
         let fetchedValue = EMPTY;
@@ -56,7 +56,7 @@ export function useCheckmarkValue(habitId, date) {
     setStatus('pending');
 
     try {
-      const checkmarkRef = db.ref(`checkmarks/${user.uid}/${habitId}/${date}`);
+      const checkmarkRef = db.ref(`checkmarks/${user.uid}/${date}/${habitId}`);
       const nextValue = getNextCheckmarkValue(value);
       
       // When user sets a checkmark back to `empty` we remove the checkmark in the database

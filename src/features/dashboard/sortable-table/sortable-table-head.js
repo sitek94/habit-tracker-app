@@ -43,12 +43,25 @@ const useStyles = makeStyles({
 });
 
 // Sortable Table Head
-function SortableTableHead({ order, orderBy, onRequestSort }) {
+function SortableTableHead({ dates, order, orderBy, onRequestSort }) {
   const classes = useStyles();
 
   const createSortHandler = property => event => {
     onRequestSort(event, property);
   };
+
+  const headCells = [
+     // Only sortable options: by position and name
+    { id: 'position', numeric: false, isSortable: true, label: 'Nº' },
+    { id: 'name', numeric: false, isSortable: true, label: 'Habit name' },
+    // Days of the week [Monday - Sunday]
+      ...dates.map(day => ({
+      id: day,
+      numeric: false,
+      isSortable: false,
+      label: dayjs(day).format('DD-MMM'),
+    })),
+  ]
 
   return (
     <TableHead>

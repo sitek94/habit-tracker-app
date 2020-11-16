@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { useFirebase } from 'services/firebase';
-import { DatesRangeProvider } from 'features/dates-range';
 import { CheckmarksProvider, HabitsProvider } from 'context';
 
 import LandingPage from 'components/landing-page';
@@ -25,7 +24,7 @@ const Router = ({ navbar }) => {
 
   return (
     <BrowserRouter>
-      {navbar}
+      {!user ? navbar : null}
 
       <Switch>
         <Route exact path="/">
@@ -45,9 +44,7 @@ const Router = ({ navbar }) => {
             <CheckmarksProvider>
               <Switch>
                 <Route exact path="/dashboard">
-                  <DatesRangeProvider>
-                    <DashboardPage />
-                  </DatesRangeProvider>
+                  <DashboardPage />
                 </Route>
 
                 <Route exact path="/dashboard/add-habit">

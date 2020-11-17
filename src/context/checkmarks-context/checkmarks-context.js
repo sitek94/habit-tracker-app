@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { useCheckmarksData } from 'hooks';
+import { useCheckmarksData } from './use-checkmarks-data';
 
 // Context
 const CheckmarksContext = createContext(null);

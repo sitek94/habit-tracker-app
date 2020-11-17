@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { useHabitsData } from 'hooks';
+import { useHabitsData } from './use-habits-data';
 
 // Context
 const HabitsContext = createContext(null);

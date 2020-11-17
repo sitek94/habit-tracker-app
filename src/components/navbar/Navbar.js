@@ -69,7 +69,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="absolute">
       <Toolbar>
         <Box flexGrow={1}>
           {user && <Typography variant="h6">Hello, {user.email}</Typography>}
@@ -92,34 +92,14 @@ const Navbar = () => {
             </Button>
           </ButtonGroup>
         )}
-
-        {user && (
-          <>
-            <Button
-              component={Link}
-              to="/dashboard/add-habit"
-              color="inherit"
-              disabled={isLoading}
-            >
-              Create habit
-            </Button>
-
-            <Button component={Link} to="/dashboard" color="inherit" disabled={isLoading}>
-              Dashboard
-            </Button>
-
-            <Button component={Link} to="/dashboard/habits" color="inherit" disabled={isLoading}>
-              All habits
-            </Button>
-
-            <Button color="inherit" onClick={handleSignOutClick} disabled={isLoading}>
-              Logout
-            </Button>
-          </>
-        )}
       </Toolbar>
     </AppBar>
   );
 };
 
 export default Navbar;
+
+
+            // <Button color="inherit" onClick={handleSignOutClick} disabled={isLoading}>
+            //   Logout
+            // </Button>

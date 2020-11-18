@@ -19,37 +19,37 @@ const authProviders = [
     icon: <FacebookIcon />,
     name: "Facebook",
   },
-  {
-    id: "github.com",
-    color: "#24292e",
-    icon: <GitHubIcon />,
-    name: "GitHub",
-    scopes: ["repo"],
-  },
+  // {
+  //   id: "github.com",
+  //   color: "#24292e",
+  //   icon: <GitHubIcon />,
+  //   name: "GitHub",
+  //   scopes: ["repo"],
+  // },
   {
     id: "google.com",
-    color: "#4285f4",
+    color: "#de5246",
     icon: <GoogleIcon />,
     name: "Google",
   },
-  {
-    id: "microsoft.com",
-    color: "#f65314",
-    icon: <MicrosoftIcon />,
-    name: "Microsoft",
-  },
-  {
-    id: "twitter.com",
-    color: "#1da1f2",
-    icon: <TwitterIcon />,
-    name: "Twitter",
-  },
-  {
-    id: "yahoo.com",
-    color: "#410093",
-    icon: <YahooIcon />,
-    name: "Yahoo",
-  },
+  // {
+  //   id: "microsoft.com",
+  //   color: "#f65314",
+  //   icon: <MicrosoftIcon />,
+  //   name: "Microsoft",
+  // },
+  // {
+  //   id: "twitter.com",
+  //   color: "#1da1f2",
+  //   icon: <TwitterIcon />,
+  //   name: "Twitter",
+  // },
+  // {
+  //   id: "yahoo.com",
+  //   color: "#410093",
+  //   icon: <YahooIcon />,
+  //   name: "Yahoo",
+  // },
 ];
 
 export default authProviders;

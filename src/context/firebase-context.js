@@ -1,5 +1,5 @@
 import * as React from 'react';
-import firebase, { auth, database as db, firestore } from 'services/firebase/firebase-init';
+import firebase, { auth, database as db, firestore } from 'api/firebase';
 
 // Context
 const FirebaseContext = React.createContext(null);

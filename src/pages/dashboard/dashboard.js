@@ -50,7 +50,7 @@ let initialDateRange = {
 // Dashboard
 function Dashboard() {
   const classes = useStyles();
-
+  console.log('Dashboard');
   // Habits
   const {
     habits,

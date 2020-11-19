@@ -1,18 +1,16 @@
 import { createContext, useContext, useRef, useState } from 'react';
-
-import Snackbar from './Snackbar';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 // Context
 const SnackbarContext = createContext();
-
-const defaultSeverity = 'info';
 
 // Provider
 const SnackbarProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const [severity, setSeverity] = useState(defaultSeverity);
-  
+  const [severity, setSeverity] = useState('info');
+
   const openSnackbar = (severity, message) => {
     setIsOpen(true);
     setSeverity(severity);
@@ -21,32 +19,43 @@ const SnackbarProvider = ({ children }) => {
 
   const closeSnackbar = () => {
     setIsOpen(false);
-    setSeverity(defaultSeverity);
+    setSeverity('info');
     setMessage(message);
   };
 
-  const contextValue = useRef({ openSnackbar })
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    closeSnackbar();
+  };
+
+  const contextValue = useRef({ openSnackbar });
 
   return (
     <SnackbarContext.Provider value={contextValue.current}>
       {children}
-      <Snackbar
-        autoHideDuration={2000}
-        message={message}
-        severity={severity}
-        open={isOpen}
-        onClose={closeSnackbar}
-      />
+      <Snackbar open={isOpen} autoHideDuration={4000} onClose={handleClose}>
+        <Alert
+          variant="filled"
+          elevation={6}
+          severity={severity}
+          onClose={handleClose}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </SnackbarContext.Provider>
-  )
-}
+  );
+};
 
 // Hook
 function useSnackbar() {
   const context = useContext(SnackbarContext);
 
   if (context === undefined) {
-    throw new Error('useSnackbar must be used within HabitsProvider');
+    throw new Error('useSnackbar must be used within SnackbarProvider');
   }
 
   return context;

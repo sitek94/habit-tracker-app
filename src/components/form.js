@@ -3,26 +3,44 @@ import {
   Divider,
   Grid,
   Typography,
+  FormHelperText,
   makeStyles,
+  Box,
+  Paper,
+  Link,
 } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import ButtonProgress from 'components/button-progress';
+import { Link as RouterLink } from 'react-router-dom';
+import { ButtonProgress } from 'components/lib';
 
 const useStyles = makeStyles(theme => ({
   // Container
-  formContainer: {
-    maxWidth: 586,
+  paper: {
+    maxWidth: 550,
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: theme.spacing(6, 14),
+  },
+
+  // Form
+  form: {
+    maxWidth: 320,
+    margin: theme.spacing(6, 14),
   },
   formHeader: {
     textAlign: 'center',
+    marginBottom: theme.spacing(2),
   },
-  form: {
-    maxWidth: 320,
+  formBody: {
+    '& > *:not(:last-child)': {
+      marginBottom: theme.spacing(2),
+    },
+  },
+
+  // Helper text
+  helperText: {
+    textAlign: 'center',
+    ...theme.typography.subtitle2,
   },
 
   // Divider
@@ -39,6 +57,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function FormLink(props) {
+  return <Link component={RouterLink} {...props} />;
+}
+
 function FormDivider() {
   const classes = useStyles();
 
@@ -52,14 +74,14 @@ function FormDivider() {
 }
 
 function FormControl({ children }) {
-  return <Grid item>{children}</Grid>;
+  return <div>{children}</div>;
 }
 
 function FormContainer({ onSubmit, children }) {
   const classes = useStyles();
 
   return (
-    <Paper elevation={5} className={classes.formContainer}>
+    <Paper elevation={5} className={classes.paper}>
       <form className={classes.form} onSubmit={onSubmit} noValidate>
         <Grid container direction="column" spacing={2}>
           {children}
@@ -70,28 +92,49 @@ function FormContainer({ onSubmit, children }) {
 }
 
 const Form = ({
+  onSubmit,
   primaryText,
   secondaryText,
   buttonText,
   bottomText,
-  onSubmit,
+  helperText,
+  isError,
   isLoading,
   children,
 }) => {
+  const classes = useStyles();
+
   return (
-    <FormContainer>
-      <FormControl>
-        <Typography align="center" component="h1" variant="h5" gutterBottom>
+    <FormContainer onSubmit={onSubmit}>
+      <div className={classes.formHeader}>
+        {/* Primary text */}
+        <Typography component="h1" variant="h5" gutterBottom>
           {primaryText}
         </Typography>
-        <Typography align="center" color="textSecondary" variant="body1" gutterBottom>
-          {secondaryText}
-        </Typography>
-      </FormControl>
 
-      {children}
+        {/* Secondary text (optional) */}
+        {secondaryText ? (
+          <Typography
+            color="textSecondary"
+            component="div"
+            variant="body1"
+            gutterBottom
+          >
+            <Box fontWeight="fontWeightMedium">{secondaryText}</Box>
+          </Typography>
+        ) : null}
 
-      <FormControl>
+        {/* Form helper text */}
+        <FormHelperText error className={classes.helperText}>
+          {isError ? helperText : ' '}
+        </FormHelperText>
+      </div>
+
+      <div className={classes.formBody}>
+        {/* Form content */}
+        {children}
+
+        {/* Submit button */}
         <Button
           fullWidth
           type="submit"
@@ -102,17 +145,16 @@ const Form = ({
           {buttonText}
           {isLoading && <ButtonProgress />}
         </Button>
-      </FormControl>
 
-      {bottomText ? (
-        <FormControl>
-          <Typography color="textSecondary" align="center">
-            {bottomText}
+        {/* Bottom text (optional) */}
+        {bottomText ? (
+          <Typography color="textSecondary" component="div" align="center">
+            <Box fontWeight="fontWeightMedium">{bottomText}</Box>
           </Typography>
-        </FormControl>
-      ) : null}
+        ) : null}
+      </div>
     </FormContainer>
   );
 };
 
-export { Form, FormDivider, FormControl };
+export { Form, FormDivider, FormControl, FormLink };

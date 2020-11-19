@@ -1,1 +1,0 @@
-export { FirebaseProvider, useFirebase } from './firebase-context';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useFirebase } from 'services/firebase';
+import { useFirebase } from 'context/firebase-context';
 
 export function useCheckmarksData() {
   const { db, user } = useFirebase();

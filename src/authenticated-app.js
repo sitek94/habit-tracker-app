@@ -21,6 +21,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ListIcon from '@material-ui/icons/FormatListBulleted';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { useAuth } from 'context/auth-context';
+import { useDialog } from 'context/dialog-context';
 
 const DRAWER_WIDTH = 240;
 
@@ -135,6 +136,19 @@ function SidebarButton({ icon, children, ...rest }) {
 function Sidebar() {
   const classes = useStyles();
   const { signOut } = useAuth();
+  const { openDialog } = useDialog();
+
+  const handleLogoutClick = () => {
+    openDialog({
+      title: 'Sign out?',
+      description: `
+        While signed out you are unable to manage your profile and 
+        conduct other activities that require you to be signed in.`,
+      confirmText: 'Sign out',
+      onConfirm: signOut,
+      color: 'secondary',
+    });
+  }
 
   return (
     <Drawer
@@ -169,7 +183,7 @@ function Sidebar() {
         <SidebarLink to="/settings" icon={<SettingsIcon />}>
           Settings
         </SidebarLink>
-        <SidebarButton onClick={signOut} icon={<ExitIcon />}>
+        <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
           Logout
         </SidebarButton>
       </List>

@@ -5,6 +5,7 @@ import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { ThemeProvider } from './theme-context';
 import { SnackbarProvider } from './snackbar-context';
+import { DialogProvider } from './dialog-context';
 
 const queryConfig = {
   queries: {
@@ -25,7 +26,9 @@ function AppProviders({ children }) {
         <ThemeProvider>
           <FirebaseProvider>
             <SnackbarProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <DialogProvider>
+                <AuthProvider>{children}</AuthProvider>
+              </DialogProvider>
             </SnackbarProvider>
           </FirebaseProvider>
         </ThemeProvider>
@@ -36,5 +39,4 @@ function AppProviders({ children }) {
 
 export { AppProviders };
 export { HabitsProvider, useHabits } from './habits-context';
-export { DialogProvider, useDialog } from './dialog-context';
 export { CheckmarksProvider, useCheckmarks } from './checkmarks-context';

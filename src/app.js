@@ -13,7 +13,7 @@ function App() {
 
   return (
     // <React.Suspense fallback={<FullPageSpinner />}>
-    <div>{user ? <AuthenticatedApp /> : <UnathenticatedApp />}</div>
+    user ? <AuthenticatedApp /> : <UnathenticatedApp />
     // </React.Suspense>
   );
 }

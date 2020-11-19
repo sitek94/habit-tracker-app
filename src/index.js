@@ -1,14 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
 import App from './app';
+import { AppProviders } from 'context';
 import reportWebVitals from './reportWebVitals';
 
-import { FirebaseProvider } from 'services/firebase';
-
 render(
-  <FirebaseProvider>
+  <AppProviders>
     <App />
-  </FirebaseProvider>,
+  </AppProviders>,
   document.getElementById('root')
 );
 

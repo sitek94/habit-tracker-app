@@ -21,7 +21,7 @@ function AuthProvider(props) {
     setData,
   } = useAsync();
 
-  const { auth } = useFirebase();
+  const { firebase, auth } = useFirebase();
 
   // Auth state change observer
   React.useEffect(() => {
@@ -41,8 +41,24 @@ function AuthProvider(props) {
     [auth]
   );
 
+  // Sign in with Auth Provider
+  const signInWithAuthProvider = React.useCallback(
+    ({ id, scopes }) => {
+      const authProvider = new firebase.auth.OAuthProvider(id);
+
+      if (scopes) {
+        scopes.forEach(scope => {
+          authProvider.addScope(scope);
+        });
+      }
+
+      auth.signInWithPopup(authProvider);
+    },
+    [firebase, auth]
+  );
+
   // Sign up (email, password)
-  const register = React.useCallback(
+  const signUp = React.useCallback(
     ({ email, password }) =>
       auth.createUserWithEmailAndPassword(email, password),
     [auth]
@@ -53,15 +69,23 @@ function AuthProvider(props) {
     auth.signOut();
   }, [auth]);
 
+  const resetPassword = React.useCallback(
+    ({ email }) => auth.sendPasswordResetEmail(email),
+    [auth]
+  );
+
   // Context value
-  const value = React.useMemo(() => ({ user, signIn, signOut, register }), [
-    user,
-    signIn,
-    signOut,
-    register,
-  ]);
-
-
+  const value = React.useMemo(
+    () => ({
+      user,
+      signIn,
+      signInWithAuthProvider,
+      signUp,
+      signOut,
+      resetPassword,
+    }),
+    [user, signIn, signInWithAuthProvider, signUp, signOut, resetPassword]
+  );
 
   if (isLoading || isIdle) {
     return <FullPageSpinner />;

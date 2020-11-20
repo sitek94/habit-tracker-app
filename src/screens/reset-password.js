@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@material-ui/core';
-import { Form, FormControl, FormLink } from 'components/form';
+import { Form, FormItem, FormLink } from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { useSnackbar } from 'context/snackbar-context';
 import { resetPasswordSchema } from 'data/constraints';
@@ -41,7 +41,7 @@ const SignInForm = () => {
       isError={isError}
       helperText={errorMessage}
     >
-      <FormControl>
+      <FormItem>
         <TextField
           inputRef={register}
           name="email"
@@ -53,7 +53,7 @@ const SignInForm = () => {
           variant="outlined"
           fullWidth
         />
-      </FormControl>
+      </FormItem>
     </Form>
   );
 };

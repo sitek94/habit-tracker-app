@@ -73,8 +73,8 @@ function FormDivider() {
   );
 }
 
-function FormControl({ children }) {
-  return <div>{children}</div>;
+function FormItem({ children }) {
+  return <div className="form-item">{children}</div>;
 }
 
 function FormContainer({ onSubmit, children }) {
@@ -157,4 +157,4 @@ const Form = ({
   );
 };
 
-export { Form, FormDivider, FormControl, FormLink };
+export { Form, FormItem, FormDivider, FormLink };

@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@material-ui/core';
-import { Form, FormControl, FormDivider, FormLink } from 'components/form';
+import { Form, FormItem, FormDivider, FormLink } from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { signUpSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
@@ -38,18 +38,18 @@ function SignUpForm() {
       isError={isError}
       helperText={errorMessage}
     >
-      <FormControl>
+      <FormItem>
         <AuthProviderList
           text="Sign up with"
           onAuthProviderClick={signInWithAuthProvider}
         />
-      </FormControl>
+      </FormItem>
 
-      <FormControl>
+      <FormItem>
         <FormDivider />
-      </FormControl>
+      </FormItem>
 
-      <FormControl>
+      <FormItem>
         <TextField
           inputRef={register}
           name="email"
@@ -61,9 +61,9 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormControl>
+      </FormItem>
 
-      <FormControl>
+      <FormItem>
         <TextField
           inputRef={register}
           name="password"
@@ -76,9 +76,9 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormControl>
+      </FormItem>
 
-      <FormControl>
+      <FormItem>
         <TextField
           inputRef={register}
           name="passwordConfirmation"
@@ -91,7 +91,7 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormControl>
+      </FormItem>
     </Form>
   );
 };

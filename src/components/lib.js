@@ -23,6 +23,25 @@ function ButtonProgress(props) {
   return <LinearProgress className={classes.buttonProgress} {...props} />;
 }
 
+function ErrorMessage({ error, inline, ...props }) {
+  const display = inline ? 'inline' : 'block';
+
+  return (
+    <Box role="alert" color="error.main" display={display} {...props}>
+      <span>There was an error</span>
+      <Box
+        component="pre"
+        display={display}
+        margin={0}
+        mb={-5}
+        whiteSpace="break-spaces"
+      >
+        {error.message}
+      </Box>
+    </Box>
+  );
+}
+
 function FullPageSpinner() {
   return (
     <Box
@@ -63,4 +82,4 @@ function FullPageErrorFallback({ error }) {
   );
 }
 
-export { ButtonProgress, FullPageSpinner, FullPageErrorFallback };
+export { ButtonProgress, ErrorMessage, FullPageSpinner, FullPageErrorFallback };

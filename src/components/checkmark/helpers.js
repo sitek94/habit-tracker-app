@@ -13,6 +13,7 @@ export function getCheckmarkLabel(value) {
     case FAILED:
       return 'failed';
     case EMPTY:
+    case null:
       return 'empty';
     default:
       throw new Error(`Unhandled value ${value}`);

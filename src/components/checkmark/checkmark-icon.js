@@ -17,6 +17,7 @@ function CheckmarkIcon({ value }) {
     case FAILED:
       return <CheckboxFailedIcon color="secondary" data-testid="checkmark-failed" />;
 
+    case null:
     case EMPTY:
     default:
       return <CheckBoxBlankIcon data-testid="checkmark-empty" />;

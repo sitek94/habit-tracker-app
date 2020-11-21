@@ -1,11 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, TextField } from '@material-ui/core';
-import { Form, FormItem, FormDivider, FormLink } from 'components/form';
+import { TextField } from '@material-ui/core';
+import { AuthProviderList } from 'components/auth-providers-list';
+import {
+  Form,
+  FormBody,
+  FormButton,
+  FormDivider,
+  FormErrorText,
+  FormHeader,
+  FormLink,
+  FormPrimaryText,
+  FormSecondaryText,
+} from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { signInSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
-import { AuthProviderList } from 'components/auth-providers-list';
 
 const SignInForm = () => {
   const { signIn, signInWithAuthProvider } = useAuth();
@@ -25,36 +35,23 @@ const SignInForm = () => {
   const errorMessage = authError?.message || errorMessages[0]?.message;
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      primaryText="Sign in"
-      secondaryText={
-        <>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <FormPrimaryText>Sign in</FormPrimaryText>
+        <FormSecondaryText>
           Don't have an account? <FormLink to="/signup">Sign up</FormLink>
-        </>
-      }
-      bottomText={
-        <>
-          Forgot password? <FormLink to="/reset-password">Reset here</FormLink>
-        </>
-      }
-      buttonText="Sign in"
-      isLoading={isLoading}
-      isError={isError}
-      helperText={errorMessage}
-    >
-      <FormItem>
+        </FormSecondaryText>
+        <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
+      </FormHeader>
+
+      <FormBody>
         <AuthProviderList
           text="Sign in with"
           onAuthProviderClick={signInWithAuthProvider}
         />
-      </FormItem>
 
-      <FormItem>
         <FormDivider />
-      </FormItem>
 
-      <FormItem>
         <TextField
           inputRef={register}
           name="email"
@@ -66,9 +63,7 @@ const SignInForm = () => {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
 
-      <FormItem>
         <TextField
           inputRef={register}
           name="password"
@@ -81,7 +76,15 @@ const SignInForm = () => {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
+
+        <FormButton type="submit" disabled={isLoading}>
+          Sign in
+        </FormButton>
+
+        <FormSecondaryText>
+          Forgot password? <FormLink to="/reset-password">Reset here</FormLink>
+        </FormSecondaryText>
+      </FormBody>
     </Form>
   );
 };

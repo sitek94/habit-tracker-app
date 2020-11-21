@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Grid,
   Typography,
   FormHelperText,
   makeStyles,
@@ -38,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   // Helper text
-  helperText: {
+  errorText: {
     textAlign: 'center',
     ...theme.typography.subtitle2,
   },
@@ -73,88 +72,71 @@ function FormDivider() {
   );
 }
 
-function FormItem({ children }) {
-  return <div className="form-item">{children}</div>;
-}
-
-function FormContainer({ onSubmit, children }) {
+function Form({ onSubmit, children }) {
   const classes = useStyles();
 
   return (
     <Paper elevation={5} className={classes.paper}>
       <form className={classes.form} onSubmit={onSubmit} noValidate>
-        <Grid container direction="column" spacing={2}>
-          {children}
-        </Grid>
+        {children}
       </form>
     </Paper>
   );
 }
 
-const Form = ({
-  onSubmit,
-  primaryText,
-  secondaryText,
-  buttonText,
-  bottomText,
-  helperText,
-  isError,
-  isLoading,
-  children,
-}) => {
+function FormPrimaryText({ children }) {
+  return (
+    <Typography component="h1" variant="h5" align="center" gutterBottom>
+      {children}
+    </Typography>
+  );
+}
+
+function FormSecondaryText({ children, ...props }) {
+  return (
+    <Typography color="textSecondary" component="div" align="center" {...props}>
+      <Box fontWeight="fontWeightMedium">{children}</Box>
+    </Typography>
+  );
+}
+
+function FormErrorText({ children }) {
   const classes = useStyles();
 
   return (
-    <FormContainer onSubmit={onSubmit}>
-      <div className={classes.formHeader}>
-        {/* Primary text */}
-        <Typography component="h1" variant="h5" gutterBottom>
-          {primaryText}
-        </Typography>
-
-        {/* Secondary text (optional) */}
-        {secondaryText ? (
-          <Typography
-            color="textSecondary"
-            component="div"
-            variant="body1"
-            gutterBottom
-          >
-            <Box fontWeight="fontWeightMedium">{secondaryText}</Box>
-          </Typography>
-        ) : null}
-
-        {/* Form helper text */}
-        <FormHelperText error className={classes.helperText}>
-          {isError ? helperText : ' '}
-        </FormHelperText>
-      </div>
-
-      <div className={classes.formBody}>
-        {/* Form content */}
-        {children}
-
-        {/* Submit button */}
-        <Button
-          fullWidth
-          type="submit"
-          color="primary"
-          variant="contained"
-          disabled={isLoading}
-        >
-          {buttonText}
-          {isLoading && <ButtonProgress />}
-        </Button>
-
-        {/* Bottom text (optional) */}
-        {bottomText ? (
-          <Typography color="textSecondary" component="div" align="center">
-            <Box fontWeight="fontWeightMedium">{bottomText}</Box>
-          </Typography>
-        ) : null}
-      </div>
-    </FormContainer>
+    <FormHelperText error className={classes.errorText}>
+      {children}
+    </FormHelperText>
   );
-};
+}
 
-export { Form, FormItem, FormDivider, FormLink };
+function FormButton({ children, isLoading, ...props }) {
+  return (
+    <Button fullWidth color="primary" variant="contained" {...props}>
+      {children}
+      {isLoading && <ButtonProgress />}
+    </Button>
+  );
+}
+
+function FormHeader({ children }) {
+  return <Box mb={2}>{children}</Box>;
+}
+
+function FormBody({ children }) {
+  const classes = useStyles();
+
+  return <div className={classes.formBody}>{children}</div>;
+}
+
+export {
+  Form,
+  FormBody,
+  FormHeader,
+  FormPrimaryText,
+  FormSecondaryText,
+  FormErrorText,
+  FormButton,
+  FormDivider,
+  FormLink,
+};

@@ -1,6 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@material-ui/core';
-import { Form, FormItem, FormDivider, FormLink } from 'components/form';
+import {
+  Form,
+  FormBody,
+  FormButton,
+  FormDivider,
+  FormErrorText,
+  FormHeader,
+  FormLink,
+  FormPrimaryText,
+  FormSecondaryText,
+} from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { signUpSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
@@ -25,31 +35,23 @@ function SignUpForm() {
   const errorMessage = authError?.message || errorMessages[0]?.message;
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      primaryText="Sign up"
-      secondaryText={
-        <>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <FormPrimaryText>Sign up</FormPrimaryText>
+        <FormSecondaryText>
           Already have an account? <FormLink to="/signin">Sign in</FormLink>
-        </>
-      }
-      buttonText="Sign up"
-      isLoading={isLoading}
-      isError={isError}
-      helperText={errorMessage}
-    >
-      <FormItem>
+        </FormSecondaryText>
+        <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
+      </FormHeader>
+
+      <FormBody>
         <AuthProviderList
           text="Sign up with"
           onAuthProviderClick={signInWithAuthProvider}
         />
-      </FormItem>
 
-      <FormItem>
         <FormDivider />
-      </FormItem>
 
-      <FormItem>
         <TextField
           inputRef={register}
           name="email"
@@ -61,9 +63,7 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
 
-      <FormItem>
         <TextField
           inputRef={register}
           name="password"
@@ -76,9 +76,6 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
-
-      <FormItem>
         <TextField
           inputRef={register}
           name="passwordConfirmation"
@@ -91,9 +88,13 @@ function SignUpForm() {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
+
+        <FormButton type="submit" disabled={isLoading}>
+          Sign up
+        </FormButton>
+      </FormBody>
     </Form>
   );
-};
+}
 
 export default SignUpForm;

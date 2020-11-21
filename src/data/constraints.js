@@ -6,16 +6,14 @@ import { object, string, array, ref } from 'yup';
 const habit = {
   name: string().required('Title is required.'),
   description: string().notRequired(),
-  frequencyType: string().required(),
-  frequencyValue: array().required('You have to select at least one day.'),
+  frequency: array().required('You have to select at least one day.'),
 };
 
 // Habit schema
 const habitSchema = object().shape({
   name: habit.name,
   description: habit.description,
-  frequencyType: habit.frequencyType,
-  frequencyValue: habit.frequencyValue,
+  frequency: habit.frequency,
 });
 
 /**

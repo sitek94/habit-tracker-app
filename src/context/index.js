@@ -6,6 +6,8 @@ import { FirebaseProvider } from './firebase-context';
 import { ThemeProvider } from './theme-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
+import { HabitsProvider } from './habits-context';
+import { ReactQueryDevtools } from 'react-query-devtools';
 
 const queryConfig = {
   queries: {
@@ -19,24 +21,34 @@ const queryConfig = {
   },
 };
 
+function ModalsProvider({ children }) {
+  return (
+    <DialogProvider>
+      <SnackbarProvider>{children}</SnackbarProvider>
+    </DialogProvider>
+  );
+}
+
+function AuthenticatedAppProviders({ children }) {
+  return <HabitsProvider>{children}</HabitsProvider>;
+}
+
 function AppProviders({ children }) {
   return (
     <ReactQueryConfigProvider config={queryConfig}>
       <Router>
         <ThemeProvider>
           <FirebaseProvider>
-            <SnackbarProvider>
-              <DialogProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </DialogProvider>
-            </SnackbarProvider>
+            <ModalsProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </ModalsProvider>
           </FirebaseProvider>
         </ThemeProvider>
       </Router>
+      <ReactQueryDevtools initialIsOpen position="top-right" />
     </ReactQueryConfigProvider>
   );
 }
 
-export { AppProviders };
-export { HabitsProvider, useHabits } from './habits-context';
-export { CheckmarksProvider, useCheckmarks } from './checkmarks-context';
+export { AppProviders, AuthenticatedAppProviders, ModalsProvider };
+export { CheckmarksProvider, useCheckmarks } from './checkmarks-context2';

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { ReactComponent as BugFixingSvg } from 'images/bug-fixing.svg';
 import {
@@ -59,7 +60,7 @@ function FullPageErrorFallback({ error }) {
   return (
     <Box
       role="alert"
-      height="100vh"
+      height="100%"
       display="flex"
       flexDirection="column"
       justifyContent="center"
@@ -80,6 +81,9 @@ function FullPageErrorFallback({ error }) {
       </Box>
     </Box>
   );
+}
+FullPageErrorFallback.propTypes = {
+  error: PropTypes.object.isRequired
 }
 
 export { ButtonProgress, ErrorMessage, FullPageSpinner, FullPageErrorFallback };

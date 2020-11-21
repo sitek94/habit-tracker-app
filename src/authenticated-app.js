@@ -22,6 +22,14 @@ import ListIcon from '@material-ui/icons/FormatListBulleted';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
+import { ErrorMessage, FullPageErrorFallback } from 'components/lib';
+import { ErrorBoundary } from 'react-error-boundary';
+import NotFoundScreen from 'screens/not-found';
+import AddHabitScreen from 'screens/add-habit';
+import { AuthenticatedAppProviders } from 'context';
+import EditHabitScreen from 'screens/edit-habit';
+import ManageHabits from 'screens/manage-habits';
+import Dashboard from 'screens/dashboard';
 
 const DRAWER_WIDTH = 240;
 
@@ -30,15 +38,28 @@ const useStyles = makeStyles(theme => ({
   container: {
     height: '100vh',
     width: '100%',
+    display: 'flex',
   },
+
+  main: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
+  },
+
   content: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: theme.spacing(4),
   },
 
+  // Toolbar offset
+  offset: theme.mixins.toolbar,
+  
   // Nav
   toolbar: {
     justifyContent: 'flex-end',
@@ -63,18 +84,40 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function ErrorFallback({ error }) {
+  return (
+    <ErrorMessage
+      error={error}
+      height="100%"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+    />
+  );
+}
+
 // App
 function AuthenticatedApp() {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
-      <Nav />
-      <Sidebar />
-      <main className={classes.content}>
-        <AppRoutes />
-      </main>
-    </div>
+    <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
+      <div className={classes.container}>
+        <Nav />
+        <Sidebar />
+        <main className={classes.main}>
+          <div className={classes.offset} />
+          <div className={classes.content}>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <AuthenticatedAppProviders>
+                <AppRoutes />
+              </AuthenticatedAppProviders>
+            </ErrorBoundary>
+          </div>
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }
 
@@ -83,7 +126,7 @@ function Nav() {
   const classes = useStyles();
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="fixed">
       <Toolbar className={classes.toolbar}>
         <Tooltip title="GitHub repository">
           <IconButton
@@ -148,7 +191,7 @@ function Sidebar() {
       onConfirm: signOut,
       color: 'secondary',
     });
-  }
+  };
 
   return (
     <Drawer
@@ -195,10 +238,11 @@ function Sidebar() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/dashboard" element={<div />} />
-      <Route path="/add-habit" element={<div />} />
-      <Route path="/edit-habit" element={<div />} />
-      <Route path="/manage-habits" element={<div />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/add-habit" element={<AddHabitScreen />} />
+      <Route path="/edit-habit/:habitId" element={<EditHabitScreen />} />
+      <Route path="/manage-habits" element={<ManageHabits />} />
+      <Route path="*" element={<NotFoundScreen />} />
     </Routes>
   );
 }

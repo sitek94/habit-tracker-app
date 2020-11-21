@@ -48,9 +48,9 @@ const DialogProvider = ({ children }) => {
           confirmText,
           onConfirm,
           color = 'primary',
-        }) => (
+        }, i) => (
           <Dialog
-            key={title}
+            key={`${i}-${title}`}
             open={open}
             onClose={closeDialog}
             aria-labelledby="dialog-title"

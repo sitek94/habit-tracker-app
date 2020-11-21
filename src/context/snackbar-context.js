@@ -19,8 +19,6 @@ const SnackbarProvider = ({ children }) => {
 
   const closeSnackbar = () => {
     setIsOpen(false);
-    setSeverity('info');
-    setMessage(message);
   };
 
   const handleClose = (event, reason) => {

@@ -12,8 +12,8 @@ import {
 
 import { getComparator } from './helpers';
 
-import SortableTableHead from './sortable-table-head';
-import Checkmark from '../checkmark';
+import { SortableTableHead } from './sortable-table-head';
+import Checkmark from 'components/checkmark';
 
 // Styles
 const useStyles = makeStyles({
@@ -86,11 +86,8 @@ SortableTable.propTypes = {
     })
   ).isRequired,
 
-  // Dates 
+  // Dates
   dates: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default SortableTable;
-
-
-
+export { SortableTable };

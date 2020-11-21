@@ -1,6 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@material-ui/core';
-import { Form, FormItem, FormLink } from 'components/form';
+import {
+  Form,
+  FormBody,
+  FormButton,
+  FormErrorText,
+  FormHeader,
+  FormLink,
+  FormPrimaryText,
+  FormSecondaryText,
+} from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { useSnackbar } from 'context/snackbar-context';
 import { resetPasswordSchema } from 'data/constraints';
@@ -17,9 +26,11 @@ const SignInForm = () => {
   });
 
   const onSubmit = ({ email }) => {
-    run(resetPassword({ email }).then(() => {
-      openSnackbar('success', `Sent password reset email to ${email}`);
-    }));
+    run(
+      resetPassword({ email }).then(() => {
+        openSnackbar('success', `Sent password reset email to ${email}`);
+      })
+    );
     reset();
   };
 
@@ -28,20 +39,13 @@ const SignInForm = () => {
   const errorMessage = authError?.message || errorMessages[0]?.message;
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      primaryText="Reset password"
-      bottomText={
-        <>
-          Already have an account? <FormLink to="/signin">Sign in</FormLink>
-        </>
-      }
-      buttonText="Reset password"
-      isLoading={isLoading}
-      isError={isError}
-      helperText={errorMessage}
-    >
-      <FormItem>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <FormPrimaryText>Reset password</FormPrimaryText>
+        <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
+      </FormHeader>
+
+      <FormBody>
         <TextField
           inputRef={register}
           name="email"
@@ -53,7 +57,14 @@ const SignInForm = () => {
           variant="outlined"
           fullWidth
         />
-      </FormItem>
+        <FormButton type="submit" disabled={isLoading}>
+          Sign in
+        </FormButton>
+
+        <FormSecondaryText>
+          Already have an account? <FormLink to="/signin">Sign in</FormLink>
+        </FormSecondaryText>
+      </FormBody>
     </Form>
   );
 };

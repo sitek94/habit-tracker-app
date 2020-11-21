@@ -10,7 +10,7 @@ export function useHabits() {
       .once('value')
       .then(snapshot => {
         let fetchedHabits = [];
-
+        
         if (snapshot.exists()) {
           snapshot.forEach(childSnapshot => {
             fetchedHabits.push({

@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextField } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
 import {
   Form,
@@ -11,10 +12,32 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
+import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
-import { useAddHabit } from 'hooks/useAddHabit';
+import { useHabit } from 'hooks/useHabit';
+import { useSaveHabit } from 'hooks/useSaveHabit';
 import { weekdays } from 'utils/misc';
+
+// Styles
+const useStyles = makeStyles({
+  actions: {
+    justifyContent: 'flex-end',
+  },
+  formControl: {
+    width: '100%',
+  },
+  frequencyLabel: {
+    // 14px is a value taken from .MuiOutlinedInput-input
+    // so that the label is aligned equally to other labels
+    padding: '0 14px',
+  },
+
+  disableMargin: {
+    marginLeft: 0,
+    marginRight: 0,
+  },
+});
 
 // Initial habit
 const initialHabit = {
@@ -23,42 +46,60 @@ const initialHabit = {
   frequency: [],
 };
 
-const AddHabitScreen = () => {
+const EditHabitScreen = () => {
+  const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
 
-  // Add habit mutation
-  const [addHabit, { status, error }] = useAddHabit();
+  const { status: habitStatus, data: habit, error } = useHabit(habitId);
+  const [saveHabit, { status: saveHabitStatus }] = useSaveHabit();
 
   // Form
-  const { control, register, handleSubmit, errors, getValues, reset } = useForm(
-    {
-      defaultValues: initialHabit,
-      resolver: yupResolver(habitSchema),
-    }
-  );
+  const {
+    control,
+    register,
+    handleSubmit,
+    errors,
+    getValues,
+    setValue,
+    reset,
+  } = useForm({
+    defaultValues: initialHabit,
+    resolver: yupResolver(habitSchema),
+  });
 
-  // Submit form
+  // Set initial values of the form
+  React.useEffect(() => {
+    if (!habit) return;
+    const { name, description, frequency } = habit;
+
+    setValue('name', name);
+    setValue('description', description);
+    setValue('frequency', frequency);
+  }, [habit, setValue, habitId]);
+
+  // Save edited habit
   const onSubmit = form => {
     const { name, description, frequency } = form;
 
-    addHabit(
-      { name, description, frequency },
-      {
-        onSuccess: () => openSnackbar('success', 'Habit added!'),
-      }
-    );
+    saveHabit({ ...habit, name, description, frequency });
+
     reset(initialHabit);
   };
 
+  if (habitStatus === 'loading') {
+    return <FullPageSpinner />
+  }
+
   const formErrors = Object.values(errors);
-  const isError = status === 'error' || formErrors.length !== 0;
   const errorMessage = error?.message || formErrors[0]?.message;
-  const isLoading = status === 'loading';
+
+  const isError = habitStatus === 'error' || formErrors.length !== 0;
+  const isLoading = habitStatus === 'loading';
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>Create new habit</FormPrimaryText>
+        <FormPrimaryText>Edit habit</FormPrimaryText>
         <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
       </FormHeader>
 
@@ -76,7 +117,7 @@ const AddHabitScreen = () => {
         <TextField
           inputRef={register}
           name="description"
-          label="Question (optional)"
+          label="Question"
           error={!!errors?.description}
           variant="outlined"
           disabled={isLoading}
@@ -84,8 +125,8 @@ const AddHabitScreen = () => {
         />
 
         <CheckboxGroup
-          label="Frequency"
           name="frequency"
+          label="Frequency"
           control={control}
           getValues={getValues}
           values={weekdays}
@@ -93,11 +134,11 @@ const AddHabitScreen = () => {
         />
 
         <FormButton type="submit" disabled={isLoading}>
-          Create habit
+          Save habit
         </FormButton>
       </FormBody>
     </Form>
   );
 };
 
-export default AddHabitScreen;
+export default EditHabitScreen;

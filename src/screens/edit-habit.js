@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { makeStyles, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
+import { FullPageErrorFallback } from 'components/lib';
+import { useSnackbar } from 'context/snackbar-context';
+import { habitSchema } from 'data/constraints';
+import { useHabit } from 'hooks/useHabit';
+import { useSaveHabit } from 'hooks/useSaveHabit';
+import { weekdays } from 'utils/misc';
 import {
   Form,
   FormBody,
@@ -12,32 +18,6 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
-import { FullPageSpinner } from 'components/lib';
-import { useSnackbar } from 'context/snackbar-context';
-import { habitSchema } from 'data/constraints';
-import { useHabit } from 'hooks/useHabit';
-import { useSaveHabit } from 'hooks/useSaveHabit';
-import { weekdays } from 'utils/misc';
-
-// Styles
-const useStyles = makeStyles({
-  actions: {
-    justifyContent: 'flex-end',
-  },
-  formControl: {
-    width: '100%',
-  },
-  frequencyLabel: {
-    // 14px is a value taken from .MuiOutlinedInput-input
-    // so that the label is aligned equally to other labels
-    padding: '0 14px',
-  },
-
-  disableMargin: {
-    marginLeft: 0,
-    marginRight: 0,
-  },
-});
 
 // Initial habit
 const initialHabit = {
@@ -47,11 +27,23 @@ const initialHabit = {
 };
 
 const EditHabitScreen = () => {
+  const navigate = useNavigate();
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
 
-  const { status: habitStatus, data: habit, error } = useHabit(habitId);
-  const [saveHabit, { status: saveHabitStatus }] = useSaveHabit();
+  // Habit date
+  const {
+    data: habit,
+    isFetching,
+    isError: isFetchingError,
+    isFetched,
+  } = useHabit(habitId);
+
+  // Saving habit mutation
+  const [
+    saveHabit,
+    { isLoading: isSavingHabit, isError: isSavingError, error },
+  ] = useSaveHabit();
 
   // Form
   const {
@@ -67,34 +59,41 @@ const EditHabitScreen = () => {
     resolver: yupResolver(habitSchema),
   });
 
-  // Set initial values of the form
-  React.useEffect(() => {
-    if (!habit) return;
-    const { name, description, frequency } = habit;
-
-    setValue('name', name);
-    setValue('description', description);
-    setValue('frequency', frequency);
-  }, [habit, setValue, habitId]);
-
   // Save edited habit
-  const onSubmit = form => {
-    const { name, description, frequency } = form;
-
-    saveHabit({ ...habit, name, description, frequency });
-
+  const onSubmit = (form) => {
+    saveHabit(
+      { id: habitId, ...form },
+      {
+        onSuccess: () => {
+          openSnackbar('success', 'Habit edited!');
+          navigate('/manage-habits');
+        },
+      }
+    );
     reset(initialHabit);
   };
 
-  if (habitStatus === 'loading') {
-    return <FullPageSpinner />
+  // Set initial values of the form
+  React.useEffect(() => {
+    if (isFetched) {
+      const { name, description, frequency } = habit;
+
+      setValue('name', name);
+      setValue('description', description);
+      setValue('frequency', frequency);
+    }
+  }, [habit, setValue, habitId, isFetched]);
+
+  if (isFetchingError) {
+    return <FullPageErrorFallback error={{ message: 'Fetching error' }} />;
   }
 
   const formErrors = Object.values(errors);
-  const errorMessage = error?.message || formErrors[0]?.message;
+  const errorMessage =
+    (isSavingError && error?.message) || formErrors[0]?.message;
 
-  const isError = habitStatus === 'error' || formErrors.length !== 0;
-  const isLoading = habitStatus === 'loading';
+  const isError = isSavingError || formErrors.length !== 0;
+  const isLoading = isSavingHabit || isFetching;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

@@ -21,7 +21,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
 import NoHabitsPage from 'pages/no-habits';
-import SortableTable from './sortable-table';
+import SortableTable from '../../components/sortable-table2';
 
 // Styles
 const useStyles = makeStyles(theme => ({

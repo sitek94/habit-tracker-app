@@ -7,8 +7,10 @@ import {
   LinearProgress,
   Typography,
 } from '@material-ui/core';
+import { ReactComponent as VisualDataSvg } from 'images/visual-data.svg';
+import { ReactComponent as HeatmapDataSvg } from 'images/heatmap-data.svg';
 
-const useButtonProgressStyles = makeStyles(theme => ({
+const useButtonProgressStyles = makeStyles((theme) => ({
   buttonProgress: {
     position: 'absolute',
     width: '100%',
@@ -43,6 +45,7 @@ function ErrorMessage({ error, inline, ...props }) {
   );
 }
 
+// Full page spinner
 function FullPageSpinner() {
   return (
     <Box
@@ -56,6 +59,7 @@ function FullPageSpinner() {
   );
 }
 
+// Full page error fallback
 function FullPageErrorFallback({ error }) {
   return (
     <Box
@@ -83,7 +87,23 @@ function FullPageErrorFallback({ error }) {
   );
 }
 FullPageErrorFallback.propTypes = {
-  error: PropTypes.object.isRequired
+  error: PropTypes.object.isRequired,
+};
+
+// Barchart placeholder
+function BarchartPlaceholder(props) {
+  return <VisualDataSvg height="100%" width="100%" />;
 }
 
-export { ButtonProgress, ErrorMessage, FullPageSpinner, FullPageErrorFallback };
+function HeatmapPlaceholder(props) {
+  return <HeatmapDataSvg height="100%" width="100%" />;
+}
+
+export {
+  BarchartPlaceholder,
+  ButtonProgress,
+  ErrorMessage,
+  HeatmapPlaceholder,
+  FullPageSpinner,
+  FullPageErrorFallback,
+};

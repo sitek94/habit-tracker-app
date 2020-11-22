@@ -45,10 +45,9 @@ function AppProviders({ children }) {
           </FirebaseProvider>
         </ThemeProvider>
       </Router>
-      <ReactQueryDevtools initialIsOpen position="top-right" />
+      <ReactQueryDevtools position="bottom-left" />
     </ReactQueryConfigProvider>
   );
 }
 
 export { AppProviders, AuthenticatedAppProviders, ModalsProvider };
-export { CheckmarksProvider, useCheckmarks } from './checkmarks-context2';

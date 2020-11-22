@@ -2,7 +2,7 @@ import { render, screen, cleanup } from '@testing-library/react';
 
 import CheckmarkIcon from '../checkmark-icon';
 
-import { COMPLETED, SKIPPED, FAILED } from 'data/constants';
+import { COMPLETED, FAILED } from 'data/constants';
 
 beforeEach(cleanup)
 
@@ -17,12 +17,6 @@ describe('<CheckmarkIcon />', () => {
     render(<CheckmarkIcon value={COMPLETED} />);
 
     expect(screen.getByTestId('checkmark-completed')).toBeTruthy();
-  });
-
-  it('renders skipped checkmark icon', () => {
-    render(<CheckmarkIcon value={SKIPPED} />);
-
-    expect(screen.getByTestId('checkmark-skipped')).toBeTruthy();
   });
 
   it('renders failed checkmark icon', () => {

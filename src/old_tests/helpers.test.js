@@ -1,4 +1,4 @@
-import { descendingComparator, getComparator } from '../helpers';
+import { descendingComparator, getComparator } from '../components/sortable-table2/helpers';
 
 const achilles = { name: 'Achilles', rating: 100 };
 const zorro = { name: 'Zorro', rating: 0 };

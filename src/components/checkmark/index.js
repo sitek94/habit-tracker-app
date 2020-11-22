@@ -1,1 +1,1 @@
-export { default } from './checkmark';
+export { Checkmark } from './checkmark';

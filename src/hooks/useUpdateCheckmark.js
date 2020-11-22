@@ -21,13 +21,22 @@ export function useUpdateCheckmark() {
     {
       onMutate: ({ habitId, date, value }) => {
         queryCache.cancelQueries('checkmarks');
-
+        
         const previousCheckmarks = queryCache.getQueryData('checkmarks');
 
         const newCheckmarks = {
           ...previousCheckmarks,
         };
-        newCheckmarks[habitId][date] = value;
+        
+        if (newCheckmarks[habitId]) {
+          // The habit already exists, just set the value
+          newCheckmarks[habitId][date] = value
+        } else {
+          // Initialize the habit
+          newCheckmarks[habitId] = {
+            [date]: value
+          }
+        }
 
         queryCache.setQueryData('checkmarks', (old) => newCheckmarks);
 

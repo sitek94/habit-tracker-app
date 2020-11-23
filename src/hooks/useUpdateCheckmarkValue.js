@@ -1,33 +1,45 @@
-import { useMutation, useQueryCache } from 'react-query';
-import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
+import { useFirebase } from 'context/firebase-context';
+import { useMutation, useQueryCache } from 'react-query';
 
-export function useDeleteCheckmark() {
+export function useUpdateCheckmarkValue() {
   const { db } = useFirebase();
   const { user } = useAuth();
   const cache = useQueryCache();
 
   return useMutation(
-    (checkmarkId) => {
-      // Remove checkmark in the database
-      return db.ref(`checkmarks/${user.uid}/${checkmarkId}`).remove();
+    (checkmark) => {
+      // Get checkmark database ref
+      const checkmarkRef = db.ref(`checkmarks/${user.uid}/${checkmark.id}`);
+
+      // Update checkmark value in the database
+      return checkmarkRef.update({
+        value: checkmark.value,
+      });
     },
     {
       // When mutate is called:
-      onMutate: async (checkmarkId) => {
+      onMutate: async (newCheckmark) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await cache.cancelQueries('checkmarks');
 
         // Snapshot previous values
         const previousCheckmarks = cache.getQueryData('checkmarks');
 
-        // Optimistically remove the checkmark from cache
-        cache.setQueryData('checkmarks', (old) =>
-          old.filter((checkmark) => checkmark.id !== checkmarkId)
-        );
+        // Optimistically update to the new checkmark value
+        cache.setQueryData('checkmarks', old => old.map(checkmark => {
+          if (checkmark.id === newCheckmark.id) {
+            return {
+              ...checkmark,
+              ...newCheckmark
+            }
+          } else {
+            return checkmark;
+          }
+        }));
 
         // Return a context object with the snapshotted value
-        return { previousCheckmarks };
+        return { previousCheckmarks }
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, newCheckmark, context) => {

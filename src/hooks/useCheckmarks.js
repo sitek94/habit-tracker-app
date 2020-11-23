@@ -1,32 +1,30 @@
-import { useAuth } from 'context/auth-context';
-import { useFirebase } from 'context/firebase-context';
 import { useQuery } from 'react-query';
+import { useFirebase } from 'context/firebase-context';
+import { useAuth } from 'context/auth-context';
 
 export function useCheckmarks() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return useQuery('checkmarks', () =>
-    db
+  return useQuery('checkmarks', () => {
+    // Get all the user's checkmarks from the database
+    return db
       .ref(`checkmarks/${user.uid}`)
       .once('value')
-      .then(snapshot => {
-        let habits = null;
+      .then((snapshot) => {
+        let checkmarks = [];
 
         if (snapshot.exists()) {
-          // snapshot.forEach(child => {
-          //   habits({
-          //     id: child.key,
-          //     checkmarks: {
-          //       ...child.val()
-          //     }
-          //   })
-          // });
-          habits = snapshot.val();
+          // Iterate over each checkmark to get its ID and values
+          snapshot.forEach((child) => {
+            checkmarks.push({
+              id: child.key,
+              ...child.val(),
+            });
+          });
         }
 
-
-        return habits;
-      })
-  );
+        return checkmarks;
+      });
+  });
 }

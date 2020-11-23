@@ -1,10 +1,11 @@
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
 
 export function useAddCheckmark() {
   const { db } = useFirebase();
   const { user } = useAuth();
+  const cache = useQueryCache();
 
   return useMutation(
     (checkmark) => {
@@ -26,25 +27,26 @@ export function useAddCheckmark() {
       );
     },
     {
-      // Optimistically update the cache on mutate
+      // When mutate is called:
       onMutate: (checkmark) => {
-        const { habitId, date, value } = checkmark;
+        // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+        cache.cancelQueries('checkmarks');
 
-        // Update the cache with checkmarks properties
-        queryCache.setQueryData(['checkmark', checkmark.id], {
-          habitId,
-          date,
-          value,
-        });
+        // Snapshot previous values
+        const previousCheckmarks = cache.getQueryData('checkmarks');
 
-        // In case of error, revert the checkmark to null
-        return () => queryCache.setQueryData(['checkmark', checkmark.id], null);
+        // Optimistically add new checkmark
+        cache.setQueryData('checkmarks', (old) => [...old, checkmark]);
+
+        // Return a context object with the snapshotted value
+        return { previousCheckmarks };
       },
-      onError: (error, checkmark, rollback) => rollback(),
-      onSuccess: async (checkmark) => {
-        queryCache.refetchQueries('checkmarks');
-        await queryCache.refetchQueries(['checkmark', checkmark.id]);
+      // If the mutation fails, use the context returned from onMutate to roll back
+      onError: (error, newCheckmark, context) => {
+        cache.setQueryData('checkmarks', context.previousCheckmarks);
       },
+      // Always refetch after error or success:
+      onSettled: () => cache.invalidateQueries('checkmarks'),
     }
   );
 }

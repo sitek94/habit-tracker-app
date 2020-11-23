@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
 import {
   AppBar,
   Divider,
@@ -17,23 +16,23 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExitIcon from '@material-ui/icons/ExitToApp';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ListIcon from '@material-ui/icons/FormatListBulleted';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { ErrorMessage, FullPageErrorFallback } from 'components/lib';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
-import { ErrorMessage, FullPageErrorFallback } from 'components/lib';
 import { ErrorBoundary } from 'react-error-boundary';
-import NotFoundScreen from 'screens/not-found';
+import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
 import AddHabitScreen from 'screens/add-habit';
-import { AuthenticatedAppProviders } from 'context';
+import Dashboard from 'screens/dashboard';
 import EditHabitScreen from 'screens/edit-habit';
 import ManageHabits from 'screens/manage-habits';
-import Dashboard from 'screens/dashboard';
+import NotFoundScreen from 'screens/not-found';
 
 const DRAWER_WIDTH = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   // App
   container: {
     height: '100vh',
@@ -58,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 
   // Toolbar offset
   offset: theme.mixins.toolbar,
-  
+
   // Nav
   toolbar: {
     justifyContent: 'flex-end',
@@ -109,9 +108,7 @@ function AuthenticatedApp() {
           <div className={classes.offset} />
           <div className={classes.content}>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <AuthenticatedAppProviders>
-                <AppRoutes />
-              </AuthenticatedAppProviders>
+              <AppRoutes />
             </ErrorBoundary>
           </div>
         </main>

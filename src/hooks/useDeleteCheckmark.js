@@ -9,7 +9,7 @@ export function useDeleteCheckmark() {
 
   return useMutation(
     (checkmarkId) => {
-      // Remove checkmark in the database
+      // Remove the checkmark in the database
       return db.ref(`checkmarks/${user.uid}/${checkmarkId}`).remove();
     },
     {
@@ -30,7 +30,7 @@ export function useDeleteCheckmark() {
         return { previousCheckmarks };
       },
       // If the mutation fails, use the context returned from onMutate to roll back
-      onError: (error, newCheckmark, context) => {
+      onError: (error, checkmarkId, context) => {
         cache.setQueryData('checkmarks', context.previousCheckmarks);
       },
       // Always refetch after error or success:

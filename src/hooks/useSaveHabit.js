@@ -1,40 +1,53 @@
+import { useMutation, useQueryCache } from 'react-query';
 import { useFirebase } from 'context/firebase-context';
-import { useMutation, queryCache } from 'react-query';
+import { useAuth } from 'context/auth-context';
 
-export function useSaveHabit() {
+export function useUpdateHabit() {
   const { db } = useFirebase();
+  const { user } = useAuth();
+  const cache = useQueryCache();
 
   return useMutation(
-    values => {
-      const { name, description, frequency } = values;
+    (habit) => {
+      const { id, name, description, frequency } = habit;
 
-      // Update habit in the database
-      return db
-        .ref(`maciek/habits/${values.id}`)
-        .update({
-          name,
-          description,
-          frequency,
-        })
-        // Success
-        .then(() => values);
+      // Get checkmark database ref
+      const habitRef = db.ref(`habits/${user.uid}/${id}`);
+
+      // Update the habit in the database
+      return (
+        habitRef
+          .update({
+            name,
+            description,
+            frequency,
+          })
+          // Return the habit object so it can be used in `onMutate`, etc.
+          .then(() => habit)
+      );
     },
     {
-      onMutate: values => {
-        const previousHabit = queryCache.getQueryData(['habit', values.id]);
+      // When mutate is called:
+      onMutate: (habit) => {
+        const previousHabit = cache.getQueryData(['habit', habit.id]);
 
-        queryCache.setQueryData(['habit', values.id], old => ({
+        // Snapshot previous values
+        cache.setQueryData(['habit', habit.id], (old) => ({
           ...old,
-          ...values,
+          ...habit,
         }));
 
-        return () =>
-          queryCache.setQueryData(['habit', values.id], previousHabit);
+        // Return a context object with the snapshotted value
+        return { previousHabit };
       },
-      onError: (error, values, rollback) => rollback(),
-      onSuccess: async values => {
-        queryCache.refetchQueries('habits');
-        await queryCache.refetchQueries(['habit', values.id]);
+      // If the mutation fails, use the context returned from onMutate to roll back
+      onError: (error, newCheckmark, context) => {
+        cache.setQueryData('checkmarks', context.previousCheckmarks);
+      },
+      // Always refetch after error or success:
+      onSuccess: async (habit) => {
+        cache.refetchQueries('habits');
+        await cache.refetchQueries(['habit', habit.id]);
       },
     }
   );

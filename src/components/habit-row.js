@@ -5,16 +5,16 @@ import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 import { getDay } from 'date-fns';
 
 // Styles
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   // A trick to set width of the table cell to its content
   minWidth: {
     width: '1%',
     whiteSpace: 'nowrap',
   },
-});
+}));
 
 // Habit row
-function HabitRow({ habit, dates, checkmarks }) {
+function HabitRow({ habit, dates }) {
   const classes = useStyles();
 
   const { id, name, frequency, position } = habit;
@@ -38,20 +38,12 @@ function HabitRow({ habit, dates, checkmarks }) {
 
       {/* Dates */}
       {dates.map((date) => {
-        // Check if there is a checkmark for the date
-        const checkmarkExists = !!(checkmarks && checkmarks[date]);
         // Check if the date is tracked
-
         const isTracked = frequency.includes(getDay(new Date(date)));
 
         return (
           <TableCell align="center" key={date}>
-            <Checkmark
-              habitId={id}
-              date={date}
-              value={checkmarkExists ? checkmarks[date] : null}
-              disabled={!isTracked}
-            />
+            <Checkmark habitId={id} date={date} disabled={!isTracked} />
           </TableCell>
         );
       })}
@@ -63,10 +55,10 @@ HabitRow.propTypes = {
   habit: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    frequency: PropTypes.arrayOf(PropTypes.number).isRequired,
     // position: PropTypes.number.isRequired,
   }).isRequired,
   dates: PropTypes.arrayOf(PropTypes.string).isRequired,
-  checkmarks: PropTypes.object,
 };
 
 export { HabitRow };

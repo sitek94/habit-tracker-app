@@ -1,4 +1,5 @@
 import {
+  Box,
   makeStyles,
   Table,
   TableBody,
@@ -6,16 +7,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TableSortLabel
+  TableSortLabel,
 } from '@material-ui/core';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
+import { isToday } from 'date-fns';
 
 // Styles
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   visuallyHidden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
@@ -30,30 +32,44 @@ const useStyles = makeStyles({
   positionPadding: {
     padding: '0 0 0 12px',
   },
-});
+  highlight: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
 
 // Sortable Table
-function HabitsTable({ habits, dates, checkmarks }) {
+function HabitsTable({ habits, dates }) {
   const classes = useStyles();
 
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('position');
 
+  // Handles sorting
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
+  // Cells with option to sort the habits
   const sortableCells = [
     { id: 'position', label: 'Nº', align: 'center' },
     { id: 'name', label: 'Habit name', align: 'left' },
   ];
 
-  const cells = dates.map((date) => ({
-    id: date,
-    label: format(new Date(date), 'd-MMM'),
-  }));
+  // Currently selected date range cells
+  const datesCells = dates.map((d) => {
+    const date = new Date(d);
+
+    return {
+      id: date,
+      label: format(date, 'd-MMM'),
+
+      // If true applies highlight class to the cell
+      isToday: isToday(date),
+    };
+  });
 
   const sortedHabits = habits.slice().sort(getComparator(order, orderBy));
 
@@ -88,8 +104,15 @@ function HabitsTable({ habits, dates, checkmarks }) {
             ))}
 
             {/* Normal cells */}
-            {cells.map(({ id, label }) => (
-              <TableCell key={id}>{label}</TableCell>
+            {datesCells.map(({ id, label, isToday }) => (
+              <Box key={id} clone>
+                <TableCell
+                  align="center"
+                  className={isToday && classes.highlight}
+                >
+                  {label}
+                </TableCell>
+              </Box>
             ))}
           </TableRow>
         </TableHead>
@@ -97,12 +120,7 @@ function HabitsTable({ habits, dates, checkmarks }) {
         {/* Table body */}
         <TableBody>
           {sortedHabits.map((habit) => (
-            <HabitRow
-              key={habit.id}
-              habit={habit}
-              dates={dates}
-              checkmarks={checkmarks ? checkmarks[habit.id] : null}
-            />
+            <HabitRow key={habit.id} habit={habit} dates={dates} />
           ))}
         </TableBody>
       </Table>
@@ -112,9 +130,7 @@ function HabitsTable({ habits, dates, checkmarks }) {
 
 HabitsTable.propTypes = {
   habits: PropTypes.array.isRequired,
-  checkmarks: PropTypes.object.isRequired,
   dates: PropTypes.array.isRequired,
 };
 
 export { HabitsTable };
-

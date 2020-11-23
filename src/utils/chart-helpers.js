@@ -24,24 +24,15 @@ Each habit is an object where keys are dates, and values
 are completion state of the checkmark
 */
 
-type Checkmark = {
-  [key: string]: number;
-};
 
-type AggregatedCheckmark = {
-  [key: string]: number[];
-};
 
-type Habit = {
-  [key: string]: Checkmark;
-};
 
 /**
  * Aggregates all the habits checkmarks
  *
  */
-function aggregate(habits: Habit) {
-  let obj: AggregatedCheckmark = {};
+function aggregate(habits) {
+  let obj = {};
 
   // Iterate over each habit
   Object.values(habits).forEach((checkmarks) => {
@@ -64,7 +55,7 @@ function aggregate(habits: Habit) {
  * Prepares the checkmarks to be used in heatmap chart
  *
  */
-function heatmapDataFrom(checkmarks: AggregatedCheckmark) {
+function heatmapDataFrom(checkmarks) {
   return Object.entries(checkmarks).map(([date, values]) => {
     const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
 
@@ -78,7 +69,7 @@ function heatmapDataFrom(checkmarks: AggregatedCheckmark) {
 /**
  * Prepares the checkmarks to be used in bar chart
  */
-function barchartDataFrom(checkmarks: AggregatedCheckmark, dates: string[]) {
+function barchartDataFrom(checkmarks, dates) {
   return dates.map((date) => {
     let values = checkmarks[date] || null;
 
@@ -93,10 +84,11 @@ function barchartDataFrom(checkmarks: AggregatedCheckmark, dates: string[]) {
 /**
  * Counts the occurences of given value in the array
  *
- * @param arr source array of numbers
- * @param value a value to count
+ * @param {Number[]} arr source array of numbers
+ * @param {Number}   value a value to count
+ * 
  */
-function countValues(arr: number[], value: number) {
+function countValues(arr, value) {
   return arr.reduce((acc, cur) => (cur === value ? acc + 1 : acc), 0);
 }
 

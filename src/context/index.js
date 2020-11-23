@@ -1,13 +1,18 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ReactQueryConfigProvider } from 'react-query';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { ThemeProvider } from './theme-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { HabitsProvider } from './habits-context';
 import { ReactQueryDevtools } from 'react-query-devtools';
+import {
+  ReactQueryCacheProvider,
+  QueryCache,
+  ReactQueryConfigProvider,
+} from 'react-query';
+
+const queryCache = new QueryCache();
 
 const queryConfig = {
   queries: {
@@ -29,25 +34,23 @@ function ModalsProvider({ children }) {
   );
 }
 
-function AuthenticatedAppProviders({ children }) {
-  return <HabitsProvider>{children}</HabitsProvider>;
-}
-
 function AppProviders({ children }) {
   return (
-    <ReactQueryConfigProvider config={queryConfig}>
-      <Router>
-        <ThemeProvider>
-          <FirebaseProvider>
-            <ModalsProvider>
-              <AuthProvider>{children}</AuthProvider>
-            </ModalsProvider>
-          </FirebaseProvider>
-        </ThemeProvider>
-      </Router>
-      <ReactQueryDevtools position="bottom-left" />
-    </ReactQueryConfigProvider>
+    <ReactQueryCacheProvider queryCache={queryCache}>
+      <ReactQueryConfigProvider config={queryConfig}>
+        <Router>
+          <ThemeProvider>
+            <FirebaseProvider>
+              <ModalsProvider>
+                <AuthProvider>{children}</AuthProvider>
+              </ModalsProvider>
+            </FirebaseProvider>
+          </ThemeProvider>
+        </Router>
+        <ReactQueryDevtools position="bottom-left" />
+      </ReactQueryConfigProvider>
+    </ReactQueryCacheProvider>
   );
 }
 
-export { AppProviders, AuthenticatedAppProviders, ModalsProvider };
+export { AppProviders, ModalsProvider };

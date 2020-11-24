@@ -9,12 +9,11 @@ export function useFetchHabitById() {
   return (key, { id }) => {
     // Get habit database ref
     const habitRef = db.ref(`habits/${user.uid}/${id}`);
-    
+
     // Get habit value
     return habitRef.once('value').then((snapshot) => {
       // Check if the habit's data exists
       if (snapshot.exists()) {
-        console.log(snapshot.val());
         // Return habit id and the rest of the values
         return {
           id,

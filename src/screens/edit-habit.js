@@ -4,12 +4,13 @@ import { useNavigate, useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
-import { FullPageErrorFallback } from 'components/lib';
+import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
-import { useHabit } from 'hooks/useHabit';
-import { useSaveHabit } from 'hooks/useSaveHabit';
+import { useHabitById } from 'hooks/useHabit';
+import { useUpdateHabit } from 'hooks/useSaveHabit';
 import { weekdays } from 'utils/misc';
+import { NotFoundHabitScreen } from './not-found-habit';
 import {
   Form,
   FormBody,
@@ -19,8 +20,8 @@ import {
   FormPrimaryText,
 } from 'components/form';
 
-// Initial habit
-const initialHabit = {
+// Default habit values
+const defaultHabit = {
   name: '',
   description: '',
   frequency: [],
@@ -31,19 +32,8 @@ const EditHabitScreen = () => {
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
 
-  // Habit date
-  const {
-    data: habit,
-    isFetching,
-    isError: isFetchingError,
-    isFetched,
-  } = useHabit(habitId);
-
-  // Saving habit mutation
-  const [
-    saveHabit,
-    { isLoading: isSavingHabit, isError: isSavingError, error },
-  ] = useSaveHabit();
+  const { data: habit, error: habitError, isFetching } = useHabitById(habitId);
+  const [updateHabit, { isLoading: isUpdatingHabit }] = useUpdateHabit();
 
   // Form
   const {
@@ -55,13 +45,13 @@ const EditHabitScreen = () => {
     setValue,
     reset,
   } = useForm({
-    defaultValues: initialHabit,
+    defaultValues: defaultHabit,
     resolver: yupResolver(habitSchema),
   });
 
   // Save edited habit
   const onSubmit = (form) => {
-    saveHabit(
+    updateHabit(
       { id: habitId, ...form },
       {
         onSuccess: () => {
@@ -70,36 +60,46 @@ const EditHabitScreen = () => {
         },
       }
     );
-    reset(initialHabit);
+    reset(defaultHabit);
   };
 
   // Set initial values of the form
   React.useEffect(() => {
-    if (isFetched) {
+    if (habit) {
       const { name, description, frequency } = habit;
 
       setValue('name', name);
       setValue('description', description);
       setValue('frequency', frequency);
     }
-  }, [habit, setValue, habitId, isFetched]);
+  }, [habit, setValue, habitId]);
 
-  if (isFetchingError) {
-    return <FullPageErrorFallback error={{ message: 'Fetching error' }} />;
+  // Get array of errors from the form
+  const formErrors = Object.values(errors);
+
+  const errorText = habitError
+    ? // If there is an error with fetching the habit it display it first
+      habitError.message
+    : // Otherwise display first form error if any
+      formErrors[0]?.message;
+
+  if (isFetching) {
+    return <FullPageSpinner />;
   }
 
-  const formErrors = Object.values(errors);
-  const errorMessage =
-    (isSavingError && error?.message) || formErrors[0]?.message;
+  // There is no data corresponding with the habit id
+  if (!habit) {
+    return <NotFoundHabitScreen />;
+  }
 
-  const isError = isSavingError || formErrors.length !== 0;
-  const isLoading = isSavingHabit || isFetching;
+  // Disable form actions when the habit is updating
+  const disableActions = isUpdatingHabit;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
         <FormPrimaryText>Edit habit</FormPrimaryText>
-        <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
+        <FormErrorText>{errorText || ' '}</FormErrorText>
       </FormHeader>
 
       <FormBody>
@@ -109,7 +109,7 @@ const EditHabitScreen = () => {
           label="Habit name"
           error={!!errors?.name}
           variant="outlined"
-          disabled={isLoading}
+          disabled={disableActions}
           fullWidth
         />
 
@@ -119,7 +119,7 @@ const EditHabitScreen = () => {
           label="Question"
           error={!!errors?.description}
           variant="outlined"
-          disabled={isLoading}
+          disabled={disableActions}
           fullWidth
         />
 
@@ -132,7 +132,7 @@ const EditHabitScreen = () => {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" disabled={isLoading}>
+        <FormButton type="submit" disabled={disableActions}>
           Save habit
         </FormButton>
       </FormBody>

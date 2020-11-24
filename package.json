@@ -12,6 +12,7 @@
     "@nivo/bar": "^0.64.0",
     "@nivo/calendar": "^0.64.0",
     "@nivo/line": "^0.64.0",
+    "@nivo/pie": "^0.65.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",

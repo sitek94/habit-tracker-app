@@ -8,7 +8,7 @@ import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 import { useHabitById } from 'hooks/useHabit';
-import { useUpdateHabit } from 'hooks/useSaveHabit';
+import { useUpdateHabit } from 'hooks/useUpdateHabit';
 import { weekdays } from 'utils/misc';
 import { NotFoundHabitScreen } from './not-found-habit';
 import {

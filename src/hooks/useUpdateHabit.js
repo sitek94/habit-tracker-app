@@ -29,10 +29,10 @@ export function useUpdateHabit() {
     {
       // When mutate is called:
       onMutate: (habit) => {
-        const previousHabit = cache.getQueryData(['habit', habit.id]);
+        const previousHabit = cache.getQueryData(['habit', { id: habit.id }]);
 
         // Snapshot previous values
-        cache.setQueryData(['habit', habit.id], (old) => ({
+        cache.setQueryData(['habit', { id: habit.id }], (old) => ({
           ...old,
           ...habit,
         }));
@@ -42,12 +42,12 @@ export function useUpdateHabit() {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, newCheckmark, context) => {
-        cache.setQueryData('checkmarks', context.previousCheckmarks);
+        cache.setQueryData('habits', context.previousCheckmarks);
       },
       // Always refetch after error or success:
       onSuccess: async (habit) => {
         cache.refetchQueries('habits');
-        await cache.refetchQueries(['habit', habit.id]);
+        await cache.refetchQueries(['habit', { id: habit.id }]);
       },
     }
   );

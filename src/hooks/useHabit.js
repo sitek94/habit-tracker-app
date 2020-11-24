@@ -2,21 +2,21 @@ import { useQuery } from 'react-query';
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
 
-export function useFetchHabit() {
+export function useFetchHabitById() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return (key, habitId) => {
+  return (key, { id }) => {
     // Get habit database ref
-    const habitRef = db.ref(`habits/${user.uid}/${habitId}`);
+    const habitRef = db.ref(`habits/${user.uid}/${id}`);
 
     // Get habit value
-    habitRef.once('value').then((snapshot) => {
+    return habitRef.once('value').then((snapshot) => {
       // Check if the habit's data exists
       if (snapshot.exists()) {
         // Return habit id and the rest of the values
         return {
-          id: habitId,
+          id,
           ...snapshot.val(),
         };
       } else {
@@ -27,8 +27,10 @@ export function useFetchHabit() {
   };
 }
 
-export function useHabit(habitId) {
-  const fetchHabit = useFetchHabit();
+export function useHabitById(habitId) {
+  const fetchHabitById = useFetchHabitById();
 
-  return useQuery(habitId && ['habit', habitId], fetchHabit);
+  return useQuery(habitId && ['habit', { id: habitId }], fetchHabitById, {
+    enabled: habitId !== null,
+  });
 }

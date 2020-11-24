@@ -27,6 +27,8 @@ function HabitListItem({ habit }) {
   const [deleteHabit, { isLoading }] = useDeleteHabit();
 
   const handleDeleteClick = async () => {
+
+    // Open the dialog to ask the user if they're sure to delete the habit
     openDialog({
       title: `Remove "${name}" habit?`,
       description: `
@@ -41,6 +43,9 @@ function HabitListItem({ habit }) {
       color: 'secondary',
     });
   };
+
+  // Disable buttons when the habit is being deleted
+  const disableActions = isLoading;
 
   return (
     <ListItem button>
@@ -65,10 +70,10 @@ function HabitListItem({ habit }) {
 
       {/* Edit link */}
       <IconButton
-        to={`/edit-habit/${id}`}
         component={RouterLink}
+        to={`/edit-habit/${id}`}
         aria-label="Edit habit"
-        disabled={isLoading}
+        disabled={disableActions}
       >
         <EditIcon />
       </IconButton>
@@ -77,7 +82,7 @@ function HabitListItem({ habit }) {
       <IconButton
         onClick={handleDeleteClick}
         aria-label="Delete habit"
-        disabled={isLoading}
+        disabled={disableActions}
       >
         <DeleteIcon />
       </IconButton>
@@ -88,7 +93,7 @@ function HabitListItem({ habit }) {
 function HabitList({ habits }) {
   return (
     <List>
-      {habits.map(habit => (
+      {habits.map((habit) => (
         <HabitListItem key={habit.id} habit={habit} />
       ))}
     </List>

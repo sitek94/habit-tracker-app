@@ -15,6 +15,8 @@ import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 import { useAddHabit } from 'hooks/useAddHabit';
 import { weekdays } from 'utils/misc';
+import { useHabits } from 'hooks/useHabits';
+import { FullPageSpinner } from 'components/lib';
 
 // Initial habit
 const initialHabit = {
@@ -26,8 +28,11 @@ const initialHabit = {
 const AddHabitScreen = () => {
   const { openSnackbar } = useSnackbar();
 
-  // Add habit mutation
-  const [addHabit, { status, error }] = useAddHabit();
+  const { data: habits, isLoading } = useHabits();
+  const [
+    addHabit,
+    { error: addingError, isLoading: isAddingHabit },
+  ] = useAddHabit();
 
   // Form
   const { control, register, handleSubmit, errors, getValues, reset } = useForm(
@@ -38,11 +43,13 @@ const AddHabitScreen = () => {
   );
 
   // Submit form
-  const onSubmit = form => {
+  const onSubmit = (form) => {
     const { name, description, frequency } = form;
+    // Habit's position is based on the number of habits
+    const position = habits.length;
 
     addHabit(
-      { name, description, frequency },
+      { name, description, frequency, position },
       {
         onSuccess: () => openSnackbar('success', 'Habit added!'),
       }
@@ -50,16 +57,28 @@ const AddHabitScreen = () => {
     reset(initialHabit);
   };
 
+  // Is loading habits
+  if (isLoading) {
+    return <FullPageSpinner />;
+  }
+
+  // Get array of errors from the form
   const formErrors = Object.values(errors);
-  const isError = status === 'error' || formErrors.length !== 0;
-  const errorMessage = error?.message || formErrors[0]?.message;
-  const isLoading = status === 'loading';
+
+  const errorText = addingError
+    ? // If there is an error when adding the habit it display it first
+      addingError.message
+    : // Otherwise display first form error if any
+      formErrors[0]?.message;
+
+  // Disable form actions when the habit is being added
+  const disableActions = isAddingHabit;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
         <FormPrimaryText>Create new habit</FormPrimaryText>
-        <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
+        <FormErrorText>{errorText || ' '}</FormErrorText>
       </FormHeader>
 
       <FormBody>
@@ -69,7 +88,7 @@ const AddHabitScreen = () => {
           label="Habit name"
           error={!!errors?.name}
           variant="outlined"
-          disabled={isLoading}
+          disabled={disableActions}
           fullWidth
         />
 
@@ -79,7 +98,7 @@ const AddHabitScreen = () => {
           label="Question (optional)"
           error={!!errors?.description}
           variant="outlined"
-          disabled={isLoading}
+          disabled={disableActions}
           fullWidth
         />
 
@@ -92,7 +111,7 @@ const AddHabitScreen = () => {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" disabled={isLoading}>
+        <FormButton type="submit" disabled={disableActions}>
           Create habit
         </FormButton>
       </FormBody>

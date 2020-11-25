@@ -75,7 +75,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
 
   return (
     <TableContainer data-testid="table">
-      <Table>
+      <Table size="small">
         {/* Table head */}
         <TableHead>
           <TableRow>

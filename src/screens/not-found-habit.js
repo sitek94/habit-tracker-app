@@ -6,17 +6,29 @@ import { ReactComponent as TowingSvg } from 'images/towing.svg';
 function NotFoundHabitScreen() {
   return (
     <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <Box clone width="50%" margin={2}>
+      <Box
+        clone
+        sx={{
+          width: '50%',
+          margin: 2,
+        }}
+      >
         <TowingSvg />
       </Box>
 
-      <Box margin={2}>
+      <Box
+        sx={{
+          margin: 2,
+        }}
+      >
         <Typography variant="h4">Sorry, this habit doesn't exist...</Typography>
       </Box>
       <Fab
@@ -25,7 +37,12 @@ function NotFoundHabitScreen() {
         component={RouterLink}
         to="/dashboard"
       >
-        <Box clone mr={1}>
+        <Box
+          clone
+          sx={{
+            mr: 1,
+          }}
+        >
           <DashboardIcon />
         </Box>
         Dashboard

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box, Divider, Grid, Typography, useTheme } from '@material-ui/core';
 import { Done as DoneIcon } from '@material-ui/icons';
 import { Pie } from '@nivo/pie';
-import { Title } from 'components/lib';
 import {
   calculateScore,
   createScoreType,
@@ -32,7 +31,9 @@ function UserScores({ checkmarks }) {
   return (
     <>
       {/* Title */}
-      <Title>Your performance</Title>
+      <Typography component="h2" variant="h6" color="primary">
+        Your Performance
+      </Typography>
 
       <FixedHeightDivider />
 
@@ -76,7 +77,13 @@ function UserScores({ checkmarks }) {
 
 function FixedHeightDivider() {
   return (
-    <Box clone alignSelf="stretch" height="1px">
+    <Box
+      clone
+      sx={{
+        alignSelf: 'stretch',
+        height: '1px',
+      }}
+    >
       <Divider />
     </Box>
   );
@@ -92,7 +99,13 @@ function Label({ children }) {
 
 function GoalLabel({ children }) {
   return (
-    <Box clone fontSize={12} lineHeight={1}>
+    <Box
+      clone
+      sx={{
+        fontSize: 12,
+        lineHeight: 1,
+      }}
+    >
       <Typography
         variant="subtitle2"
         color="textSecondary"
@@ -112,14 +125,16 @@ const CHART_SIZE = 100;
 function CenteredBox({ children }) {
   return (
     <Box
-      position="absolute"
-      width={CHART_SIZE}
-      height={CHART_SIZE}
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      top={0}
-      left={0}
+      sx={{
+        position: 'absolute',
+        width: CHART_SIZE,
+        height: CHART_SIZE,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 0,
+        left: 0,
+      }}
     >
       {children}
     </Box>
@@ -127,7 +142,15 @@ function CenteredBox({ children }) {
 }
 
 function ChartContainer({ children }) {
-  return <Box position="relative">{children}</Box>;
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+      }}
+    >
+      {children}
+    </Box>
+  );
 }
 
 function PieChart({ data }) {

@@ -11,7 +11,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { ButtonProgress } from 'components/lib';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   // Container
   paper: {
     maxWidth: 550,
@@ -95,7 +95,13 @@ function FormPrimaryText({ children }) {
 function FormSecondaryText({ children, ...props }) {
   return (
     <Typography color="textSecondary" component="div" align="center" {...props}>
-      <Box fontWeight="fontWeightMedium">{children}</Box>
+      <Box
+        sx={{
+          fontWeight: 'fontWeightMedium',
+        }}
+      >
+        {children}
+      </Box>
     </Typography>
   );
 }
@@ -120,7 +126,15 @@ function FormButton({ children, isLoading, ...props }) {
 }
 
 function FormHeader({ children }) {
-  return <Box mb={2}>{children}</Box>;
+  return (
+    <Box
+      sx={{
+        mb: 2,
+      }}
+    >
+      {children}
+    </Box>
+  );
 }
 
 function FormBody({ children }) {

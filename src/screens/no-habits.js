@@ -1,24 +1,39 @@
 import { Add as AddIcon } from '@material-ui/icons';
 import { ReactComponent as EmptyBox } from 'images/empty-box.svg';
 import { Link as RouterLink } from 'react-router-dom';
-
 import { Fab, Box, Typography } from '@material-ui/core';
 
 function NoHabitsScreen() {
   return (
     <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <Box clone width="40%" height="40%" margin={2}>
+      <Box
+        clone
+        sx={{
+          width: '40%',
+          height: '40%',
+          margin: 2,
+        }}
+      >
         <EmptyBox />
       </Box>
 
-      <Box margin={2} textAlign="center">
-        <Typography variant="h5" gutterBottom>There are no habits</Typography>
+      <Box
+        sx={{
+          margin: 2,
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          There are no habits
+        </Typography>
         <Typography variant="body1">
           It looks like you don't have any habits yet, why don't you add one?
         </Typography>
@@ -29,7 +44,12 @@ function NoHabitsScreen() {
         component={RouterLink}
         to="/add-habit"
       >
-        <Box clone mr={1}>
+        <Box
+          clone
+          sx={{
+            mr: 1,
+          }}
+        >
           <AddIcon />
         </Box>
         Add habit

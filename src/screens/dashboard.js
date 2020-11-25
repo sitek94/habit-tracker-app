@@ -1,26 +1,23 @@
 import * as React from 'react';
-import { countBy } from 'lodash';
 import { Box, Grid, makeStyles, Paper } from '@material-ui/core';
-import clsx from 'clsx';
-import { useHabits } from 'hooks/useHabits';
-import { useCheckmarks } from 'hooks/useCheckmarks';
+import { BarChart } from 'components/bar-chart';
+import { HabitsTable } from 'components/habits-table';
+import { FullPageSpinner, PieChartPlaceholder } from 'components/lib';
+import { UserScores } from 'components/user-scores';
+import { WeekPicker } from 'components/week-picker';
+import { COMPLETED, FAILED } from 'data/constants';
 import {
   eachDayOfInterval,
+  endOfWeek,
   lastDayOfWeek,
   lightFormat,
   startOfWeek,
 } from 'date-fns';
-import { DateRange } from 'react-date-range';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
-import { HabitsTable } from 'components/habits-table';
+import { useCheckmarks } from 'hooks/useCheckmarks';
+import { useHabits } from 'hooks/useHabits';
+import { countBy } from 'lodash';
 import NoHabitsScreen from 'screens/no-habits';
-import { FullPageSpinner, PieChartPlaceholder } from 'components/lib';
-import { queryCache } from 'react-query';
-import { BarChart } from 'components/bar-chart';
 import { BarchartPlaceholder } from '../components/lib';
-import { COMPLETED, FAILED } from 'data/constants';
-import { UserScores } from 'components/user-scores';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -45,13 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Initial date range that is selected
-let initialDateRange = {
-  startDate: startOfWeek(new Date()),
-  endDate: lastDayOfWeek(new Date()),
-  key: 'selection',
-};
-
 // Dashboard
 function Dashboard() {
   const classes = useStyles();
@@ -62,33 +52,16 @@ function Dashboard() {
     isError: isHabitsError,
   } = useHabits();
 
-  /**
-   * Date ranges
-   *
-   */
-  const [dateRanges, setDateRanges] = React.useState([initialDateRange]);
-  const handleDateRangesChange = ({ selection }) => {
-    // This has to be array!
-    setDateRanges([selection]);
-  };
-
-  const { startDate, endDate } = dateRanges[0];
+  const [selectedDate, handleDateChange] = React.useState(new Date());
+  const start = startOfWeek(selectedDate);
+  const end = endOfWeek(selectedDate);
 
   // Get dates that are currently selected
-  const selectedDates = eachDayOfInterval({
-    start: startDate,
-    // If there is no end date selected use start date
-    end: endDate ? endDate : startDate,
-
-    // Format the dates to strings used in charts and table
-  }).map((date) => lightFormat(date, 'yyyy-MM-dd'));
+  const selectedDates = eachDayOfInterval({ start, end }).map((date) =>
+    lightFormat(date, 'yyyy-MM-dd')
+  );
 
   const { data: checkmarks } = useCheckmarks();
-  console.log(checkmarks);
-  /**
-   * Charts
-   *
-   */
 
   if (isLoadingHabits || !checkmarks) {
     return <FullPageSpinner />;
@@ -106,7 +79,6 @@ function Dashboard() {
   return (
     <div className={classes.container}>
       <Grid container spacing={2}>
-
         {/* Chart placeholder */}
         <Grid item xs>
           <TopRowPaper>
@@ -116,8 +88,7 @@ function Dashboard() {
 
         {/* User scores */}
         <Grid item>
-
-          <TopRowPaper justifyContent="space-between">
+          <TopRowPaper>
             <UserScores checkmarks={checkmarks} />
           </TopRowPaper>
         </Grid>
@@ -125,11 +96,9 @@ function Dashboard() {
         {/* Date picker */}
         <Grid item>
           <TopRowPaper>
-            <DateRange
-              ranges={dateRanges}
-              onChange={handleDateRangesChange}
-              showDateDisplay={false}
-              moveRangeOnFirstSelection={false}
+            <WeekPicker
+              selectedDate={selectedDate}
+              onChange={handleDateChange}
             />
           </TopRowPaper>
         </Grid>
@@ -149,19 +118,19 @@ function Dashboard() {
   );
 }
 
-function TopRowPaper({ children, ...props }) {
+function TopRowPaper({ children }) {
   return (
     <Box
-      clone
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height={300}
-      p={2}
-      {...props}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: 330,
+      }}
+      component={Paper}
     >
-      <Paper>{children}</Paper>
+      {children}
     </Box>
   );
 }
@@ -206,4 +175,4 @@ function AllHabitsBarchart({ dates = [] }) {
   );
 }
 
-export default Dashboard;
+export { Dashboard };

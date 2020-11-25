@@ -27,7 +27,6 @@ function HabitListItem({ habit }) {
   const [deleteHabit, { isLoading }] = useDeleteHabit();
 
   const handleDeleteClick = async () => {
-
     // Open the dialog to ask the user if they're sure to delete the habit
     openDialog({
       title: `Remove "${name}" habit?`,
@@ -58,7 +57,11 @@ function HabitListItem({ habit }) {
       <ListItemText primary={name} secondary={description} />
 
       {/* Frequency */}
-      <Box mr={1}>
+      <Box
+        sx={{
+          mr: 1,
+        }}
+      >
         {weekdays.map((day, i) => (
           <Chip
             key={day}

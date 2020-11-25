@@ -12,7 +12,12 @@ function ManageHabits() {
   if (!habits.length) return <NoHabits />;
 
   return (
-    <Box width="100%" height="100%">
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%',
+      }}
+    >
       <HabitList habits={habits} />
     </Box>
   );

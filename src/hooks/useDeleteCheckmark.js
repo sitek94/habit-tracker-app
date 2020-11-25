@@ -9,8 +9,9 @@ export function useDeleteCheckmark() {
 
   return useMutation(
     (checkmarkId) => {
+      const checkmarkRef = db.ref(`checkmarks/${user.uid}/${checkmarkId}`);
       // Remove the checkmark in the database
-      return db.ref(`checkmarks/${user.uid}/${checkmarkId}`).remove();
+      return checkmarkRef.set(null).then(() => checkmarkId);
     },
     {
       // When mutate is called:

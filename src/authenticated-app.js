@@ -25,10 +25,10 @@ import { useDialog } from 'context/dialog-context';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
 import AddHabitScreen from 'screens/add-habit';
-import Dashboard from 'screens/dashboard';
+import { Dashboard } from 'screens/dashboard';
 import EditHabitScreen from 'screens/edit-habit';
 import ManageHabits from 'screens/manage-habits';
-import NotFoundScreen from 'screens/not-found';
+import { NotFoundScreen } from 'screens/not-found';
 
 const DRAWER_WIDTH = 240;
 
@@ -86,11 +86,13 @@ function ErrorFallback({ error }) {
   return (
     <ErrorMessage
       error={error}
-      height="100%"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     />
   );
 }

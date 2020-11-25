@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { ReactComponent as VisualDataSvg } from 'images/visual-data.svg';
 import { ReactComponent as HeatmapDataSvg } from 'images/heatmap-data.svg';
+import { ReactComponent as PiechartSvg } from 'images/piechart.svg';
 
 const useButtonProgressStyles = makeStyles((theme) => ({
   buttonProgress: {
@@ -26,18 +27,26 @@ function ButtonProgress(props) {
   return <LinearProgress className={classes.buttonProgress} {...props} />;
 }
 
-function ErrorMessage({ error, inline, ...props }) {
+function ErrorMessage({ error, inline, ...sx }) {
   const display = inline ? 'inline' : 'block';
 
   return (
-    <Box role="alert" color="error.main" display={display} {...props}>
-      <span>There was an error</span>
+    <Box
+      sx={{
+        color: 'error.main',
+        display: 'inline',
+        ...sx,
+      }}
+    >
+      <span role="alert">There was an error</span>
       <Box
         component="pre"
-        display={display}
-        margin={0}
-        mb={-5}
-        whiteSpace="break-spaces"
+        sx={{
+          display: 'inline',
+          margin: 0,
+          mb: -5,
+          whiteSpace: 'break-spaces',
+        }}
       >
         {error.message}
       </Box>
@@ -49,10 +58,12 @@ function ErrorMessage({ error, inline, ...props }) {
 function FullPageSpinner() {
   return (
     <Box
-      height="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <CircularProgress size={150} />
     </Box>
@@ -64,23 +75,40 @@ function FullPageErrorFallback({ error }) {
   return (
     <Box
       role="alert"
-      height="100%"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
-      <Box clone width="50%" height="50%" margin={2}>
+      <Box
+        clone
+        sx={{
+          width: '50%',
+          height: '50%',
+          margin: 2,
+        }}
+      >
         <BugFixingSvg />
       </Box>
 
-      <Box margin={2}>
+      <Box
+        sx={{
+          margin: 2,
+        }}
+      >
         <Typography variant="h5">
           Uh oh... There's a problem. Try refreshing the app.
         </Typography>
       </Box>
 
-      <Box margin={2}>
+      <Box
+        sx={{
+          margin: 2,
+        }}
+      >
         <Typography variant="body1">{error.message}</Typography>
       </Box>
     </Box>
@@ -99,11 +127,16 @@ function HeatmapPlaceholder(props) {
   return <HeatmapDataSvg height="100%" width="100%" />;
 }
 
+function PieChartPlaceholder(props) {
+  return <PiechartSvg height="100%" width="100%" />;
+}
+
 export {
   BarchartPlaceholder,
   ButtonProgress,
   ErrorMessage,
   HeatmapPlaceholder,
+  PieChartPlaceholder,
   FullPageSpinner,
   FullPageErrorFallback,
 };

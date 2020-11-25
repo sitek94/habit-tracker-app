@@ -9,28 +9,21 @@ export function useAddCheckmark() {
 
   return useMutation(
     (checkmark) => {
-      const { id, habitId, date, value } = checkmark;
-
       // Get checkmark ref in the database
-      const newCheckmarkRef = db.ref(`checkmarks/${user.uid}/${id}`);
+      const newCheckmarkRef = db.ref(`checkmarks/${user.uid}`).push();
+      const newCheckmarkId = newCheckmarkRef.key;
 
-      // Create checkmark in the database
-      return (
-        newCheckmarkRef
-          .set({
-            habitId,
-            date,
-            value,
-          })
-          // Return the checkmark so it can be used in `onMutate`, etc.
-          .then(() => checkmark)
-      );
+      // Update the checkmark in the database
+      return newCheckmarkRef.set(checkmark).then(() => ({
+        id: newCheckmarkId,
+        ...checkmark,
+      }));
     },
     {
       // When mutate is called:
-      onMutate: (checkmark) => {
+      onMutate: async (checkmark) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        cache.cancelQueries('checkmarks');
+        await cache.cancelQueries('checkmarks');
 
         // Snapshot previous values
         const previousCheckmarks = cache.getQueryData('checkmarks');

@@ -21,9 +21,9 @@ export function useAddCheckmark() {
     },
     {
       // When mutate is called:
-      onMutate: (checkmark) => {
+      onMutate: async (checkmark) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        cache.cancelQueries('checkmarks');
+        await cache.cancelQueries('checkmarks');
 
         // Snapshot previous values
         const previousCheckmarks = cache.getQueryData('checkmarks');

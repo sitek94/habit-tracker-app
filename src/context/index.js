@@ -9,22 +9,10 @@ import { ReactQueryDevtools } from 'react-query-devtools';
 import {
   ReactQueryCacheProvider,
   QueryCache,
-  ReactQueryConfigProvider,
 } from 'react-query';
 
 const queryCache = new QueryCache();
 
-const queryConfig = {
-  queries: {
-    useErrorBoundary: true,
-    refetchOnWindowFocus: false,
-    retry(failureCount, error) {
-      if (error.status === 404) return false;
-      else if (failureCount < 2) return true;
-      else return false;
-    },
-  },
-};
 
 function ModalsProvider({ children }) {
   return (
@@ -37,7 +25,6 @@ function ModalsProvider({ children }) {
 function AppProviders({ children }) {
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
-      <ReactQueryConfigProvider config={queryConfig}>
         <Router>
           <ThemeProvider>
             <FirebaseProvider>
@@ -48,7 +35,6 @@ function AppProviders({ children }) {
           </ThemeProvider>
         </Router>
         <ReactQueryDevtools position="bottom-left" />
-      </ReactQueryConfigProvider>
     </ReactQueryCacheProvider>
   );
 }

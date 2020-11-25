@@ -8,24 +8,29 @@ import {
 
 import { COMPLETED, FAILED, EMPTY } from 'data/constants';
 
-function CheckmarkIcon({ value }) {
+function CheckmarkIcon({ value, ...props }) {
   switch (value) {
     case COMPLETED:
       return (
         <CheckBoxIcon
           style={{ color: green[500] }}
           data-testid="checkmark-completed"
+          {...props}
         />
       );
 
     case FAILED:
       return (
-        <CheckboxFailedIcon color="secondary" data-testid="checkmark-failed" />
+        <CheckboxFailedIcon
+          color="secondary"
+          data-testid="checkmark-failed"
+          {...props}
+        />
       );
 
     case EMPTY:
     default:
-      return <CheckBoxBlankIcon data-testid="checkmark-empty" />;
+      return <CheckBoxBlankIcon data-testid="checkmark-empty" {...props} />;
   }
 }
 

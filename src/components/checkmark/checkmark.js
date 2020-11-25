@@ -15,7 +15,7 @@ function Checkmark({ value, onClick, disabled }) {
       onClick={onClick}
       disabled={disabled}
     >
-      <CheckmarkIcon value={value} />
+      <CheckmarkIcon fontSize="large" value={value} />
     </IconButton>
   );
 }

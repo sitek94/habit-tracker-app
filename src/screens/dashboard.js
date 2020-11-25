@@ -18,6 +18,7 @@ import { useHabits } from 'hooks/useHabits';
 import { countBy } from 'lodash';
 import NoHabitsScreen from 'screens/no-habits';
 import { BarchartPlaceholder } from '../components/lib';
+import diagramPlaceholder from 'images/diagram-placeholder.png';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +83,7 @@ function Dashboard() {
         {/* Chart placeholder */}
         <Grid item xs>
           <TopRowPaper>
-            <PieChartPlaceholder />
+            <img alt="diagram" src={diagramPlaceholder} width="85%" />
           </TopRowPaper>
         </Grid>
 
@@ -127,6 +128,7 @@ function TopRowPaper({ children }) {
         justifyContent: 'space-evenly',
         alignItems: 'center',
         height: 330,
+        overflow: 'hidden',
       }}
       component={Paper}
     >

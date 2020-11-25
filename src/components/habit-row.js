@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Checkmark } from 'components/checkmark';
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getDay } from 'date-fns';
+import { getDay, isFuture } from 'date-fns';
 import { useAddCheckmark } from 'hooks/useAddCheckmark';
 import { useDeleteCheckmark } from 'hooks/useDeleteCheckmark';
 import { useUpdateCheckmarkValue } from 'hooks/useUpdateCheckmarkValue';
@@ -27,20 +27,23 @@ function HabitRow({ habit, dates, checkmarks }) {
   const [updateCheckmarkValue] = useUpdateCheckmarkValue();
   const [deleteCheckmark] = useDeleteCheckmark();
 
-  const handleCheckmarkClick = React.useCallback(({ checkmarkId, date, value }) => {
-    // Add `completed` checkmark if it doesn't exists
-    if (value === EMPTY) {
-      addCheckmark({ habitId: id, date, value: COMPLETED });
+  const handleCheckmarkClick = React.useCallback(
+    ({ checkmarkId, date, value }) => {
+      // Add `completed` checkmark if it doesn't exists
+      if (value === EMPTY) {
+        addCheckmark({ habitId: id, date, value: COMPLETED });
 
-      // Update checkmark to `failed` if it is `completed`
-    } else if (value === COMPLETED) {
-      updateCheckmarkValue({ id: checkmarkId, value: FAILED });
+        // Update checkmark to `failed` if it is `completed`
+      } else if (value === COMPLETED) {
+        updateCheckmarkValue({ id: checkmarkId, value: FAILED });
 
-      // If checkmark is `failed` remove it from the database
-    } else if (value === FAILED) {
-      deleteCheckmark(checkmarkId);
-    }
-  }, [id, addCheckmark, updateCheckmarkValue, deleteCheckmark]);
+        // If checkmark is `failed` remove it from the database
+      } else if (value === FAILED) {
+        deleteCheckmark(checkmarkId);
+      }
+    },
+    [id, addCheckmark, updateCheckmarkValue, deleteCheckmark]
+  );
 
   return (
     <TableRow hover>
@@ -61,9 +64,12 @@ function HabitRow({ habit, dates, checkmarks }) {
 
       {/* Dates */}
       {dates.map((date) => {
-        // Check if the date is tracked
-        const isTracked = frequency.includes(getDay(new Date(date)));
+        const dateObj = new Date(date);
 
+        // Checkmark is disabled if the date is not tracked or date is in the future
+        const disabled =
+          !frequency.includes(getDay(dateObj)) || isFuture(dateObj);
+          
         // Get checkmark's `id` and `value`. If `undefined` use default values.
         const { id, value } = checkmarks.find((d) => d.date === date) || {
           id: '',
@@ -77,7 +83,7 @@ function HabitRow({ habit, dates, checkmarks }) {
               onClick={() =>
                 handleCheckmarkClick({ checkmarkId: id, value, date })
               }
-              disabled={!isTracked}
+              disabled={disabled}
             />
           </TableCell>
         );

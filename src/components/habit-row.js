@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import { Checkmark } from 'components/checkmark';
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 import { getDay } from 'date-fns';
+import { useAddCheckmark } from 'hooks/useAddCheckmark';
+import { useDeleteCheckmark } from 'hooks/useDeleteCheckmark';
+import { useUpdateCheckmarkValue } from 'hooks/useUpdateCheckmarkValue';
+import { COMPLETED, EMPTY, FAILED } from 'data/constants';
 
 // Styles
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   // A trick to set width of the table cell to its content
   minWidth: {
     width: '1%',
@@ -14,10 +18,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // Habit row
-function HabitRow({ habit, dates }) {
+function HabitRow({ habit, dates, checkmarks }) {
   const classes = useStyles();
 
   const { id, name, frequency, position } = habit;
+
+  const [addCheckmark] = useAddCheckmark();
+  const [updateCheckmarkValue] = useUpdateCheckmarkValue();
+  const [deleteCheckmark] = useDeleteCheckmark();
+
+  const handleCheckmarkClick = React.useCallback(({ checkmarkId, date, value }) => {
+    // Add `completed` checkmark if it doesn't exists
+    if (value === EMPTY) {
+      addCheckmark({ habitId: id, date, value: COMPLETED });
+
+      // Update checkmark to `failed` if it is `completed`
+    } else if (value === COMPLETED) {
+      updateCheckmarkValue({ id: checkmarkId, value: FAILED });
+
+      // If checkmark is `failed` remove it from the database
+    } else if (value === FAILED) {
+      deleteCheckmark(checkmarkId);
+    }
+  }, [id, addCheckmark, updateCheckmarkValue, deleteCheckmark]);
 
   return (
     <TableRow hover>
@@ -41,9 +64,21 @@ function HabitRow({ habit, dates }) {
         // Check if the date is tracked
         const isTracked = frequency.includes(getDay(new Date(date)));
 
+        // Get checkmark's `id` and `value`. If `undefined` use default values.
+        const { id, value } = checkmarks.find((d) => d.date === date) || {
+          id: '',
+          value: EMPTY,
+        };
+
         return (
           <TableCell align="center" key={date}>
-            <Checkmark habitId={id} date={date} disabled={!isTracked} />
+            <Checkmark
+              value={value}
+              onClick={() =>
+                handleCheckmarkClick({ checkmarkId: id, value, date })
+              }
+              disabled={!isTracked}
+            />
           </TableCell>
         );
       })}

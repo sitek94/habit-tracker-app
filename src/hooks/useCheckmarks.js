@@ -2,11 +2,11 @@ import { useQuery } from 'react-query';
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
 
-export function useCheckmarks() {
+function useFetchCheckmarks() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return useQuery('checkmarks', () => {
+  return () => {
     // Get all the user's checkmarks from the database
     return db
       .ref(`checkmarks/${user.uid}`)
@@ -26,5 +26,13 @@ export function useCheckmarks() {
 
         return checkmarks;
       });
-  });
+  };
 }
+
+function useCheckmarks() {
+  const fetchCheckmarks = useFetchCheckmarks();
+
+  return useQuery('checkmarks', fetchCheckmarks);
+}
+
+export { useCheckmarks, useFetchCheckmarks }

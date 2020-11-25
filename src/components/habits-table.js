@@ -1,3 +1,5 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   makeStyles,
@@ -10,8 +12,6 @@ import {
   TableSortLabel,
 } from '@material-ui/core';
 import { format } from 'date-fns';
-import PropTypes from 'prop-types';
-import * as React from 'react';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
 import { isToday } from 'date-fns';
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Sortable Table
-function HabitsTable({ habits, dates }) {
+function HabitsTable({ habits, checkmarks, dates }) {
   const classes = useStyles();
 
   const [order, setOrder] = React.useState('desc');
@@ -119,9 +119,20 @@ function HabitsTable({ habits, dates }) {
 
         {/* Table body */}
         <TableBody>
-          {sortedHabits.map((habit) => (
-            <HabitRow key={habit.id} habit={habit} dates={dates} />
-          ))}
+          {sortedHabits.map((habit) => {
+            const habitCheckmarks = checkmarks.filter(
+              (d) => d.habitId === habit.id
+            );
+
+            return (
+              <HabitRow
+                key={habit.id}
+                habit={habit}
+                dates={dates}
+                checkmarks={habitCheckmarks}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

@@ -1,13 +1,7 @@
 import * as React from 'react';
-
+import { countBy } from 'lodash';
 import { Box, Grid, makeStyles, Paper } from '@material-ui/core';
 import clsx from 'clsx';
-import {
-  BarChart,
-  barChartDataFrom,
-  HeatmapCalendar,
-  heatmapDataFrom,
-} from 'pages/dashboard/charts';
 import { useHabits } from 'hooks/useHabits';
 import { useCheckmarks } from 'hooks/useCheckmarks';
 import {
@@ -21,11 +15,21 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { HabitsTable } from 'components/habits-table';
 import NoHabitsScreen from 'screens/no-habits';
-import { FullPageSpinner } from 'components/lib';
+import { FullPageSpinner, PieChartPlaceholder } from 'components/lib';
 import { queryCache } from 'react-query';
+import { BarChart } from 'components/bar-chart';
+import { BarchartPlaceholder } from '../components/lib';
+import { COMPLETED, FAILED } from 'data/constants';
+import { UserScores } from 'components/user-scores';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
+  container: {
+    maxWidth: theme.breakpoints.values.lg,
+    height: '100%',
+    padding: theme.spacing(4),
+  },
+
   paper: {
     display: 'flex',
     justifyContent: 'center',
@@ -52,12 +56,15 @@ let initialDateRange = {
 function Dashboard() {
   const classes = useStyles();
 
-  const { data: habits, isError: isHabitsError } = useHabits();
-  const { data: checkmarks, isError: isCheckmarksError } = useCheckmarks();
+  const {
+    data: habits,
+    isLoading: isLoadingHabits,
+    isError: isHabitsError,
+  } = useHabits();
 
   /**
-   * Date ranges 
-   * 
+   * Date ranges
+   *
    */
   const [dateRanges, setDateRanges] = React.useState([initialDateRange]);
   const handleDateRangesChange = ({ selection }) => {
@@ -76,80 +83,126 @@ function Dashboard() {
     // Format the dates to strings used in charts and table
   }).map((date) => lightFormat(date, 'yyyy-MM-dd'));
 
-
+  const { data: checkmarks } = useCheckmarks();
+  console.log(checkmarks);
   /**
    * Charts
-   * 
+   *
    */
 
-
-
-
-  if (queryCache.isFetching) {
+  if (isLoadingHabits || !checkmarks) {
     return <FullPageSpinner />;
   }
 
-  if (isCheckmarksError || isHabitsError) {
+  if (isHabitsError) {
     return <div>Error</div>;
   }
 
   if (!habits.length) {
-    return <NoHabitsScreen />
+    return <NoHabitsScreen />;
   }
-
-  // Combine classes
-  const barChartStyles = clsx(
-    classes.paper,
-    classes.fixedHeight
-    // classes.padding
-  );
-  const dateRangeStyles = clsx(classes.paper, classes.fixedHeight);
 
   // Render
   return (
-    <Box height="100%" p={4}>
-      <Grid container spacing={3}>
-        {/* Bar chart */}
-        {/* <Grid item xs={12} sm={6} md={7} lg={8}>
-        <Paper className={barChartStyles}>
-          <BarChart
-            data={barChartDataFrom(checkmarks, selectedDates)}
-            keys={['completed', 'failed']}
-            indexBy="date"
-            maxValue={habits.length}
-          />
-        </Paper>
-      </Grid> */}
+    <div className={classes.container}>
+      <Grid container spacing={2}>
 
-        {/* Date range picker */}
-        <Grid item xs={12} sm={6} md={5} lg={4}>
-          <Paper className={dateRangeStyles}>
+        {/* Chart placeholder */}
+        <Grid item xs>
+          <TopRowPaper>
+            <PieChartPlaceholder />
+          </TopRowPaper>
+        </Grid>
+
+        {/* User scores */}
+        <Grid item>
+
+          <TopRowPaper justifyContent="space-between">
+            <UserScores checkmarks={checkmarks} />
+          </TopRowPaper>
+        </Grid>
+
+        {/* Date picker */}
+        <Grid item>
+          <TopRowPaper>
             <DateRange
               ranges={dateRanges}
               onChange={handleDateRangesChange}
               showDateDisplay={false}
-              // moveRangeOnFirstSelection={true}
+              moveRangeOnFirstSelection={false}
             />
-          </Paper>
+          </TopRowPaper>
         </Grid>
 
         {/* Habits and checkmarks table */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>
             <HabitsTable
-              habits={habits}
               checkmarks={checkmarks}
+              habits={habits}
               dates={selectedDates}
             />
           </Paper>
         </Grid>
-
-        {/* Heatmap calendar */}
-        {/* <Grid item xs={12}>
-        <HeatmapCalendar data={heatmapDataFrom(checkmarks)} />
-      </Grid> */}
       </Grid>
+    </div>
+  );
+}
+
+function TopRowPaper({ children, ...props }) {
+  return (
+    <Box
+      clone
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      height={300}
+      p={2}
+      {...props}
+    >
+      <Paper>{children}</Paper>
     </Box>
+  );
+}
+
+function AllHabitsBarchart({ dates = [] }) {
+  // data, keys, indexBy, maxValue
+  const { data: checkmarks, isLoading } = useCheckmarks();
+
+  if (isLoading) {
+    return <BarchartPlaceholder />;
+  }
+
+  let filteredData = checkmarks
+    // First filter only the checkmarks for the selected dates
+    .filter((checkmark) => dates.includes(checkmark.date));
+
+  // Transform the data to the format accepted by bar chart
+  let barchartData = dates.map((date) => {
+    let values = filteredData
+      // Find all checkmarks for the given date
+      .filter((checkmark) => checkmark.date === date)
+
+      // Get only checkmark values
+      .map((checkmark) => checkmark.value);
+
+    let counts = countBy(values);
+
+    return {
+      date,
+      completed: counts[COMPLETED] || null,
+      failed: -counts[FAILED] || null,
+    };
+  });
+
+  return (
+    <BarChart
+      data={barchartData}
+      keys={['completed', 'failed']}
+      indexBy="date"
+      maxValue={2}
+    />
   );
 }
 

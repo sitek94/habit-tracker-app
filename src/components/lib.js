@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { ReactComponent as VisualDataSvg } from 'images/visual-data.svg';
 import { ReactComponent as HeatmapDataSvg } from 'images/heatmap-data.svg';
+import { ReactComponent as PiechartSvg } from 'images/piechart.svg';
 
 const useButtonProgressStyles = makeStyles((theme) => ({
   buttonProgress: {
@@ -99,11 +100,29 @@ function HeatmapPlaceholder(props) {
   return <HeatmapDataSvg height="100%" width="100%" />;
 }
 
+function PieChartPlaceholder(props) {
+  return <PiechartSvg height="100%" width="100%" />;
+}
+
+function Title({ children, ...props }) {
+  return (
+    <Typography component="h2" variant="h6" color="primary" gutterBottom {...props}>
+      {children}
+    </Typography>
+  );
+}
+
+Title.propTypes = {
+  children: PropTypes.node,
+};
+
 export {
   BarchartPlaceholder,
   ButtonProgress,
   ErrorMessage,
   HeatmapPlaceholder,
+  PieChartPlaceholder,
   FullPageSpinner,
   FullPageErrorFallback,
+  Title,
 };

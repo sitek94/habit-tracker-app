@@ -18,6 +18,7 @@ import { countBy } from 'lodash';
 import { NoHabitsScreen } from 'screens/no-habits';
 import { BarchartPlaceholder } from '../components/lib';
 import diagramPlaceholder from 'images/diagram-placeholder.png';
+import { useUserConfig } from 'context/user-config-context';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,9 @@ function DashboardScreen() {
   // Get dates that are currently selected
   const selectedDates = eachDayOfInterval({ start, end }).map((date) =>
     lightFormat(date, 'yyyy-MM-dd')
-  );
+    );
+    
+  const { performanceGoal } = useUserConfig();
 
   if (isLoadingHabits) {
     return <FullPageSpinner />;
@@ -77,6 +80,7 @@ function DashboardScreen() {
     return <NoHabitsScreen />;
   }
 
+
   // Render
   return (
     <div className={classes.container}>
@@ -84,14 +88,14 @@ function DashboardScreen() {
         {/* Chart placeholder */}
         <Grid item xs>
           <TopRowPaper>
-            <img alt="diagram" src={diagramPlaceholder} width="85%" />
+            <img alt="diagram" src={diagramPlaceholder} height="85%" />
           </TopRowPaper>
         </Grid>
 
         {/* User scores */}
         <Grid item>
           <TopRowPaper>
-            <UserScores checkmarks={checkmarks} />
+            <UserScores checkmarks={checkmarks} goal={performanceGoal} />
           </TopRowPaper>
         </Grid>
 

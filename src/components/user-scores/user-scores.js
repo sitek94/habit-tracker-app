@@ -18,15 +18,13 @@ const scoreTypeList = [
   createScoreType('Today', isCheckmarkToday),
 ];
 
-function UserScores({ checkmarks }) {
+function UserScores({ checkmarks, goal }) {
   // Use user's checkmarks and score types list to generate the data for pie chart
   const scoreTypeDataList = getScoreTypeDataList(checkmarks, scoreTypeList);
 
   // Calculate all time user score
   const allTimeValues = checkmarks.map((d) => d.value);
   const allTimeScore = calculateScore(allTimeValues);
-
-  const userGoal = 75;
 
   return (
     <>
@@ -40,21 +38,22 @@ function UserScores({ checkmarks }) {
       {/* Pie charts */}
       <Grid container>
         {scoreTypeDataList.map(({ label, data }) => {
-          const value = data[0].value;
+          const completedValue = data[0].value;
+          const hasReachedGoal = completedValue > goal;
 
           return (
             <Grid item key={label}>
-              <Label>{value}%</Label>
+              <Label>{completedValue}%</Label>
 
               <ChartContainer>
                 <PieChart data={data} />
 
                 <CenteredBox>
                   {/* User has reached the goal */}
-                  {value >= userGoal ? (
+                  {hasReachedGoal ? (
                     <DoneIcon fontSize="large" color="primary" />
                   ) : (
-                    <GoalLabel>{userGoal}%</GoalLabel>
+                    <GoalLabel>{goal}%</GoalLabel>
                   )}
                 </CenteredBox>
               </ChartContainer>

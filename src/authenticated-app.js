@@ -30,6 +30,7 @@ import { EditHabitScreen } from 'screens/edit-habit';
 import { ManageHabitsScreen } from 'screens/manage-habits';
 import { NotFoundScreen } from 'screens/not-found';
 import { UserSettingsScreen } from 'screens/user-settings';
+import { AuthenticatedAppProviders } from 'context';
 
 const DRAWER_WIDTH = 240;
 
@@ -104,18 +105,20 @@ function AuthenticatedApp() {
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
-      <div className={classes.container}>
-        <Nav />
-        <Sidebar />
-        <main className={classes.main}>
-          <div className={classes.offset} />
-          <div className={classes.content}>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <AppRoutes />
-            </ErrorBoundary>
-          </div>
-        </main>
-      </div>
+      <AuthenticatedAppProviders>
+        <div className={classes.container}>
+          <Nav />
+          <Sidebar />
+          <main className={classes.main}>
+            <div className={classes.offset} />
+            <div className={classes.content}>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <AppRoutes />
+              </ErrorBoundary>
+            </div>
+          </main>
+        </div>
+      </AuthenticatedAppProviders>
     </ErrorBoundary>
   );
 }

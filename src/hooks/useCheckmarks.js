@@ -32,7 +32,10 @@ function useFetchCheckmarks() {
 function useCheckmarks() {
   const fetchCheckmarks = useFetchCheckmarks();
 
-  return useQuery('checkmarks', fetchCheckmarks);
+  return useQuery('checkmarks', fetchCheckmarks, {
+    initialData: [],
+    initialStale: true,
+  });
 }
 
-export { useCheckmarks, useFetchCheckmarks }
+export { useCheckmarks, useFetchCheckmarks };

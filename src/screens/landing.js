@@ -2,7 +2,7 @@ import { Fab, makeStyles, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import landscape from 'images/landscape.jpg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   image: {
     height: '100vh',
     alignSelf: 'stretch',
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function LandingPage() {
+function LandingScreen() {
   const classes = useStyles();
 
   return (
@@ -34,7 +34,7 @@ function LandingPage() {
         <Typography variant="h3" gutterBottom>
           one step at a time
         </Typography>
-        
+
         <Fab
           to="/signup"
           component={RouterLink}
@@ -49,5 +49,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
-
+export { LandingScreen };

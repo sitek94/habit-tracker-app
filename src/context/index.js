@@ -1,42 +1,47 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query-devtools';
+import { ReactQueryCacheProvider, QueryCache } from 'react-query';
+import { MainThemeProvider, UserThemeProvider } from 'theme';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
-import { ThemeProvider } from './theme-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { ReactQueryDevtools } from 'react-query-devtools';
-import {
-  ReactQueryCacheProvider,
-  QueryCache,
-} from 'react-query';
+import { UserConfigProvider } from './user-config-context';
 
 const queryCache = new QueryCache();
 
-
-function ModalsProvider({ children }) {
-  return (
-    <DialogProvider>
-      <SnackbarProvider>{children}</SnackbarProvider>
-    </DialogProvider>
-  );
-}
-
+/**
+ * Shared context across all app
+ */
 function AppProviders({ children }) {
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
-        <Router>
-          <ThemeProvider>
-            <FirebaseProvider>
-              <ModalsProvider>
+      <Router>
+        <MainThemeProvider>
+          <FirebaseProvider>
+            <DialogProvider>
+              <SnackbarProvider>
                 <AuthProvider>{children}</AuthProvider>
-              </ModalsProvider>
-            </FirebaseProvider>
-          </ThemeProvider>
-        </Router>
-        <ReactQueryDevtools position="bottom-left" />
+              </SnackbarProvider>
+            </DialogProvider>
+          </FirebaseProvider>
+        </MainThemeProvider>
+      </Router>
+      <ReactQueryDevtools position="bottom-left" />
     </ReactQueryCacheProvider>
   );
 }
 
-export { AppProviders, ModalsProvider };
+/**
+ * Context used only when the user is authenticated
+ */
+function AuthenticatedAppProviders({ children }) {
+  return (
+    <UserConfigProvider>
+      <UserThemeProvider>{children}</UserThemeProvider>
+    </UserConfigProvider>
+  );
+}
+
+export { AppProviders, AuthenticatedAppProviders };

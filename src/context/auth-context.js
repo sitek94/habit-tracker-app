@@ -1,4 +1,3 @@
-import { queryCache } from 'react-query';
 import * as React from 'react';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
@@ -25,12 +24,11 @@ function AuthProvider(props) {
 
   // Auth state change observer
   React.useEffect(() => {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         setData(user);
       } else {
         setData(null);
-        queryCache.clear();
       }
     });
   }, [auth, setData]);
@@ -47,7 +45,7 @@ function AuthProvider(props) {
       const authProvider = new firebase.auth.OAuthProvider(id);
 
       if (scopes) {
-        scopes.forEach(scope => {
+        scopes.forEach((scope) => {
           authProvider.addScope(scope);
         });
       }
@@ -69,6 +67,7 @@ function AuthProvider(props) {
     auth.signOut();
   }, [auth]);
 
+  // Reset password
   const resetPassword = React.useCallback(
     ({ email }) => auth.sendPasswordResetEmail(email),
     [auth]

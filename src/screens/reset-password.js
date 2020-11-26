@@ -16,7 +16,7 @@ import { resetPasswordSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 
-const SignInForm = () => {
+function ResetPasswordScreen() {
   const { resetPassword } = useAuth();
   const { openSnackbar } = useSnackbar();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
@@ -58,7 +58,7 @@ const SignInForm = () => {
           fullWidth
         />
         <FormButton type="submit" disabled={isLoading}>
-          Sign in
+          Reset
         </FormButton>
 
         <FormSecondaryText>
@@ -67,6 +67,6 @@ const SignInForm = () => {
       </FormBody>
     </Form>
   );
-};
+}
 
-export default SignInForm;
+export { ResetPasswordScreen };

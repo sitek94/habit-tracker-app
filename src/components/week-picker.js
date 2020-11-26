@@ -4,11 +4,16 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizaitonProvider from '@material-ui/lab/LocalizationProvider';
 import StaticDatePicker from '@material-ui/lab/StaticDatePicker';
 import clsx from 'clsx';
-import endOfWeek from 'date-fns/endOfWeek';
-import isSameDay from 'date-fns/isSameDay';
-import isWithinInterval from 'date-fns/isWithinInterval';
-import startOfWeek from 'date-fns/startOfWeek';
-
+import {
+  add,
+  endOfWeek,
+  endOfMonth,
+  isSameDay,
+  isWithinInterval,
+  isThisYear,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
 import PickersDay from '@material-ui/lab/PickersDay';
 import { makeStyles } from '@material-ui/core';
 
@@ -31,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const MIN_DATE = new Date('2006-04-09');
+const MAX_DATE = add(new Date(), { years: 10 });
+
 function WeekPicker({ selectedDate, onChange }) {
   const classes = useStyles();
 
@@ -43,28 +51,42 @@ function WeekPicker({ selectedDate, onChange }) {
       return <PickersDay {...PickersDayComponentProps} />;
     }
 
-    const start = startOfWeek(selectedDate);
-    const end = endOfWeek(selectedDate);
+    const weekStart = startOfWeek(selectedDate);
+    const weekEnd = endOfWeek(selectedDate);
+    const monthStart = startOfMonth(date);
+    const monthEnd = endOfMonth(date);
 
-    const dayIsBetween = isWithinInterval(date, { start, end });
-    const isFirstDay = isSameDay(date, start);
-    const isLastDay = isSameDay(date, end);
+    const isWeekFirstDay = isSameDay(date, weekStart);
+    const isWeekLastDay = isSameDay(date, weekEnd);
+    const isMonthFirstDay = isSameDay(date, monthStart);
+    const isMonthLastDay = isSameDay(date, monthEnd);
+
+    const dayIsBetween = isWithinInterval(date, {
+      start: weekStart,
+      end: weekEnd,
+    });
+    
+    const isCurrentYear = isThisYear(date);
 
     return (
       <PickersDay
         {...PickersDayComponentProps}
         disableMargin
-        className={clsx({
-          [classes.highlight]: dayIsBetween,
-          [classes.firstHighlight]: isFirstDay,
-          [classes.endHighlight]: isLastDay,
-        })}
+        className={clsx(
+          isCurrentYear && {
+            [classes.highlight]: dayIsBetween,
+            [classes.firstHighlight]: isWeekFirstDay || isMonthFirstDay,
+            [classes.endHighlight]: isWeekLastDay || isMonthLastDay,
+          }
+        )}
       />
     );
   };
   return (
     <LocalizaitonProvider dateAdapter={AdapterDateFns}>
       <StaticDatePicker
+        minDate={MIN_DATE}
+        maxDate={MAX_DATE}
         displayStaticWrapperAs="desktop"
         orientation="landscape"
         openTo="date"

@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 import { AuthProviderList } from 'components/auth-providers-list';
 
-function SignUpForm() {
+function SignUpScreen() {
   const { signUp, signInWithAuthProvider } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
@@ -97,4 +97,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export { SignUpScreen };

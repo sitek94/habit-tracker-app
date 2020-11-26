@@ -24,11 +24,12 @@ import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
-import AddHabitScreen from 'screens/add-habit';
-import { Dashboard } from 'screens/dashboard';
-import EditHabitScreen from 'screens/edit-habit';
-import ManageHabits from 'screens/manage-habits';
+import { AddHabitScreen } from 'screens/add-habit';
+import { DashboardScreen } from 'screens/dashboard';
+import { EditHabitScreen } from 'screens/edit-habit';
+import { ManageHabitsScreen } from 'screens/manage-habits';
 import { NotFoundScreen } from 'screens/not-found';
+import { UserSettingsScreen } from 'screens/user-settings';
 
 const DRAWER_WIDTH = 240;
 
@@ -236,10 +237,11 @@ function Sidebar() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<DashboardScreen />} />
       <Route path="/add-habit" element={<AddHabitScreen />} />
       <Route path="/edit-habit/:habitId" element={<EditHabitScreen />} />
-      <Route path="/manage-habits" element={<ManageHabits />} />
+      <Route path="/manage-habits" element={<ManageHabitsScreen />} />
+      <Route path="/settings" element={<UserSettingsScreen />} />
       <Route path="*" element={<NotFoundScreen />} />
     </Routes>
   );

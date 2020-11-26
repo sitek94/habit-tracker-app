@@ -17,7 +17,7 @@ import { signInSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 
-const SignInForm = () => {
+function SignInScreen() {
   const { signIn, signInWithAuthProvider } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
@@ -87,6 +87,6 @@ const SignInForm = () => {
       </FormBody>
     </Form>
   );
-};
+}
 
-export default SignInForm;
+export { SignInScreen };

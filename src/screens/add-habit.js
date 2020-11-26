@@ -25,7 +25,7 @@ const initialHabit = {
   frequency: [],
 };
 
-const AddHabitScreen = () => {
+function AddHabitScreen() {
   const { openSnackbar } = useSnackbar();
 
   const { data: habits, isLoading } = useHabits();
@@ -117,6 +117,6 @@ const AddHabitScreen = () => {
       </FormBody>
     </Form>
   );
-};
+}
 
-export default AddHabitScreen;
+export { AddHabitScreen };

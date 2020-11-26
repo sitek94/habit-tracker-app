@@ -2,21 +2,20 @@ import * as React from 'react';
 import { Box, Grid, makeStyles, Paper } from '@material-ui/core';
 import { BarChart } from 'components/bar-chart';
 import { HabitsTable } from 'components/habits-table';
-import { FullPageSpinner, PieChartPlaceholder } from 'components/lib';
+import { FullPageSpinner } from 'components/lib';
 import { UserScores } from 'components/user-scores';
 import { WeekPicker } from 'components/week-picker';
 import { COMPLETED, FAILED } from 'data/constants';
 import {
   eachDayOfInterval,
   endOfWeek,
-  lastDayOfWeek,
   lightFormat,
   startOfWeek,
 } from 'date-fns';
 import { useCheckmarks } from 'hooks/useCheckmarks';
 import { useHabits } from 'hooks/useHabits';
 import { countBy } from 'lodash';
-import NoHabitsScreen from 'screens/no-habits';
+import { NoHabitsScreen } from 'screens/no-habits';
 import { BarchartPlaceholder } from '../components/lib';
 import diagramPlaceholder from 'images/diagram-placeholder.png';
 
@@ -44,16 +43,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Dashboard
-function Dashboard() {
+function DashboardScreen() {
   const classes = useStyles();
 
+  // Habits data
   const {
     data: habits,
     isLoading: isLoadingHabits,
     isError: isHabitsError,
   } = useHabits();
+  // Checkmarks data
+  const { data: checkmarks, isError: isCheckmarksError } = useCheckmarks();
 
-  const [selectedDate, handleDateChange] = React.useState(new Date());
+  // Date
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
   const start = startOfWeek(selectedDate);
   const end = endOfWeek(selectedDate);
 
@@ -62,13 +65,11 @@ function Dashboard() {
     lightFormat(date, 'yyyy-MM-dd')
   );
 
-  const { data: checkmarks } = useCheckmarks();
-
-  if (isLoadingHabits || !checkmarks) {
+  if (isLoadingHabits) {
     return <FullPageSpinner />;
   }
 
-  if (isHabitsError) {
+  if (isHabitsError || isCheckmarksError) {
     return <div>Error</div>;
   }
 
@@ -99,7 +100,7 @@ function Dashboard() {
           <TopRowPaper>
             <WeekPicker
               selectedDate={selectedDate}
-              onChange={handleDateChange}
+              onChange={(newDate) => setSelectedDate(newDate)}
             />
           </TopRowPaper>
         </Grid>
@@ -177,4 +178,4 @@ function AllHabitsBarchart({ dates = [] }) {
   );
 }
 
-export { Dashboard };
+export { DashboardScreen };

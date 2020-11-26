@@ -27,7 +27,7 @@ const defaultHabit = {
   frequency: [],
 };
 
-const EditHabitScreen = () => {
+function EditHabitScreen() {
   const navigate = useNavigate();
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
@@ -138,6 +138,6 @@ const EditHabitScreen = () => {
       </FormBody>
     </Form>
   );
-};
+}
 
-export default EditHabitScreen;
+export { EditHabitScreen };

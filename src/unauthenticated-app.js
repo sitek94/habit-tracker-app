@@ -7,12 +7,12 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import LandingScreen from 'screens/landing';
-import ResetPasswordScreen from 'screens/reset-password';
-import SignInScreen from 'screens/sign-in';
-import SignUpScreen from 'screens/sign-up';
+import { LandingScreen } from 'screens/landing';
+import { ResetPasswordScreen } from 'screens/reset-password';
+import { SignInScreen } from 'screens/sign-in';
+import { SignUpScreen } from 'screens/sign-up';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   // App
   container: {
     height: '100vh',

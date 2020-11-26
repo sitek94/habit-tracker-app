@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
+  Typography,
 } from '@material-ui/core';
 import { format } from 'date-fns';
 import { getComparator } from 'utils/misc';
@@ -63,11 +64,8 @@ function HabitsTable({ habits, checkmarks, dates }) {
     const date = new Date(d);
 
     return {
-      id: date,
+      date,
       label: format(date, 'd-MMM'),
-
-      // If true applies highlight class to the cell
-      isToday: isToday(date),
     };
   });
 
@@ -103,16 +101,15 @@ function HabitsTable({ habits, checkmarks, dates }) {
               </TableCell>
             ))}
 
-            {/* Normal cells */}
-            {datesCells.map(({ id, label, isToday }) => (
-              <Box key={id} clone>
-                <TableCell
-                  align="center"
-                  className={isToday && classes.highlight}
-                >
-                  {label}
-                </TableCell>
-              </Box>
+            {/* Date cells */}
+            {datesCells.map(({ date, label }) => (
+              <TableCell key={date} align="center">
+                {isToday(date) ? (
+                  <Typography color="primary">{label}</Typography>
+                ) : (
+                  label
+                )}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>

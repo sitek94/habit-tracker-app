@@ -16,7 +16,6 @@ function AuthProvider(props) {
     isIdle,
     isError,
     isSuccess,
-    run,
     setData,
   } = useAsync();
 
@@ -35,7 +34,9 @@ function AuthProvider(props) {
 
   // Sign in (email, password)
   const signIn = React.useCallback(
-    ({ email, password }) => auth.signInWithEmailAndPassword(email, password),
+    ({ email, password }) => {
+      return auth.signInWithEmailAndPassword(email, password);
+    },
     [auth]
   );
 
@@ -50,26 +51,29 @@ function AuthProvider(props) {
         });
       }
 
-      auth.signInWithPopup(authProvider);
+      return auth.signInWithPopup(authProvider);
     },
     [firebase, auth]
   );
 
   // Sign up (email, password)
   const signUp = React.useCallback(
-    ({ email, password }) =>
-      auth.createUserWithEmailAndPassword(email, password),
+    ({ email, password }) => {
+      return auth.createUserWithEmailAndPassword(email, password);
+    },
     [auth]
   );
 
   // Sign out
   const signOut = React.useCallback(() => {
-    auth.signOut();
+    return auth.signOut();
   }, [auth]);
 
   // Reset password
   const resetPassword = React.useCallback(
-    ({ email }) => auth.sendPasswordResetEmail(email),
+    ({ email }) => {
+      return auth.sendPasswordResetEmail(email);
+    },
     [auth]
   );
 

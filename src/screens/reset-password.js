@@ -57,7 +57,7 @@ function ResetPasswordScreen() {
           variant="outlined"
           fullWidth
         />
-        <FormButton type="submit" disabled={isLoading}>
+        <FormButton type="submit" pending={isLoading}>
           Reset
         </FormButton>
 

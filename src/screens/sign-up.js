@@ -55,6 +55,7 @@ function SignUpScreen() {
         <AuthProviderList
           text="Sign up with"
           onAuthProviderClick={handleAuthProviderClick}
+          disabled={isLoading}
         />
 
         <FormDivider />
@@ -96,7 +97,7 @@ function SignUpScreen() {
           fullWidth
         />
 
-        <FormButton type="submit" disabled={isLoading}>
+        <FormButton type="submit" pending={isLoading}>
           Sign up
         </FormButton>
       </FormBody>

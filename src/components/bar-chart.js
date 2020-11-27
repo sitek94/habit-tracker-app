@@ -1,10 +1,6 @@
 import { ResponsiveBar } from '@nivo/bar';
-import dayjs from 'dayjs';
 
 export function BarChart({ data, keys, indexBy, maxValue }) {
-  const yValueFormat = v => `${Math.floor((v * 100) / maxValue)}%`;
-  const xValueFormat = v => dayjs(v).format('DD MMM');
-
   return (
     <ResponsiveBar
       data={data}
@@ -17,7 +13,7 @@ export function BarChart({ data, keys, indexBy, maxValue }) {
       borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
       axisLeft={false}
       axisBottom={{
-        format: xValueFormat,
+        // format: xValueFormat,
         tickSize: 0,
         tickPadding: 12,
       }}
@@ -31,7 +27,7 @@ export function BarChart({ data, keys, indexBy, maxValue }) {
       ]}
       enableGridX={true}
       enableGridY={false}
-      labelFormat={yValueFormat}
+      // labelFormat={yValueFormat}
       labelSkipWidth={12}
       labelSkipHeight={12}
       labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}

@@ -1,23 +1,26 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from '@material-ui/core';
-import { CheckmarkIcon } from './checkmark-icon';
-import { getCheckmarkLabel, getNextCheckmarkValue } from './helpers';
-import { CHECKMARK_VALUES } from 'data/constants';
+import { CHECKMARK_VALUES, COMPLETED, EMPTY, FAILED } from 'data/constants';
+import {
+  CompletedCheckmark,
+  FailedCheckmark,
+  EmptyCheckmark,
+} from './checkmark-variants';
 
-function Checkmark({ value, onClick, disabled }) {
-  const nextLabel = getCheckmarkLabel(getNextCheckmarkValue(value));
+function Checkmark(props) {
+  const { value } = props;
 
-  return (
-    <IconButton
-      data-testid="checkmark"
-      aria-label={`Mark as ${nextLabel}?`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <CheckmarkIcon fontSize="large" value={value} />
-    </IconButton>
-  );
+  switch (value) {
+    case COMPLETED:
+      return <CompletedCheckmark {...props} />;
+
+    case FAILED:
+      return <FailedCheckmark {...props} />;
+
+    case EMPTY:
+    default:
+      return <EmptyCheckmark {...props} />;
+  }
 }
 
 Checkmark.propTypes = {

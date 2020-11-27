@@ -111,7 +111,7 @@ function AddHabitScreen() {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" disabled={disableActions}>
+        <FormButton type="submit" pending={isAddingHabit}>
           Create habit
         </FormButton>
       </FormBody>

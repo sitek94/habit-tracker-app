@@ -1,40 +1,16 @@
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { ReactComponent as BugFixingSvg } from 'images/bug-fixing.svg';
-import {
-  Box,
-  CircularProgress,
-  LinearProgress,
-  Typography,
-} from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import { ReactComponent as VisualDataSvg } from 'images/visual-data.svg';
 import { ReactComponent as HeatmapDataSvg } from 'images/heatmap-data.svg';
 import { ReactComponent as PiechartSvg } from 'images/piechart.svg';
 
-const useButtonProgressStyles = makeStyles((theme) => ({
-  buttonProgress: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: theme.shape.borderRadius,
-    opacity: 0.5,
-  },
-}));
-
-function ButtonProgress(props) {
-  const classes = useButtonProgressStyles();
-
-  return <LinearProgress className={classes.buttonProgress} {...props} />;
-}
-
-function ErrorMessage({ error, inline, ...sx }) {
-  const display = inline ? 'inline' : 'block';
-
+function ErrorMessage({ error, ...sx }) {
   return (
     <Box
       sx={{
         color: 'error.main',
-        display: 'inline',
+        display: 'block',
         ...sx,
       }}
     >
@@ -42,7 +18,7 @@ function ErrorMessage({ error, inline, ...sx }) {
       <Box
         component="pre"
         sx={{
-          display: 'inline',
+          display: 'block',
           margin: 0,
           mb: -5,
           whiteSpace: 'break-spaces',
@@ -133,7 +109,6 @@ function PieChartPlaceholder(props) {
 
 export {
   BarchartPlaceholder,
-  ButtonProgress,
   ErrorMessage,
   HeatmapPlaceholder,
   PieChartPlaceholder,

@@ -21,7 +21,6 @@
     "camelcase": "^6.2.0",
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
-    "dayjs": "^1.9.5",
     "firebase": "^8.0.0",
     "history": "^5.0.0",
     "lodash": "^4.17.20",
@@ -35,6 +34,7 @@
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "4.0.0",
+    "react-swipeable-views": "^0.13.9",
     "web-vitals": "^0.2.4",
     "yup": "^0.29.3"
   },

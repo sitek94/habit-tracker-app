@@ -132,7 +132,7 @@ function EditHabitScreen() {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" disabled={disableActions}>
+        <FormButton type="submit" pending={isUpdatingHabit}>
           Save habit
         </FormButton>
       </FormBody>

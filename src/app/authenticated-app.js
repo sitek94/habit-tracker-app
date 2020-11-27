@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100%',
     display: 'flex',
+    backgroundColor: theme.palette.background.default,
   },
 
   main: {
@@ -101,25 +102,36 @@ function ErrorFallback({ error }) {
 
 // App
 function AuthenticatedApp() {
-  const classes = useStyles();
-
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <AuthenticatedAppProviders>
-        <div className={classes.container}>
-          <Nav />
-          <Sidebar />
-          <main className={classes.main}>
-            <div className={classes.offset} />
-            <div className={classes.content}>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <AppRoutes />
-              </ErrorBoundary>
-            </div>
-          </main>
-        </div>
+        <Layout
+          nav={<Nav />}
+          sidebar={<Sidebar />}
+          content={
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <AppRoutes />
+            </ErrorBoundary>
+          }
+        />
       </AuthenticatedAppProviders>
     </ErrorBoundary>
+  );
+}
+
+// Layout
+function Layout({ nav, sidebar, content }) {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.container}>
+      {nav}
+      {sidebar}
+      <main className={classes.main}>
+        <div className={classes.offset} />
+        <div className={classes.content}>{content}</div>
+      </main>
+    </div>
   );
 }
 

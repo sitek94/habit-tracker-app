@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Typography,
   FormHelperText,
@@ -8,8 +7,8 @@ import {
   Paper,
   Link,
 } from '@material-ui/core';
+import { LoadingButton } from '@material-ui/lab';
 import { Link as RouterLink } from 'react-router-dom';
-import { ButtonProgress } from 'components/lib';
 
 const useStyles = makeStyles((theme) => ({
   // Container
@@ -116,13 +115,8 @@ function FormErrorText({ children }) {
   );
 }
 
-function FormButton({ children, isLoading, ...props }) {
-  return (
-    <Button fullWidth color="primary" variant="contained" {...props}>
-      {children}
-      {isLoading && <ButtonProgress />}
-    </Button>
-  );
+function FormButton(props) {
+  return <LoadingButton fullWidth variant="contained" {...props} />;
 }
 
 function FormHeader({ children }) {

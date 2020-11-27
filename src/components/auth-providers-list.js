@@ -1,10 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from '@material-ui/core/styles';
 import authProviders from 'data/auth-providers';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   // list
   list: {
     // Target all but last buttons in the list
@@ -15,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 
   // Button
   root: {
-    color: props => props.color,
     justifyContent: 'flex-start',
   },
   icon: {
@@ -23,17 +26,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AuthProviderButton = ({ color, ...rest }) => {
-  const classes = useStyles({ color });
+// Creates a theme with primary color set to corresponding auth provider color
+const createAuthTheme = (providerColor) =>
+  createMuiTheme({
+    palette: {
+      primary: providerColor,
+    },
+  });
+
+const AuthProviderButton = ({ providerColor, ...rest }) => {
+  const classes = useStyles();
 
   return (
-    <Button
-      classes={{
-        root: classes.root,
-        startIcon: classes.icon,
-      }}
-      {...rest}
-    />
+    <ThemeProvider theme={createAuthTheme(providerColor)}>
+      <Button
+        classes={{
+          root: classes.root,
+          startIcon: classes.icon,
+        }}
+        {...rest}
+      />
+    </ThemeProvider>
   );
 };
 
@@ -45,8 +58,8 @@ function AuthProviderList({ text, disabled, onAuthProviderClick }) {
       {authProviders.map(({ id, name, color, icon, scopes }) => (
         <AuthProviderButton
           key={id}
-          color={color}
-          onClick={() => onAuthProviderClick({ id, scopes })}
+          providerColor={color}
+          onClick={(event) => onAuthProviderClick(event, { id, scopes })}
           disabled={disabled}
           startIcon={icon}
           variant="outlined"

@@ -30,6 +30,13 @@ function SignUpScreen() {
     reset();
   };
 
+  const handleAuthProviderClick = (event, provider) => {
+    // Prevents the form from submitting and triggering the form errors
+    event.preventDefault();
+
+    run(signInWithAuthProvider(provider));
+  }
+
   const errorMessages = Object.values(errors);
   const isError = isAuthError || errorMessages.length !== 0;
   const errorMessage = authError?.message || errorMessages[0]?.message;
@@ -47,7 +54,8 @@ function SignUpScreen() {
       <FormBody>
         <AuthProviderList
           text="Sign up with"
-          onAuthProviderClick={signInWithAuthProvider}
+          onAuthProviderClick={handleAuthProviderClick}
+          disabled={isLoading}
         />
 
         <FormDivider />
@@ -89,7 +97,7 @@ function SignUpScreen() {
           fullWidth
         />
 
-        <FormButton type="submit" disabled={isLoading}>
+        <FormButton type="submit" pending={isLoading}>
           Sign up
         </FormButton>
       </FormBody>

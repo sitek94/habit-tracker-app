@@ -1,16 +1,4 @@
-import {
-  Card,
-  CardContent,
-  FormControl,
-  Hidden,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemIcon,
-  MenuItem,
-  Select,
-  useTheme,
-} from '@material-ui/core';
+import { Box, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -20,17 +8,20 @@ import {
   Palette as PaletteIcon,
   Security as SecurityIcon,
 } from '@material-ui/icons';
-import { TabContext, TabPanel } from '@material-ui/lab';
+import { AppearanceTab } from 'components/appearance-tab';
+import { PerformanceTab } from 'components/performance-tab';
 import { useUserConfig } from 'context/user-config-context';
 import * as React from 'react';
-import { AppearanceTab } from 'components/appearance-tab';
+import SwipeableViews from 'react-swipeable-views';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    // maxWidth: 500,
+    height: '100%',
+    margin: theme.spacing(4),
+    maxWidth: 600,
   },
-});
+}));
 const tabs = [
   {
     key: 'account',
@@ -59,63 +50,45 @@ const tabs = [
 export default function IconLabelTabs() {
   const classes = useStyles();
 
-  const [selectedTab, setSelectedTab] = React.useState('performance');
-  const handleChange = (event, newValue) => {
+  const [selectedTab, setSelectedTab] = React.useState(0);
+  const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
+  };
+  const handleIndexChange = (index) => {
+    setSelectedTab(index);
   };
 
   const sth = useUserConfig();
-  console.log(sth);
 
   return (
-    <Card square className={classes.root}>
-      <TabContext value={selectedTab}>
-        <Tabs
-          value={selectedTab}
-          onChange={handleChange}
-          variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
-        >
-          {tabs.map((tab, i) => {
-            return (
-              <Tab
-                key={tab.key}
-                icon={tab.icon}
-                label={tab.label}
-                value={tab.key}
-              />
-            );
-          })}
-        </Tabs>
-        <CardContent>
-          <TabPanel value="account">Account</TabPanel>
+    <Paper className={classes.root}>
+      <Tabs
+        value={selectedTab}
+        onChange={handleTabChange}
+        variant="fullWidth"
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        {tabs.map(({ key, icon, label }, index) => {
+          return <Tab key={key} icon={icon} label={label} value={index} />;
+        })}
+      </Tabs>
+      <Box sx={{ m: 2 }}>
+        <SwipeableViews index={selectedTab} onChangeIndex={handleIndexChange}>
+          <div>Account</div>
 
-          <TabPanel value="performance">
-            <PerformanceTab />
-          </TabPanel>
+          <PerformanceTab />
 
-          <TabPanel value="appearance">
-            <AppearanceTab />
-          </TabPanel>
-
-          <TabPanel value="security">Security</TabPanel>
-        </CardContent>
-      </TabContext>
-    </Card>
+          <AppearanceTab />
+          <div>ADSD</div>
+        </SwipeableViews>
+      </Box>
+    </Paper>
   );
-}
-
-function PerformanceTab() {
-  return <>Div</>;
 }
 
 function UserSettingsScreen() {
-  return (
-    <div>
-      <IconLabelTabs />
-    </div>
-  );
+  return <IconLabelTabs />;
 }
 
 export { UserSettingsScreen };

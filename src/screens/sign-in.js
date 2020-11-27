@@ -23,12 +23,20 @@ function SignInScreen() {
 
   const { register, handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(signInSchema),
+    reValidateMode: 'onSubmit',
   });
 
   const onSubmit = ({ email, password }) => {
     run(signIn({ email, password }));
     reset();
   };
+
+  const handleAuthProviderClick = (event, provider) => {
+    // Prevents the form from submitting and triggering the form errors
+    event.preventDefault();
+
+    run(signInWithAuthProvider(provider));
+  }
 
   const errorMessages = Object.values(errors);
   const isError = isAuthError || errorMessages.length !== 0;
@@ -47,7 +55,7 @@ function SignInScreen() {
       <FormBody>
         <AuthProviderList
           text="Sign in with"
-          onAuthProviderClick={signInWithAuthProvider}
+          onAuthProviderClick={handleAuthProviderClick}
         />
 
         <FormDivider />

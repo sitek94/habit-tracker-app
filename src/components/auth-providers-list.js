@@ -28,6 +28,7 @@ const AuthProviderButton = ({ color, ...rest }) => {
 
   return (
     <Button
+
       classes={{
         root: classes.root,
         startIcon: classes.icon,
@@ -46,7 +47,7 @@ function AuthProviderList({ text, disabled, onAuthProviderClick }) {
         <AuthProviderButton
           key={id}
           color={color}
-          onClick={() => onAuthProviderClick({ id, scopes })}
+          onClick={(event) => onAuthProviderClick(event, { id, scopes })}
           disabled={disabled}
           startIcon={icon}
           variant="outlined"

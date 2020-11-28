@@ -10,6 +10,7 @@ UserConfigContext.displayName = 'UserConfigContext';
 const defaultUserConfig = {
   theme: null,
   performanceGoal: 75,
+  weekStartsOn: 0, // Sunday
 };
 
 function UserConfigProvider(props) {
@@ -36,7 +37,11 @@ function UserConfigProvider(props) {
       const userHasConfig = snapshot.exists();
 
       if (userHasConfig) {
-        setData(snapshot.val());
+        setData({
+          // Overwrite these values of default config that user has set
+          ...defaultUserConfig,
+          ...snapshot.val(),
+        });
       } else {
         // If there are no stored config, set default config
         setData(defaultUserConfig);

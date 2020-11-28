@@ -19,6 +19,7 @@ import { NoHabitsScreen } from 'screens/no-habits';
 import { BarchartPlaceholder } from '../components/lib';
 import diagramPlaceholder from 'images/diagram-placeholder.png';
 import { useUserConfig } from 'context/user-config-context';
+import { useLocale } from 'locale';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Dashboard
 function DashboardScreen() {
+  const locale = useLocale();
   const classes = useStyles();
 
   // Habits data
@@ -58,8 +60,8 @@ function DashboardScreen() {
 
   // Date
   const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const start = startOfWeek(selectedDate);
-  const end = endOfWeek(selectedDate);
+  const start = startOfWeek(selectedDate, { locale });
+  const end = endOfWeek(selectedDate, { locale });
 
   // Get dates that are currently selected
   const selectedDates = eachDayOfInterval({ start, end }).map((date) =>

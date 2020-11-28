@@ -30,11 +30,15 @@ const AuthProviderButton = ({ providerColor, ...rest }) => {
   const classes = useStyles();
 
   // Create a theme with primary color set to corresponding auth provider color
-  const providerTheme = createMuiTheme({
-    palette: {
-      primary: providerColor
-    }
-  })
+  const providerTheme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          primary: providerColor,
+        },
+      }),
+    [providerColor]
+  );
 
   return (
     <ThemeProvider theme={providerTheme}>

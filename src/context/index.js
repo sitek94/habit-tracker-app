@@ -8,6 +8,7 @@ import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
 import { UserConfigProvider } from './user-config-context';
+import { LocaleProvider } from 'locale';
 
 const queryCache = new QueryCache();
 
@@ -16,20 +17,22 @@ const queryCache = new QueryCache();
  */
 function AppProviders({ children }) {
   return (
-    <ReactQueryCacheProvider queryCache={queryCache}>
-      <Router>
-        <MainThemeProvider>
-          <FirebaseProvider>
-            <DialogProvider>
-              <SnackbarProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </SnackbarProvider>
-            </DialogProvider>
-          </FirebaseProvider>
-        </MainThemeProvider>
-      </Router>
-      <ReactQueryDevtools position="bottom-left" />
-    </ReactQueryCacheProvider>
+    <LocaleProvider>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <Router>
+          <MainThemeProvider>
+            <FirebaseProvider>
+              <DialogProvider>
+                <SnackbarProvider>
+                  <AuthProvider>{children}</AuthProvider>
+                </SnackbarProvider>
+              </DialogProvider>
+            </FirebaseProvider>
+          </MainThemeProvider>
+        </Router>
+        <ReactQueryDevtools position="bottom-left" />
+      </ReactQueryCacheProvider>
+    </LocaleProvider>
   );
 }
 

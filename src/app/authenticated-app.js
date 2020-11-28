@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   AppBar,
+  CssBaseline,
   Divider,
   Drawer,
   IconButton,
@@ -31,6 +32,7 @@ import { ManageHabitsScreen } from 'screens/manage-habits';
 import { NotFoundScreen } from 'screens/not-found';
 import { UserSettingsScreen } from 'screens/user-settings';
 import { AuthenticatedAppProviders } from 'context';
+import { LocaleSelect } from 'components/locale-select';
 
 const DRAWER_WIDTH = 240;
 
@@ -40,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100%',
     display: 'flex',
-    backgroundColor: theme.palette.background.default,
   },
 
   main: {
@@ -124,14 +125,17 @@ function Layout({ nav, sidebar, content }) {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
-      {nav}
-      {sidebar}
-      <main className={classes.main}>
-        <div className={classes.offset} />
-        <div className={classes.content}>{content}</div>
-      </main>
-    </div>
+    <>
+      <CssBaseline />
+      <div className={classes.container}>
+        {nav}
+        {sidebar}
+        <main className={classes.main}>
+          <div className={classes.offset} />
+          <div className={classes.content}>{content}</div>
+        </main>
+      </div>
+    </>
   );
 }
 
@@ -142,6 +146,7 @@ function Nav() {
   return (
     <AppBar position="fixed">
       <Toolbar className={classes.toolbar}>
+        <LocaleSelect />
         <Tooltip title="GitHub repository">
           <IconButton
             target="_blank"

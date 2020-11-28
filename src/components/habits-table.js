@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Box,
   makeStyles,
   Table,
   TableBody,
@@ -12,10 +11,10 @@ import {
   TableSortLabel,
   Typography,
 } from '@material-ui/core';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
-import { isToday } from 'date-fns';
+import { useLocale } from 'locale';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Sortable Table
 function HabitsTable({ habits, checkmarks, dates }) {
+  const locale = useLocale();
   const classes = useStyles();
 
   const [order, setOrder] = React.useState('desc');
@@ -65,7 +65,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
 
     return {
       date,
-      label: format(date, 'd-MMM'),
+      label: format(date, 'd-MMM', { locale }),
     };
   });
 

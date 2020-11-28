@@ -16,9 +16,11 @@ import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
 import { useDeleteHabit } from 'hooks/useDeleteHabit';
 import { Link as RouterLink } from 'react-router-dom';
-import { weekdays } from 'utils/misc';
+import { useLocale } from 'locale';
 
 function HabitListItem({ habit }) {
+  const { weekdays } = useLocale();
+
   const { id, name, description, frequency } = habit;
 
   const { openSnackbar } = useSnackbar();

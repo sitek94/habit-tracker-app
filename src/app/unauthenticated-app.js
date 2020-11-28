@@ -1,16 +1,12 @@
 import * as React from 'react';
+import Button from '@material-ui/core/Button';
 import { Link as RouterLink, Route, Routes } from 'react-router-dom';
-import {
-  AppBar,
-  Button,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { AppBar, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { LandingScreen } from 'screens/landing';
 import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
 import { SignUpScreen } from 'screens/sign-up';
+import { LocaleSelect } from 'components/locale-select';
 
 const useStyles = makeStyles((theme) => ({
   // App
@@ -66,6 +62,7 @@ function Nav() {
         </Typography>
 
         <NavLink to="/home">Home</NavLink>
+        <LocaleSelect />
         <NavLink to="/signin">Sign in</NavLink>
         <NavLink to="/signup">Sign up</NavLink>
       </Toolbar>

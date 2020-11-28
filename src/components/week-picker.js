@@ -1,9 +1,8 @@
 import * as React from 'react';
-import TextField from '@material-ui/core/TextField';
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
-import LocalizaitonProvider from '@material-ui/lab/LocalizationProvider';
-import StaticDatePicker from '@material-ui/lab/StaticDatePicker';
 import clsx from 'clsx';
+import { TextField, makeStyles } from '@material-ui/core';
+import { StaticDatePicker, PickersDay } from '@material-ui/lab';
+import { useLocale } from 'locale';
 import {
   add,
   endOfWeek,
@@ -14,10 +13,14 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns';
-import PickersDay from '@material-ui/lab/PickersDay';
-import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
+  //
+  day: {
+    width: 40,
+  },
+
+  // Highlighting
   highlight: {
     borderRadius: 0,
     backgroundColor: theme.palette.primary.main,
@@ -41,6 +44,7 @@ const MAX_DATE = add(new Date(), { years: 10 });
 
 function WeekPicker({ selectedDate, onChange }) {
   const classes = useStyles();
+  const locale = useLocale();
 
   const renderWeekPickerDay = (
     date,
@@ -50,9 +54,8 @@ function WeekPicker({ selectedDate, onChange }) {
     if (!selectedDate) {
       return <PickersDay {...PickersDayComponentProps} />;
     }
-
-    const weekStart = startOfWeek(selectedDate);
-    const weekEnd = endOfWeek(selectedDate);
+    const weekStart = startOfWeek(selectedDate, { locale });
+    const weekEnd = endOfWeek(selectedDate, { locale });
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
 
@@ -65,7 +68,7 @@ function WeekPicker({ selectedDate, onChange }) {
       start: weekStart,
       end: weekEnd,
     });
-    
+
     const isCurrentYear = isThisYear(date);
 
     return (
@@ -73,6 +76,7 @@ function WeekPicker({ selectedDate, onChange }) {
         {...PickersDayComponentProps}
         disableMargin
         className={clsx(
+          classes.day,
           isCurrentYear && {
             [classes.highlight]: dayIsBetween,
             [classes.firstHighlight]: isWeekFirstDay || isMonthFirstDay,
@@ -83,19 +87,17 @@ function WeekPicker({ selectedDate, onChange }) {
     );
   };
   return (
-    <LocalizaitonProvider dateAdapter={AdapterDateFns}>
-      <StaticDatePicker
-        minDate={MIN_DATE}
-        maxDate={MAX_DATE}
-        displayStaticWrapperAs="desktop"
-        orientation="landscape"
-        openTo="date"
-        value={selectedDate}
-        onChange={onChange}
-        renderDay={renderWeekPickerDay}
-        renderInput={(params) => <TextField {...params} variant="standard" />}
-      />
-    </LocalizaitonProvider>
+    <StaticDatePicker
+      minDate={MIN_DATE}
+      maxDate={MAX_DATE}
+      displayStaticWrapperAs="desktop"
+      orientation="landscape"
+      openTo="date"
+      value={selectedDate}
+      onChange={onChange}
+      renderDay={renderWeekPickerDay}
+      renderInput={(params) => <TextField {...params} variant="standard" />}
+    />
   );
 }
 

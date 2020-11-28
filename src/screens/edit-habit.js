@@ -9,7 +9,9 @@ import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 import { useHabitById } from 'hooks/useHabit';
 import { useUpdateHabit } from 'hooks/useUpdateHabit';
-import { weekdays } from 'utils/misc';
+
+import { useLocale } from 'locale';
+
 import { NotFoundHabitScreen } from './not-found-habit';
 import {
   Form,
@@ -29,6 +31,8 @@ const defaultHabit = {
 
 function EditHabitScreen() {
   const navigate = useNavigate();
+  
+  const { weekdays } = useLocale();
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
 

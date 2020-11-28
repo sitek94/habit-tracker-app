@@ -14,7 +14,7 @@ import {
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 import { useAddHabit } from 'hooks/useAddHabit';
-import { weekdays } from 'utils/misc';
+import { useLocale } from 'locale';
 import { useHabits } from 'hooks/useHabits';
 import { FullPageSpinner } from 'components/lib';
 
@@ -26,6 +26,8 @@ const initialHabit = {
 };
 
 function AddHabitScreen() {
+  const { weekdays } = useLocale();
+
   const { openSnackbar } = useSnackbar();
 
   const { data: habits, isLoading } = useHabits();

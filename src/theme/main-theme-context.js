@@ -6,6 +6,9 @@ import {
 
 const theme = createMuiTheme();
 
+/**
+ * Provides a theme when user is not authenticated
+ */
 function MainThemeProvider({ children }) {
   return (
     <MuiThemeProvider theme={theme}>

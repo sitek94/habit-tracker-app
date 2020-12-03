@@ -33,6 +33,8 @@ import { NotFoundScreen } from 'screens/not-found';
 import { UserSettingsScreen } from 'screens/user-settings';
 import { AuthenticatedAppProviders } from 'context';
 import { LocaleSelect } from 'components/locale-select';
+import { useUpdateLocaleCode } from 'locale/hooks/useUpdateLocale';
+import { locales, useLocale } from 'locale';
 
 const DRAWER_WIDTH = 240;
 
@@ -143,10 +145,21 @@ function Layout({ nav, sidebar, content }) {
 function Nav() {
   const classes = useStyles();
 
+  const locale = useLocale();
+  const updateLocaleCode = useUpdateLocaleCode();
+
+  console.log(locale);
+
+  const selectedLocale = locales.find(l => l.code === locale.code);
+
+  const handleLocaleClick = (clickedLocaleCode) => {
+    updateLocaleCode(clickedLocaleCode);
+  }
+
   return (
     <AppBar position="fixed">
       <Toolbar className={classes.toolbar}>
-        <LocaleSelect />
+        <LocaleSelect selectedLocale={selectedLocale} onLocaleClick={handleLocaleClick} />
         <Tooltip title="GitHub repository">
           <IconButton
             target="_blank"

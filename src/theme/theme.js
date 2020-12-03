@@ -8,6 +8,12 @@ const defaultSecondaryColor = getColor(
 );
 const defaultDark = process.env.REACT_APP_THEME_DARK === 'true';
 
+export const defaultThemeConstants = {
+  primaryColor: defaultPrimaryColor,
+  secondaryColor: defaultSecondaryColor,
+  dark: defaultDark,
+}
+
 // Create default theme
 export const defaultTheme = createMuiTheme({
   palette: {
@@ -17,9 +23,7 @@ export const defaultTheme = createMuiTheme({
   },
 
   // Extend default mui theme with some helpers
-  primaryColor: defaultPrimaryColor,
-  secondaryColor: defaultSecondaryColor,
-  dark: defaultDark,
+  ...defaultThemeConstants,
 });
 
 /**

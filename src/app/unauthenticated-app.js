@@ -7,6 +7,8 @@ import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
 import { SignUpScreen } from 'screens/sign-up';
 import { LocaleSelect } from 'components/locale-select';
+import { useLocale } from 'locale';
+import { locales } from 'locale';
 
 const useStyles = makeStyles((theme) => ({
   // App
@@ -54,6 +56,18 @@ function NavLink(props) {
 function Nav() {
   const classes = useStyles();
 
+  const { code, setLocale } = useLocale();
+
+  // Handle clicking on locale
+  const handleLocaleClick = (clickedLocaleCode) => {
+    const clickedLocale = locales.find(locale => locale.code === clickedLocaleCode);
+
+    setLocale(clickedLocale.import);
+  }
+
+  // Currently selected locale object
+  const selectedLocale = locales.find(locale => locale.code === code);
+
   return (
     <AppBar position="absolute">
       <Toolbar className={classes.toolbar}>
@@ -62,7 +76,7 @@ function Nav() {
         </Typography>
 
         <NavLink to="/home">Home</NavLink>
-        <LocaleSelect />
+        <LocaleSelect selectedLocale={selectedLocale} onLocaleClick={handleLocaleClick} />
         <NavLink to="/signin">Sign in</NavLink>
         <NavLink to="/signup">Sign up</NavLink>
       </Toolbar>

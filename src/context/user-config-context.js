@@ -3,84 +3,96 @@ import { FullPageSpinner, FullPageErrorFallback } from 'components/lib';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
 import { useAuth } from './auth-context';
+import { defaultLocale } from 'locale/locales';
+import { defaultThemeConstants } from 'theme';
 
-const UserConfigContext = React.createContext();
-UserConfigContext.displayName = 'UserConfigContext';
+const UserDataContext = React.createContext();
+UserDataContext.displayName = 'UserDataContext';
 
-const defaultUserConfig = {
-  theme: null,
+// Default user data object
+const defaultUserData = {
+  theme: defaultThemeConstants,
   performanceGoal: 75,
-  weekStartsOn: 0, // Sunday
+  locale: {
+    code: defaultLocale.code,
+  },
 };
 
-function UserConfigProvider(props) {
+/**
+ * Provides user data object, which is updated whenever user data
+ * changes in the database.
+ */
+function UserDataProvider({ children }) {
   const {
-    data: userConfig,
+    data: userData,
+    setData: setUserData,
     status,
     error,
     isLoading,
     isIdle,
     isError,
     isSuccess,
-    setData,
-  } = useAsync();
+  } = useAsync({
+    data: defaultUserData,
+  });
 
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  // Listen to changes in user config
   React.useEffect(() => {
-    const userConfigRef = db.ref(`users/${user.uid}`);
+    const userDataRef = db.ref(`users/${user.uid}`);
 
-    userConfigRef.on('value', (snapshot) => {
-      // If user has changed the config, it is stored in the database
-      const userHasConfig = snapshot.exists();
+    /**
+     * Set up snapshot listener that updates user data whenever it
+     * changes in the database
+     */
+    userDataRef.on('value', (snapshot) => {
+      // Check if user has a data point in the database
+      const userHasData = snapshot.exists();
 
-      if (userHasConfig) {
-        setData({
-          // Overwrite these values of default config that user has set
-          ...defaultUserConfig,
+      if (userHasData) {
+        // Merge any user data with the default data
+        setUserData({
+          ...defaultUserData,
           ...snapshot.val(),
         });
       } else {
-        // If there are no stored config, set default config
-        setData(defaultUserConfig);
+        setUserData(defaultUserData);
       }
     });
 
-    // Detach listener
-    return () => userConfigRef.off();
-  }, [db, user, setData]);
+    // Detach snapshot listener
+    return () => userDataRef.off();
+  }, [db, user, setUserData]);
 
-  // Context value
-  const value = React.useMemo(
-    () => ({
-      ...userConfig,
-    }),
-    [userConfig]
-  );
-
+  // User data is loading
   if (isLoading || isIdle) {
     return <FullPageSpinner />;
   }
 
+  // Error when loading user data
   if (isError) {
     return <FullPageErrorFallback error={error} />;
   }
 
+  // User data successfully loaded
   if (isSuccess) {
-    return <UserConfigContext.Provider value={value} {...props} />;
+    return (
+      <UserDataContext.Provider value={userData}>
+        {children}
+      </UserDataContext.Provider>
+    );
   }
 
   throw new Error(`Unhandled status: ${status}`);
 }
 
-function useUserConfig() {
-  const context = React.useContext(UserConfigContext);
+function useUserData() {
+  const context = React.useContext(UserDataContext);
   if (context === undefined) {
-    throw new Error(`useUserConfig must be used within a UserConfigProvider`);
+    throw new Error(`useUserData must be used within a UserDataProvider`);
   }
   return context;
 }
 
-export { UserConfigProvider, useUserConfig };
+export { UserDataProvider, useUserData };

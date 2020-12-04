@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
-
 import { FullPageSpinner, FullPageErrorFallback } from 'components/lib';
 
 const AuthContext = React.createContext();
@@ -77,6 +76,10 @@ function AuthProvider(props) {
     [auth]
   );
 
+  const deleteAccount = React.useCallback(() => {
+    return auth.currentUser.delete();
+  }, [auth]);
+
   // Context value
   const value = React.useMemo(
     () => ({
@@ -86,8 +89,17 @@ function AuthProvider(props) {
       signUp,
       signOut,
       resetPassword,
+      deleteAccount,
     }),
-    [user, signIn, signInWithAuthProvider, signUp, signOut, resetPassword]
+    [
+      user,
+      signIn,
+      signInWithAuthProvider,
+      signUp,
+      signOut,
+      resetPassword,
+      deleteAccount,
+    ]
   );
 
   if (isLoading || isIdle) {

@@ -8,13 +8,23 @@ const defaultSecondaryColor = getColor(
 );
 const defaultDark = process.env.REACT_APP_THEME_DARK === 'true';
 
+/**
+ * Default theme constants
+ * 
+ * For primary and secondary color their id and for dark a boolean.
+ */
 export const defaultThemeConstants = {
-  primaryColor: defaultPrimaryColor,
-  secondaryColor: defaultSecondaryColor,
+  primaryColor: defaultPrimaryColor.id,
+  secondaryColor: defaultSecondaryColor.id,
   dark: defaultDark,
 }
 
-// Create default theme
+/**
+ * Default theme
+ * 
+ * Theme created with `createMuiTheme` that uses default constants values:
+ * primary color, secondary color and dark mode.
+ */
 export const defaultTheme = createMuiTheme({
   palette: {
     primary: defaultPrimaryColor.import,
@@ -22,12 +32,16 @@ export const defaultTheme = createMuiTheme({
     mode: defaultDark ? 'dark' : 'light',
   },
 
-  // Extend default mui theme with some helpers
+  // Extend default mui theme with additional properties
   ...defaultThemeConstants,
 });
 
 /**
- * Checks if passed `theme` is matches `defaultTheme`
+ * Is default theme?
+ * 
+ * Checks whether passed `theme` matches `defaultTheme`.
+ * 
+ * @returns {boolean} true/false
  */
 export function isDefaultTheme(theme) {
   if (!theme) {
@@ -46,10 +60,12 @@ export function isDefaultTheme(theme) {
 };
 
 /**
- * Creates extended Material-UI Theme.
- * + primaryColor object
- * + secondaryColor object
- * + dark boolean
+ * Create theme
+ * 
+ * @returns extended material-ui theme. Additional properties:
+ *  - `primaryColor` object
+ *  - `secondaryColor` object
+ *  - `dark` boolean
  */
 export function createTheme(theme) {
   if (!theme) {
@@ -78,6 +94,7 @@ export function createTheme(theme) {
       mode: dark ? 'dark' : 'light',
     },
 
+    // Additional properties
     primaryColor: primaryColor,
     secondaryColor: secondaryColor,
     dark: dark,

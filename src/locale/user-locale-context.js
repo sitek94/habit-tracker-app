@@ -20,11 +20,6 @@ function UserLocaleProvider({ children }) {
     const newLocale = locales.find((locale) => locale.code === userLocale.code)
       .import;
 
-    // Check if user has changed the first day of the week
-    if (userLocale.weekStartsOn) {
-      newLocale.options.weekStartsOn = userLocale.weekStartsOn;
-    }
-
     setLocale(newLocale);
   }, [userLocale]);
 

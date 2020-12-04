@@ -1,11 +1,14 @@
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
-import { getColor } from './colors';
+import { getColor } from 'theme';
 
 /**
- * Returns a function that updates user theme
+ * Use update theme hook
+ * 
+ * @returns a function that updates user's theme in the database.
+ * The function takes as an argument new theme object.
  */
-export function useUpdateUserTheme() {
+export function useUpdateTheme() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
@@ -26,9 +29,12 @@ export function useUpdateUserTheme() {
 }
 
 /**
- * Returns a function that updates user's primary color
+ * Use update primary color hook
+ * 
+ * @returns a function that updates user's primary color in the database.
+ * The function takes as an argument new primary color object.
  */
-export function useUpdateUserPrimaryColor() {
+export function useUpdatePrimaryColor() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
@@ -37,12 +43,15 @@ export function useUpdateUserPrimaryColor() {
 
     return db
       .ref(`users/${user.uid}/theme/primaryColor`)
-      .update(newPrimaryColor.id);
+      .set(newPrimaryColor.id);
   };
 }
 
 /**
- * Returns a function that updates user's secondary color
+ * Use update secondary color hook
+ * 
+ * @returns a function that updates user's secondary color in the database.
+ * The function takes as an argument new secondary color object.
  */
 export function useUpdateSecondaryColor() {
   const { db } = useFirebase();
@@ -53,14 +62,17 @@ export function useUpdateSecondaryColor() {
 
     return db
       .ref(`users/${user.uid}/theme/secondaryColor`)
-      .update(newSecondaryColor.id);
+      .set(newSecondaryColor.id);
   };
 }
 
 /**
- * Returns a function that updates user's dark mode
+ * Use update dark mode hook
+ * 
+ * @returns a function that updates user's dark mode settings in the database.
+ * The function takes as an argument new dark mode value (boolean).
  */
-export function useUpdateUserDarkMode() {
+export function useUpdateDarkMode() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
@@ -70,9 +82,11 @@ export function useUpdateUserDarkMode() {
 }
 
 /**
- * Returns a function that removes user's theme
+ * Use remove theme hook
+ * 
+ * @returns a function that removes user's theme settings in the database.
  */
-export function useRemoveUserTheme() {
+export function useRemoveTheme() {
   const { db } = useFirebase();
   const { user } = useAuth();
 

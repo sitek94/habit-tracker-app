@@ -23,11 +23,25 @@ import {
   Brightness4 as Brightness4Icon,
   FormatColorReset as FormatColorResetIcon,
 } from '@material-ui/icons';
+import {
+  useUpdatePrimaryColor,
+  useUpdateSecondaryColor,
+  useUpdateDarkMode,
+  useRemoveTheme,
+} from 'api/appearance';
 
+/**
+ * Appearance Tab
+ *
+ * A tab where user can change appearance settings of the app.
+ */
 function AppearanceTab({ disabled }) {
   const theme = useTheme();
 
-  const { changeTheme, resetTheme } = theme;
+  const updatePrimaryColor = useUpdatePrimaryColor();
+  const updateSecondaryColor = useUpdateSecondaryColor();
+  const updateDarkMode = useUpdateDarkMode();
+  const resetTheme = useRemoveTheme();
 
   // Change primary color
   const handlePrimaryColorChange = (event) => {
@@ -38,11 +52,7 @@ function AppearanceTab({ disabled }) {
     if (!primaryColor) return;
     if (theme.primaryColor.id === primaryColor) return;
 
-    changeTheme({
-      primaryColor,
-      secondaryColor: theme.secondaryColor.id,
-      dark: theme.dark,
-    });
+    updatePrimaryColor(primaryColor);
   };
 
   // Change secondary color
@@ -54,11 +64,7 @@ function AppearanceTab({ disabled }) {
     if (!secondaryColor) return;
     if (theme.secondaryColor.id === secondaryColor) return;
 
-    changeTheme({
-      primaryColor: theme.primaryColor.id,
-      secondaryColor,
-      dark: theme.dark,
-    });
+    updateSecondaryColor(secondaryColor);
   };
 
   // Change dark mode
@@ -69,11 +75,7 @@ function AppearanceTab({ disabled }) {
 
     if (theme.dark === dark) return;
 
-    changeTheme({
-      primaryColor: theme.primaryColor.id,
-      secondaryColor: theme.secondaryColor.id,
-      dark: dark,
-    });
+    updateDarkMode(dark);
   };
 
   // Reset theme to default
@@ -239,7 +241,7 @@ function AppearanceTab({ disabled }) {
         <Divider light />
       </Box>
 
-      <Box sx={{ my: 1, }}>
+      <Box sx={{ my: 1 }}>
         <ListItem>
           <Hidden xsDown>
             <ListItemIcon>

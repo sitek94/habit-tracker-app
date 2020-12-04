@@ -14,7 +14,7 @@ import {
 } from '@material-ui/icons';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
-import { useDeleteHabit } from 'hooks/useDeleteHabit';
+import { useDeleteHabit } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'locale';
 

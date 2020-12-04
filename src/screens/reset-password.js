@@ -1,5 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import { TextField } from '@material-ui/core';
+import { useAuth } from 'context/auth-context';
+import { useSnackbar } from 'context/snackbar-context';
+import { resetPasswordSchema } from 'data/constraints';
+import { useAsync } from 'utils/hooks';
 import {
   Form,
   FormBody,
@@ -10,12 +15,12 @@ import {
   FormPrimaryText,
   FormSecondaryText,
 } from 'components/form';
-import { useAuth } from 'context/auth-context';
-import { useSnackbar } from 'context/snackbar-context';
-import { resetPasswordSchema } from 'data/constraints';
-import { useForm } from 'react-hook-form';
-import { useAsync } from 'utils/hooks';
 
+/**
+ * Reset Password Screen
+ * 
+ * Here the user can reset their password by entering their email address.
+ */
 function ResetPasswordScreen() {
   const { resetPassword } = useAuth();
   const { openSnackbar } = useSnackbar();

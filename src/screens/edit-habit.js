@@ -7,11 +7,8 @@ import { CheckboxGroup } from 'components/checkbox-group';
 import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
-import { useHabitById } from 'hooks/useHabit';
-import { useUpdateHabit } from 'hooks/useUpdateHabit';
-
+import { useHabitById, useUpdateHabit } from 'api/habits';
 import { useLocale } from 'locale';
-
 import { NotFoundHabitScreen } from './not-found-habit';
 import {
   Form,

@@ -3,6 +3,14 @@ import { Fab, Box, Typography } from '@material-ui/core';
 import { Dashboard as DashboardIcon } from '@material-ui/icons';
 import { ReactComponent as TowingSvg } from 'images/towing.svg';
 
+/**
+ * Not Found Habit Screen
+ * 
+ * This screen is displayed when the user tries to manually go to the 
+ * habit route that doesn't exist.
+ * 
+ * There is a big button that navigates the user back to the 'Dashboard Screen'
+ */
 function NotFoundHabitScreen() {
   return (
     <Box
@@ -18,6 +26,7 @@ function NotFoundHabitScreen() {
         clone
         sx={{
           width: '50%',
+          height: '30%',
           margin: 2,
         }}
       >

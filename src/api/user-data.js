@@ -3,7 +3,7 @@ import { useAuth } from 'context/auth-context';
 
 /**
  * Use update performance goal hook
- * 
+ *
  * @returns a function that updates user's performance goal in the database.
  * The function takes as an argument a new performance goal value.
  */
@@ -17,7 +17,10 @@ export function useUpdatePerformanceGoal() {
 }
 
 /**
- * Updates user's locale code in the database
+ * Use update locale code hook
+ *
+ * @returns a function that updates user's locale code in the database.
+ * The function takes as an argument new locale code.
  */
 export function useUpdateLocaleCode() {
   const { user } = useAuth();
@@ -28,3 +31,23 @@ export function useUpdateLocaleCode() {
   };
 }
 
+/**
+ * Use delete user data hook
+ *
+ * @returns a function that deletes user's data. It deletes user's data,
+ * habits and checkmarks.
+ */
+export function useDeleteUserData() {
+  const { user } = useAuth();
+  const { db } = useFirebase();
+
+  return () => {
+    const updates = {};
+
+    updates[`habits/${user.uid}`] = null;
+    updates[`checkmarks/${user.uid}`] = null;
+    updates[`users/${user.uid}`] = null;
+
+    return db.ref().update(updates);
+  };
+}

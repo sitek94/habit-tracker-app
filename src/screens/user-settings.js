@@ -8,9 +8,9 @@ import {
   Palette as PaletteIcon,
   Security as SecurityIcon,
 } from '@material-ui/icons';
+import { AccountTab } from 'components/account-tab';
 import { AppearanceTab } from 'components/appearance-tab';
 import { PerformanceTab } from 'components/performance-tab';
-import { useUserConfig } from 'context/user-config-context';
 import * as React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 
@@ -47,7 +47,7 @@ const tabs = [
     label: 'Security',
   },
 ];
-export default function IconLabelTabs() {
+export default function UserSettingsScreen() {
   const classes = useStyles();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -57,8 +57,6 @@ export default function IconLabelTabs() {
   const handleIndexChange = (index) => {
     setSelectedTab(index);
   };
-
-  const sth = useUserConfig();
 
   return (
     <Paper className={classes.root}>
@@ -74,8 +72,16 @@ export default function IconLabelTabs() {
         })}
       </Tabs>
       <Box sx={{ m: 2 }}>
-        <SwipeableViews index={selectedTab} onChangeIndex={handleIndexChange}>
-          <div>Account</div>
+        <SwipeableViews 
+          // Fixes broken animation when changing view for the first time.
+          // https://github.com/oliviertassinari/react-swipeable-views/issues/599
+          containerStyle={{
+            transition: 'transform 0.35s cubic-bezier(0.15, 0.3, 0.25, 1) 0s'
+          }}
+          index={selectedTab}
+          onChangeIndex={handleIndexChange}
+        >
+          <AccountTab />
 
           <PerformanceTab />
 
@@ -85,10 +91,6 @@ export default function IconLabelTabs() {
       </Box>
     </Paper>
   );
-}
-
-function UserSettingsScreen() {
-  return <IconLabelTabs />;
 }
 
 export { UserSettingsScreen };

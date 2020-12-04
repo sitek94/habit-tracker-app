@@ -23,12 +23,7 @@ import {
   Brightness4 as Brightness4Icon,
   FormatColorReset as FormatColorResetIcon,
 } from '@material-ui/icons';
-import {
-  useUpdatePrimaryColor,
-  useUpdateSecondaryColor,
-  useUpdateDarkMode,
-  useRemoveTheme,
-} from 'api/appearance';
+import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
 
 /**
  * Appearance Tab
@@ -38,9 +33,7 @@ import {
 function AppearanceTab({ disabled }) {
   const theme = useTheme();
 
-  const updatePrimaryColor = useUpdatePrimaryColor();
-  const updateSecondaryColor = useUpdateSecondaryColor();
-  const updateDarkMode = useUpdateDarkMode();
+  const updateTheme = useUpdateTheme();
   const resetTheme = useRemoveTheme();
 
   // Change primary color
@@ -52,7 +45,11 @@ function AppearanceTab({ disabled }) {
     if (!primaryColor) return;
     if (theme.primaryColor.id === primaryColor) return;
 
-    updatePrimaryColor(primaryColor);
+    updateTheme({
+      primaryColor,
+      secondaryColor: theme.secondaryColor.id,
+      dark: theme.dark,
+    });
   };
 
   // Change secondary color
@@ -64,7 +61,11 @@ function AppearanceTab({ disabled }) {
     if (!secondaryColor) return;
     if (theme.secondaryColor.id === secondaryColor) return;
 
-    updateSecondaryColor(secondaryColor);
+    updateTheme({
+      primaryColor: theme.primaryColor.id,
+      secondaryColor,
+      dark: theme.dark,
+    });
   };
 
   // Change dark mode
@@ -75,7 +76,11 @@ function AppearanceTab({ disabled }) {
 
     if (theme.dark === dark) return;
 
-    updateDarkMode(dark);
+    updateTheme({
+      primaryColor: theme.primaryColor.id,
+      secondaryColor: theme.secondaryColor.id,
+      dark: dark,
+    });
   };
 
   // Reset theme to default

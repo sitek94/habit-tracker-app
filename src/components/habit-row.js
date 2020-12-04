@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Checkmark } from 'components/checkmark';
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 import { getDay, isFuture } from 'date-fns';
-import { useAddCheckmark } from 'hooks/useAddCheckmark';
-import { useDeleteCheckmark } from 'hooks/useDeleteCheckmark';
-import { useUpdateCheckmarkValue } from 'hooks/useUpdateCheckmarkValue';
+import { useAddCheckmark, useDeleteCheckmark, useUpdateCheckmarkValue } from 'api/checkmarks';
 import { COMPLETED, EMPTY, FAILED } from 'data/constants';
 
 // Styles

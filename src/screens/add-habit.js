@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { habitSchema } from 'data/constraints';
 import { TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
+import { FullPageSpinner } from 'components/lib';
+import { useSnackbar } from 'context/snackbar-context';
+import { useLocale } from 'locale';
+import { useAddHabit, useHabits } from 'api/habits';
 import {
   Form,
   FormBody,
@@ -11,12 +16,6 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
-import { useSnackbar } from 'context/snackbar-context';
-import { habitSchema } from 'data/constraints';
-import { useAddHabit } from 'hooks/useAddHabit';
-import { useLocale } from 'locale';
-import { useHabits } from 'hooks/useHabits';
-import { FullPageSpinner } from 'components/lib';
 
 // Initial habit
 const initialHabit = {

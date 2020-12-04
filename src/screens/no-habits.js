@@ -3,6 +3,14 @@ import { ReactComponent as EmptyBox } from 'images/empty-box.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import { Fab, Box, Typography } from '@material-ui/core';
 
+/**
+ * No Habits Screen
+ * 
+ * This screen is used to inform the user that they don't have any habits.
+ * It is used for example in 'Manage Habits Screen'. 
+ * 
+ * There is a big button that navigates the user to 'Add Habit Screen'
+ */
 function NoHabitsScreen() {
   return (
     <Box

@@ -14,27 +14,31 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ExitIcon from '@material-ui/icons/ExitToApp';
-import ListIcon from '@material-ui/icons/FormatListBulleted';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import SettingsIcon from '@material-ui/icons/Settings';
+import {
+  Add as AddIcon,
+  Dashboard as DashboardIcon,
+  ExitToApp as ExitIcon,
+  List as ListIcon,
+  GitHub as GitHubIcon,
+  Settings as SettingsIcon,
+} from '@material-ui/icons';
+import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorMessage, FullPageErrorFallback } from 'components/lib';
+import { LocaleSelect } from 'components/locale-select';
+
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
+import { AuthenticatedAppProviders } from 'context';
+import { locales, useLocale } from 'locale';
+import { useUpdateLocaleCode } from 'api/user-data';
+
 import { AddHabitScreen } from 'screens/add-habit';
 import { DashboardScreen } from 'screens/dashboard';
 import { EditHabitScreen } from 'screens/edit-habit';
 import { ManageHabitsScreen } from 'screens/manage-habits';
 import { NotFoundScreen } from 'screens/not-found';
 import { UserSettingsScreen } from 'screens/user-settings';
-import { AuthenticatedAppProviders } from 'context';
-import { LocaleSelect } from 'components/locale-select';
-import { useUpdateLocaleCode } from 'locale/hooks/useUpdateLocale';
-import { locales, useLocale } from 'locale';
 
 const DRAWER_WIDTH = 240;
 
@@ -145,21 +149,23 @@ function Layout({ nav, sidebar, content }) {
 function Nav() {
   const classes = useStyles();
 
-  const locale = useLocale();
+  const { code } = useLocale();
+  const selectedLocale = locales.find((locale) => locale.code === code);
+
   const updateLocaleCode = useUpdateLocaleCode();
 
-  console.log(locale);
-
-  const selectedLocale = locales.find(l => l.code === locale.code);
-
+  // When locale is clicked, user's data in the database is updated
   const handleLocaleClick = (clickedLocaleCode) => {
     updateLocaleCode(clickedLocaleCode);
-  }
+  };
 
   return (
     <AppBar position="fixed">
       <Toolbar className={classes.toolbar}>
-        <LocaleSelect selectedLocale={selectedLocale} onLocaleClick={handleLocaleClick} />
+        <LocaleSelect
+          selectedLocale={selectedLocale}
+          onLocaleClick={handleLocaleClick}
+        />
         <Tooltip title="GitHub repository">
           <IconButton
             target="_blank"

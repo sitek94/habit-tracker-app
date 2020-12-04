@@ -1,10 +1,15 @@
 import { Link as RouterLink } from 'react-router-dom';
-
 import { Fab, Box, Typography } from '@material-ui/core';
 import { Home as HomeIcon } from '@material-ui/icons';
-
 import { ReactComponent as HelloDarkness } from 'images/hello-darkness.svg';
 
+/**
+ * Not Found Screen
+ * 
+ * This screen is displayed when the user tries to go the page that doesn't exist.
+ * 
+ * There is a big button that takes the user back to the 'Dashboard Screen'.
+ */
 function NotFoundScreen() {
   return (
     <Box

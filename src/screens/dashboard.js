@@ -12,13 +12,13 @@ import {
   lightFormat,
   startOfWeek,
 } from 'date-fns';
-import { useCheckmarks } from 'hooks/useCheckmarks';
-import { useHabits } from 'hooks/useHabits';
+import { useCheckmarks } from 'api/checkmarks';
+import { useHabits } from 'api/habits';
 import { countBy } from 'lodash';
 import { NoHabitsScreen } from 'screens/no-habits';
 import { BarchartPlaceholder } from '../components/lib';
 import diagramPlaceholder from 'images/diagram-placeholder.png';
-import { useUserConfig } from 'context/user-config-context';
+import { useUserData } from 'context/user-config-context';
 import { useLocale } from 'locale';
 
 // Styles
@@ -44,7 +44,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Dashboard
+/**
+ * Dashboard Screen
+ * 
+ * In the dashboard there are:
+ * 
+ * - Habits table - user can change the completion state of the habits.
+ * 
+ * - User Scores - shows the user's performance for last week, current week and today.
+ * 
+ * - Week Picker - user can pick the week which will update the table.
+ * 
+ * ### TODO: All time performance chart or something like that.
+ */
 function DashboardScreen() {
   const locale = useLocale();
   const classes = useStyles();
@@ -68,7 +80,7 @@ function DashboardScreen() {
     lightFormat(date, 'yyyy-MM-dd')
     );
     
-  const { performanceGoal } = useUserConfig();
+  const { performanceGoal } = useUserData();
 
   if (isLoadingHabits) {
     return <FullPageSpinner />;

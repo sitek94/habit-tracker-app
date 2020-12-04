@@ -1,9 +1,17 @@
 import { Box } from '@material-ui/core';
 import { HabitList } from 'components/habit-list';
 import { FullPageSpinner } from 'components/lib';
-import { useHabits } from 'hooks/useHabits';
+import { useHabits } from 'api/habits';
 import { NoHabitsScreen } from 'screens/no-habits';
 
+/**
+ * Manage Habits Screen
+ * 
+ * Here user can see all their habits, navigate to 'Edit Habit Screen`
+ * and delete habits.
+ * 
+ * ### TODO: Add arrows (or other mechanism) to change a habit position.
+ */
 function ManageHabitsScreen() {
   const { data: habits, isLoading } = useHabits();
 

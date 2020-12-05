@@ -3,12 +3,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ReactQueryDevtools } from 'react-query-devtools';
 import { ReactQueryCacheProvider, QueryCache } from 'react-query';
 import { MainThemeProvider, UserThemeProvider } from 'theme';
+import { MainLocaleProvider, UserLocaleProvider } from 'locale';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { UserConfigProvider } from './user-config-context';
-import { LocaleProvider } from 'locale';
+import { UserDataProvider } from './user-config-context';
 
 const queryCache = new QueryCache();
 
@@ -17,7 +17,7 @@ const queryCache = new QueryCache();
  */
 function AppProviders({ children }) {
   return (
-    <LocaleProvider>
+    <MainLocaleProvider>
       <ReactQueryCacheProvider queryCache={queryCache}>
         <Router>
           <MainThemeProvider>
@@ -32,7 +32,7 @@ function AppProviders({ children }) {
         </Router>
         <ReactQueryDevtools position="bottom-left" />
       </ReactQueryCacheProvider>
-    </LocaleProvider>
+    </MainLocaleProvider>
   );
 }
 
@@ -41,9 +41,11 @@ function AppProviders({ children }) {
  */
 function AuthenticatedAppProviders({ children }) {
   return (
-    <UserConfigProvider>
-      <UserThemeProvider>{children}</UserThemeProvider>
-    </UserConfigProvider>
+    <UserDataProvider>
+      <UserLocaleProvider>
+        <UserThemeProvider>{children}</UserThemeProvider>
+      </UserLocaleProvider>
+    </UserDataProvider>
   );
 }
 

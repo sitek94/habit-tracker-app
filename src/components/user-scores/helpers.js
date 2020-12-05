@@ -1,29 +1,10 @@
-import { useCheckmarks } from 'hooks/useCheckmarks';
-import * as React from 'react';
-import { ResponsivePie, Pie } from '@nivo/pie';
-import {
-  isWithinInterval,
-  startOfWeek,
-  lastDayOfWeek,
-  subDays,
-  startOfDay,
-  getWeek,
-  isThisWeek,
-  isToday,
-} from 'date-fns';
 import { COMPLETED } from 'data/constants';
-import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import DoneIcon from '@material-ui/icons/Done';
+import { getWeek, isThisWeek, isToday } from 'date-fns';
 
 /**
+ * Checkmark object
  * @typedef  Checkmark
+ * 
  * @property {string} id
  * @property {string} date
  * @property {string} habitId
@@ -31,12 +12,15 @@ import DoneIcon from '@material-ui/icons/Done';
  */
 
 /**
+ * Calculate score
+ * 
  * Calculates the score for an array of checkmark values.
  * The perfomance is the count of COMPLETED checkmarks divided
  * by the total count.
  *
  * @param  {number[]} values
- * @return {number}   floored score between 0 and 100
+ * 
+ * @returns {number}  floored score between 0 and 100
  */
 export function calculateScore(values) {
   if (!values.length) return 0;
@@ -49,36 +33,52 @@ export function calculateScore(values) {
 }
 
 /**
+ * Is checkmark today?
+ * 
  * Check if the checkmark's date is today
  *
  * @param {Checkmark} checkmark
+ * 
+ * @returns {boolean} true/false
  */
 export function isCheckmarkToday(checkmark) {
   return isToday(new Date(checkmark.date));
 }
 
 /**
+ * Is checkmark this week?
+ * 
  * Check if the checkmark's date is within this week
  *
  * @param {Checkmark} checkmark
+ * 
+ * @returns {boolean} true/false
  */
 export function isCheckmarkThisWeek(checkmark) {
   return isThisWeek(new Date(checkmark.date));
 }
 
 /**
+ * Is checkmark last week?
+ * 
  * Check if the checkmark's date is within lat week
  *
  * @param {Checkmark} checkmark
+ * 
+ * @returns {boolean} true/false
  */
 export function isCheckmarkLastWeek(checkmark) {
   return getWeek(new Date(checkmark.date)) === getWeek(new Date()) - 1;
 }
 
 /**
+ * Create pie chart data
+ * 
  * Prepares the data that can be used by pie chart.
  *
  * @param {number} score an integer between 0 and 100.
+ * 
+ * @returns an array of data for pie chart
  */
 export function createPieChartData(score) {
   return [
@@ -105,10 +105,10 @@ export function createScoreType(label, filterFn) {
 
 /**
  * Generates a list of objects with a label and pie chart data.
- * 
+ *
  * @param {Checkmark[]} checkmarks
  * @param {ScoreType[]} scoreTypeList
- * 
+ *
  */
 export function getScoreTypeDataList(checkmarks, scoreTypeList) {
   // Map over each score type

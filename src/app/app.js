@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useAuth } from 'context/auth-context';
-import { FullPageSpinner } from 'components/lib';
+// import { FullPageSpinner } from 'components/lib';
 import AuthenticatedApp from './authenticated-app';
 import UnathenticatedApp from './unauthenticated-app';
 

@@ -19,6 +19,8 @@ const defaultUserData = {
 };
 
 /**
+ * User Data Provider
+ * 
  * Provides user data object, which is updated whenever user data
  * changes in the database.
  */

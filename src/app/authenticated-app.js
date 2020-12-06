@@ -1,14 +1,9 @@
-import * as React from 'react';
 import {
   AppBar,
   CssBaseline,
   Divider,
-  Drawer,
   IconButton,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   makeStyles,
   Toolbar,
   Tooltip,
@@ -18,21 +13,21 @@ import {
   Add as AddIcon,
   Dashboard as DashboardIcon,
   ExitToApp as ExitIcon,
-  List as ListIcon,
   GitHub as GitHubIcon,
+  List as ListIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
-import { Link as RouterLink, Route, Routes, useMatch } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary';
+import { useUpdateLocaleCode } from 'api/user-data';
 import { ErrorMessage, FullPageErrorFallback } from 'components/lib';
 import { LocaleSelect } from 'components/locale-select';
-
+import { Sidebar, SidebarButton, SidebarLink } from 'components/sidebar';
+import { AuthenticatedAppProviders } from 'context';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
-import { AuthenticatedAppProviders } from 'context';
 import { locales, useLocale } from 'locale';
-import { useUpdateLocaleCode } from 'api/user-data';
-
+import * as React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Route, Routes } from 'react-router-dom';
 import { AddHabitScreen } from 'screens/add-habit';
 import { DashboardScreen } from 'screens/dashboard';
 import { EditHabitScreen } from 'screens/edit-habit';
@@ -109,12 +104,66 @@ function ErrorFallback({ error }) {
 
 // App
 function AuthenticatedApp() {
+  // Logout
+  const { signOut } = useAuth();
+  const { openDialog } = useDialog();
+
+  const handleLogoutClick = () => {
+    openDialog({
+      title: 'Sign out?',
+      description: `
+        While signed out you are unable to manage your profile and
+        conduct other activities that require you to be signed in.`,
+      confirmText: 'Sign out',
+      onConfirm: signOut,
+      color: 'secondary',
+    });
+  };
+
+  // Open/close drawer
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <AuthenticatedAppProviders>
         <Layout
           nav={<Nav />}
-          sidebar={<Sidebar />}
+          // Sidebar
+          sidebar={
+            <Sidebar isOpen={isDrawerOpen} onToggle={handleDrawerToggle}>
+              <Toolbar>
+                <Typography variant="h6" color="inherit" noWrap>
+                  Habit tracker
+                </Typography>
+              </Toolbar>
+              <Divider />
+              <List>
+                <SidebarLink to="/dashboard" icon={<DashboardIcon />}>
+                  Dashboard
+                </SidebarLink>
+
+                <SidebarLink to="/add-habit" icon={<AddIcon />}>
+                  Add habit
+                </SidebarLink>
+
+                <SidebarLink to="/manage-habits" icon={<ListIcon />}>
+                  Manage habits
+                </SidebarLink>
+              </List>
+              <Divider />
+              <List>
+                <SidebarLink to="/settings" icon={<SettingsIcon />}>
+                  Settings
+                </SidebarLink>
+                <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
+                  Logout
+                </SidebarButton>
+              </List>
+            </Sidebar>
+          }
           content={
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <AppRoutes />
@@ -179,96 +228,6 @@ function Nav() {
         </Tooltip>
       </Toolbar>
     </AppBar>
-  );
-}
-
-// Sidebar link
-function SidebarLink({ icon, children, ...rest }) {
-  const classes = useStyles();
-  const match = useMatch(rest.to);
-
-  return (
-    <ListItem
-      button
-      selected={Boolean(match)}
-      component={RouterLink}
-      className={classes.drawerItem}
-      {...rest}
-    >
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText>{children}</ListItemText>
-    </ListItem>
-  );
-}
-
-// Sidebar button
-function SidebarButton({ icon, children, ...rest }) {
-  const classes = useStyles();
-
-  return (
-    <ListItem button className={classes.drawerItem} {...rest}>
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText>{children}</ListItemText>
-    </ListItem>
-  );
-}
-
-// Sidebar
-function Sidebar() {
-  const classes = useStyles();
-  const { signOut } = useAuth();
-  const { openDialog } = useDialog();
-
-  const handleLogoutClick = () => {
-    openDialog({
-      title: 'Sign out?',
-      description: `
-        While signed out you are unable to manage your profile and 
-        conduct other activities that require you to be signed in.`,
-      confirmText: 'Sign out',
-      onConfirm: signOut,
-      color: 'secondary',
-    });
-  };
-
-  return (
-    <Drawer
-      anchor="left"
-      variant="permanent"
-      className={classes.drawer}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <Toolbar>
-        <Typography variant="h6" color="inherit" noWrap>
-          Habit tracker
-        </Typography>
-      </Toolbar>
-      <Divider />
-      <List>
-        <SidebarLink to="/dashboard" icon={<DashboardIcon />}>
-          Dashboard
-        </SidebarLink>
-
-        <SidebarLink to="/add-habit" icon={<AddIcon />}>
-          Add habit
-        </SidebarLink>
-
-        <SidebarLink to="/manage-habits" icon={<ListIcon />}>
-          Manage habits
-        </SidebarLink>
-      </List>
-      <Divider />
-      <List>
-        <SidebarLink to="/settings" icon={<SettingsIcon />}>
-          Settings
-        </SidebarLink>
-        <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
-          Logout
-        </SidebarButton>
-      </List>
-    </Drawer>
   );
 }
 

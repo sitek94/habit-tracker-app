@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { Box, Grid, makeStyles, Paper } from '@material-ui/core';
-import { BarChart } from 'components/bar-chart';
 import { HabitsTable } from 'components/habits-table';
 import { FullPageSpinner } from 'components/lib';
 import { UserScores } from 'components/user-scores';
 import { WeekPicker } from 'components/week-picker';
-import { COMPLETED, FAILED } from 'data/constants';
 import {
   eachDayOfInterval,
   endOfWeek,
@@ -14,13 +12,10 @@ import {
 } from 'date-fns';
 import { useCheckmarks } from 'api/checkmarks';
 import { useHabits } from 'api/habits';
-import { countBy } from 'lodash';
 import { NoHabitsScreen } from 'screens/no-habits';
-import { BarchartPlaceholder } from '../components/lib';
-import diagramPlaceholder from 'images/diagram-placeholder.png';
 import { useUserData } from 'context/user-config-context';
 import { useLocale } from 'locale';
-
+import { WeekBarChart } from 'components/week-bar-chart';
 // Styles
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,15 +41,15 @@ const useStyles = makeStyles((theme) => ({
 
 /**
  * Dashboard Screen
- * 
+ *
  * In the dashboard there are:
- * 
+ *
  * - Habits table - user can change the completion state of the habits.
- * 
+ *
  * - User Scores - shows the user's performance for last week, current week and today.
- * 
+ *
  * - Week Picker - user can pick the week which will update the table.
- * 
+ *
  * ### TODO: All time performance chart or something like that.
  */
 function DashboardScreen() {
@@ -70,6 +65,8 @@ function DashboardScreen() {
   // Checkmarks data
   const { data: checkmarks, isError: isCheckmarksError } = useCheckmarks();
 
+  const { performanceGoal } = useUserData();
+
   // Date
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const start = startOfWeek(selectedDate, { locale });
@@ -78,9 +75,12 @@ function DashboardScreen() {
   // Get dates that are currently selected
   const selectedDates = eachDayOfInterval({ start, end }).map((date) =>
     lightFormat(date, 'yyyy-MM-dd')
-    );
-    
-  const { performanceGoal } = useUserData();
+  );
+
+  // Filter checkmarks for the selected dates
+  const selectedDatesCheckmarks = checkmarks.filter((checkmark) =>
+    selectedDates.includes(checkmark.date)
+  );
 
   if (isLoadingHabits) {
     return <FullPageSpinner />;
@@ -94,15 +94,18 @@ function DashboardScreen() {
     return <NoHabitsScreen />;
   }
 
-
   // Render
   return (
     <div className={classes.container}>
       <Grid container spacing={2}>
-        {/* Chart placeholder */}
+        {/* Weekly performance chart */}
         <Grid item xs>
           <TopRowPaper>
-            <img alt="diagram" src={diagramPlaceholder} height="85%" />
+            <WeekBarChart
+              dates={selectedDates}
+              checkmarks={selectedDatesCheckmarks}
+              habitsCount={habits.length}
+            />
           </TopRowPaper>
         </Grid>
 
@@ -138,7 +141,7 @@ function DashboardScreen() {
   );
 }
 
-function TopRowPaper({ children }) {
+function TopRowPaper({ children, sx }) {
   return (
     <Box
       sx={{
@@ -148,51 +151,12 @@ function TopRowPaper({ children }) {
         alignItems: 'center',
         height: 330,
         overflow: 'hidden',
+        ...sx,
       }}
       component={Paper}
     >
       {children}
     </Box>
-  );
-}
-
-function AllHabitsBarchart({ dates = [] }) {
-  // data, keys, indexBy, maxValue
-  const { data: checkmarks, isLoading } = useCheckmarks();
-
-  if (isLoading) {
-    return <BarchartPlaceholder />;
-  }
-
-  let filteredData = checkmarks
-    // First filter only the checkmarks for the selected dates
-    .filter((checkmark) => dates.includes(checkmark.date));
-
-  // Transform the data to the format accepted by bar chart
-  let barchartData = dates.map((date) => {
-    let values = filteredData
-      // Find all checkmarks for the given date
-      .filter((checkmark) => checkmark.date === date)
-
-      // Get only checkmark values
-      .map((checkmark) => checkmark.value);
-
-    let counts = countBy(values);
-
-    return {
-      date,
-      completed: counts[COMPLETED] || null,
-      failed: -counts[FAILED] || null,
-    };
-  });
-
-  return (
-    <BarChart
-      data={barchartData}
-      keys={['completed', 'failed']}
-      indexBy="date"
-      maxValue={2}
-    />
   );
 }
 

@@ -4,13 +4,13 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemIcon,
+  // ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
-  Folder as FolderIcon,
+  // Folder as FolderIcon,
 } from '@material-ui/icons';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
@@ -51,9 +51,9 @@ function HabitListItem({ habit }) {
   return (
     <ListItem button>
       {/* TODO: Let user choose icon */}
-      <ListItemIcon>
+      {/* <ListItemIcon>
         <FolderIcon />
-      </ListItemIcon>
+      </ListItemIcon> */}
 
       {/* Name and description */}
       <ListItemText primary={name} secondary={description} />

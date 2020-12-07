@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
-import { ReactComponent as BugFixingSvg } from 'images/bug-fixing.svg';
 import { Box, CircularProgress, Typography } from '@material-ui/core';
-import { ReactComponent as VisualDataSvg } from 'images/visual-data.svg';
-import { ReactComponent as HeatmapDataSvg } from 'images/heatmap-data.svg';
-import { ReactComponent as PiechartSvg } from 'images/piechart.svg';
+import { ReactComponent as BugFixingSvg } from 'images/bug-fixing.svg';
+import PropTypes from 'prop-types';
 
 function ErrorMessage({ error, ...sx }) {
   return (
@@ -90,28 +87,24 @@ function FullPageErrorFallback({ error }) {
     </Box>
   );
 }
+
+function ErrorFallback({ error }) {
+  return (
+    <ErrorMessage
+      error={error}
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    />
+  );
+}
+
 FullPageErrorFallback.propTypes = {
   error: PropTypes.object.isRequired,
 };
 
-// Barchart placeholder
-function BarchartPlaceholder(props) {
-  return <VisualDataSvg height="100%" width="100%" />;
-}
-
-function HeatmapPlaceholder(props) {
-  return <HeatmapDataSvg height="100%" width="100%" />;
-}
-
-function PieChartPlaceholder(props) {
-  return <PiechartSvg height="100%" width="100%" />;
-}
-
-export {
-  BarchartPlaceholder,
-  ErrorMessage,
-  HeatmapPlaceholder,
-  PieChartPlaceholder,
-  FullPageSpinner,
-  FullPageErrorFallback,
-};
+export { ErrorFallback, FullPageSpinner, FullPageErrorFallback };

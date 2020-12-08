@@ -149,7 +149,10 @@ function Sidebar({ children }) {
             paper: classes.drawerPaper,
           }}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            // Prevents adding padding right to the body
+            disableScrollLock: true, 
+            // Better open performance on mobile.
+            keepMounted: true, 
           }}
         >
           {children}

@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Box, Grid, makeStyles, Paper } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Grid,
+  Hidden,
+  makeStyles,
+  Paper,
+} from '@material-ui/core';
 import { HabitsTable } from 'components/habits-table';
 import { FullPageSpinner } from 'components/lib';
 import { UserScores } from 'components/user-scores';
@@ -19,7 +26,7 @@ import { WeekBarChart } from 'components/week-bar-chart';
 // Styles
 const useStyles = makeStyles((theme) => ({
   container: {
-    maxWidth: theme.breakpoints.values.lg,
+    // maxWidth: theme.breakpoints.values.lg,
     height: '100%',
     padding: theme.spacing(4),
   },
@@ -94,50 +101,104 @@ function DashboardScreen() {
     return <NoHabitsScreen />;
   }
 
+  const barChart = (
+    <TopRowPaper>
+      <WeekBarChart
+        dates={selectedDates}
+        checkmarks={selectedDatesCheckmarks}
+        habitsCount={habits.length}
+      />
+    </TopRowPaper>
+  );
+
+  const weekPicker = (
+    <TopRowPaper>
+      <WeekPicker
+        selectedDate={selectedDate}
+        onChange={(newDate) => setSelectedDate(newDate)}
+      />
+    </TopRowPaper>
+  );
+
+  const habitsTable = (
+    <Paper className={classes.paper}>
+      <HabitsTable
+        checkmarks={checkmarks}
+        habits={habits}
+        dates={selectedDates}
+      />
+    </Paper>
+  );
+
+  const userScores = (
+    <TopRowPaper>
+      <UserScores checkmarks={checkmarks} goal={performanceGoal} />
+    </TopRowPaper>
+  );
+
   // Render
   return (
-    <div className={classes.container}>
-      <Grid container spacing={2}>
-        {/* Weekly performance chart */}
-        <Grid item xs>
-          <TopRowPaper>
-            <WeekBarChart
-              dates={selectedDates}
-              checkmarks={selectedDatesCheckmarks}
-              habitsCount={habits.length}
-            />
-          </TopRowPaper>
-        </Grid>
+    // <div className={classes.container}>
+    <Container disableGutters>
 
-        {/* User scores */}
-        <Grid item>
-          <TopRowPaper>
-            <UserScores checkmarks={checkmarks} goal={performanceGoal} />
-          </TopRowPaper>
+      {/* Mobile screens */}
+      <Hidden smUp>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            {weekPicker}
+          </Grid>
+          <Grid item xs={12}>
+            {habitsTable}
+          </Grid>
+          <Grid item xs={12}>
+            {userScores}
+          </Grid>
+          <Grid item xs={12}>
+            {barChart}
+          </Grid>
         </Grid>
+      </Hidden>
 
-        {/* Date picker */}
-        <Grid item>
-          <TopRowPaper>
-            <WeekPicker
-              selectedDate={selectedDate}
-              onChange={(newDate) => setSelectedDate(newDate)}
-            />
-          </TopRowPaper>
-        </Grid>
+      {/* Small screens */}
+      <Hidden smDown mdUp>
+        <Box sx={{ p: 1 }}>
+          <Grid container spacing={1}>
+            <Grid item sm={6}>
+              {userScores}
+            </Grid>
+            <Grid item sm={6}>
+              {weekPicker}
+            </Grid>
+            <Grid item sm={12}>
+              {habitsTable}
+            </Grid>
+            <Grid item sm={12}>
+              {barChart}
+            </Grid>
+          </Grid>
+        </Box>
+      </Hidden>
 
-        {/* Habits and checkmarks table */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <HabitsTable
-              checkmarks={checkmarks}
-              habits={habits}
-              dates={selectedDates}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
+      {/* Large screens up */}
+      <Hidden mdDown>
+        <Box sx={{ p: 2 }}>
+          <Grid container spacing={2}>
+            <Grid item md={4}>
+              {barChart}
+            </Grid>
+            <Grid item md={4}>
+              {userScores}
+            </Grid>
+            <Grid item md={4}>
+              {weekPicker}
+            </Grid>
+            <Grid item md={12}>
+              {habitsTable}
+            </Grid>
+          </Grid>
+        </Box>
+      </Hidden>
+    </Container>
   );
 }
 

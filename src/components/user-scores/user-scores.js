@@ -36,7 +36,7 @@ function UserScores({ checkmarks, goal }) {
       <FixedHeightDivider />
 
       {/* Pie charts */}
-      <Grid container>
+      <Grid container justifyContent="space-evenly">
         {scoreTypeDataList.map(({ label, data }) => {
           const completedValue = data[0].value;
           const hasReachedGoal = completedValue > goal;
@@ -119,7 +119,7 @@ function GoalLabel({ children }) {
   );
 }
 
-const CHART_SIZE = 100;
+const CHART_SIZE = 95;
 
 function CenteredBox({ children }) {
   return (
@@ -162,7 +162,7 @@ function PieChart({ data }) {
       data={data}
       height={CHART_SIZE}
       width={CHART_SIZE}
-      margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+      margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
       innerRadius={0.75}
       enableRadialLabels={false}
       enableSliceLabels={false}

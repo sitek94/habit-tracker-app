@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 function HabitRow({ habit, dates, checkmarks }) {
   const classes = useStyles();
 
-  const { id, name, frequency, position } = habit;
+  const { id, name, frequency, /* position */ } = habit;
 
   const [addCheckmark] = useAddCheckmark();
   const [updateCheckmarkValue] = useUpdateCheckmarkValue();
@@ -46,9 +46,9 @@ function HabitRow({ habit, dates, checkmarks }) {
   return (
     <TableRow hover>
       {/* Position */}
-      <TableCell align="center" className={classes.minWidth}>
+      {/* <TableCell align="center" className={classes.minWidth}>
         {position + 1}
-      </TableCell>
+      </TableCell> */}
 
       {/* Name */}
       <TableCell
@@ -75,7 +75,7 @@ function HabitRow({ habit, dates, checkmarks }) {
         };
 
         return (
-          <TableCell align="center" key={date}>
+          <TableCell align="center" key={date}  className={classes.minWidth}>
             <Checkmark
               value={value}
               onClick={() =>

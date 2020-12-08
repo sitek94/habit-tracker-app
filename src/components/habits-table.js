@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     backgroundColor: theme.palette.primary.main,
   },
+  noWrap: {
+    whiteSpace: 'nowrap',
+  },
 }));
 
 // Sortable Table
@@ -55,7 +58,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
 
   // Cells with option to sort the habits
   const sortableCells = [
-    { id: 'position', label: 'Nº', align: 'center' },
+    // { id: 'position', label: 'Nº', align: 'center' },
     { id: 'name', label: 'Habit name', align: 'left' },
   ];
 
@@ -82,12 +85,14 @@ function HabitsTable({ habits, checkmarks, dates }) {
               <TableCell
                 key={id}
                 align={align}
+                size="medium"
                 sortDirection={orderBy === id ? order : false}
               >
                 <TableSortLabel
                   active={orderBy === id}
                   direction={orderBy === id ? order : 'asc'}
                   onClick={() => handleRequestSort(id)}
+                  className={classes.noWrap}
                 >
                   {label}
                   {orderBy === id ? (

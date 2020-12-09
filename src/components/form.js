@@ -19,7 +19,6 @@ function Form({ children, ...props }) {
   return (
     <Box
       component={Paper}
-      elevation={5}
       sx={{
         maxWidth: 550,
         height: { xs: '100%', sm: 'auto' },
@@ -28,18 +27,18 @@ function Form({ children, ...props }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        boxShadow: 5,
       }}
     >
       <Box
         component="form"
-        noValidate
-        {...props}
         sx={{
           maxWidth: 320,
           margin: { sm: theme.spacing(6, 14) },
           paddingTop: { xs: theme.spacing(3), sm: 0 },
         }}
-      >
+        {...props}
+      >          
         {children}
       </Box>
     </Box>
@@ -53,7 +52,7 @@ function FormHeader({ children }) {
   return (
     <Box
       sx={{
-        mb: 2,
+        marginBottom: 2,
       }}
     >
       {children}

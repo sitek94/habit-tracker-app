@@ -15,7 +15,6 @@ import {
 } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
-  //
   day: {
     width: 40,
   },
@@ -86,6 +85,7 @@ function WeekPicker({ selectedDate, onChange }) {
       />
     );
   };
+
   return (
     <StaticDatePicker
       minDate={MIN_DATE}
@@ -93,6 +93,7 @@ function WeekPicker({ selectedDate, onChange }) {
       displayStaticWrapperAs="desktop"
       orientation="landscape"
       openTo="date"
+      views={['year', 'month', 'date']}
       value={selectedDate}
       onChange={onChange}
       renderDay={renderWeekPickerDay}

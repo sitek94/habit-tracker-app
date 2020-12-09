@@ -5,7 +5,6 @@ import {
   Button,
   Checkbox,
   FormControl,
-  Hidden,
   InputLabel,
   List,
   ListItem,
@@ -17,6 +16,7 @@ import {
   useTheme,
   Switch,
   Divider,
+  useMediaQuery,
 } from '@material-ui/core';
 import {
   FiberManualRecord as FiberManualRecordIcon,
@@ -90,16 +90,19 @@ function AppearanceTab({ disabled }) {
     resetTheme();
   };
 
+  // Media queries
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+
   return (
     <List disablePadding>
       {/* Primary color */}
       <Box sx={{ my: 1 }}>
         <ListItem>
-          <Hidden xsDown>
+          {!isXs && (
             <ListItemIcon>
               <FiberManualRecordIcon color="primary" />
             </ListItemIcon>
-          </Hidden>
+          )}
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-primary-color-label">
@@ -107,7 +110,7 @@ function AppearanceTab({ disabled }) {
             </InputLabel>
 
             {/* Mobile devices */}
-            <Hidden smUp>
+            {isXs && (
               <Select
                 native
                 label="Primary color"
@@ -125,10 +128,10 @@ function AppearanceTab({ disabled }) {
                   );
                 })}
               </Select>
-            </Hidden>
+            )}
 
             {/* Up mobile devices */}
-            <Hidden xsDown>
+            {!isXs && (
               <Select
                 label="Primary color"
                 labelId="select-primary-color-label"
@@ -145,7 +148,7 @@ function AppearanceTab({ disabled }) {
                   );
                 })}
               </Select>
-            </Hidden>
+            )}
           </FormControl>
         </ListItem>
       </Box>
@@ -153,11 +156,11 @@ function AppearanceTab({ disabled }) {
       {/* Secondary color */}
       <Box sx={{ my: 1 }}>
         <ListItem>
-          <Hidden xsDown>
+          {!isXs && (
             <ListItemIcon>
               <FiberManualRecordIcon color="secondary" />
             </ListItemIcon>
-          </Hidden>
+          )}
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-secondary-color-label">
@@ -165,7 +168,7 @@ function AppearanceTab({ disabled }) {
             </InputLabel>
 
             {/* Mobile devices */}
-            <Hidden smUp>
+            {isXs && (
               <Select
                 native
                 label="Secondary color"
@@ -183,10 +186,10 @@ function AppearanceTab({ disabled }) {
                   );
                 })}
               </Select>
-            </Hidden>
+            )}
 
             {/* Up mobile devices */}
-            <Hidden xsDown>
+            {!isXs && (
               <Select
                 label="Secondary color"
                 labelId="select-secondary-color-label"
@@ -203,7 +206,7 @@ function AppearanceTab({ disabled }) {
                   );
                 })}
               </Select>
-            </Hidden>
+            )}
           </FormControl>
         </ListItem>
       </Box>
@@ -211,11 +214,11 @@ function AppearanceTab({ disabled }) {
       {/* Dark mode */}
       <Box sx={{ my: 1, mr: 0 }}>
         <ListItem>
-          <Hidden xsDown>
+          {!isXs && (
             <ListItemIcon>
               <Brightness4Icon />
             </ListItemIcon>
-          </Hidden>
+          )}
 
           <ListItemText
             primary="Dark mode"
@@ -223,21 +226,21 @@ function AppearanceTab({ disabled }) {
           />
 
           <ListItemSecondaryAction>
-            <Hidden xsDown>
+            {!isXs && (
               <Checkbox
                 color="primary"
                 checked={theme.dark}
                 onChange={handleDarkModeChange}
               />
-            </Hidden>
+            )}
 
-            <Hidden smUp>
+            {isXs && (
               <Switch
                 color="primary"
                 checked={theme.dark}
                 onChange={handleDarkModeChange}
               />
-            </Hidden>
+            )}
           </ListItemSecondaryAction>
         </ListItem>
       </Box>
@@ -248,11 +251,11 @@ function AppearanceTab({ disabled }) {
 
       <Box sx={{ my: 1 }}>
         <ListItem>
-          <Hidden xsDown>
+          {!isXs && (
             <ListItemIcon>
               <FormatColorResetIcon />
             </ListItemIcon>
-          </Hidden>
+          )}
 
           <ListItemText
             primary="Reset theme"

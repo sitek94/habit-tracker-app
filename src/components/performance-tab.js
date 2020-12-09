@@ -3,13 +3,14 @@ import { useUserData } from 'context/user-config-context';
 import {
   Box,
   FormControl,
-  Hidden,
   InputLabel,
   List,
   ListItem,
   ListItemIcon,
   MenuItem,
   Select,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import { TrackChanges as TrackChangesIcon } from '@material-ui/icons';
 import { useUpdatePerformanceGoal } from 'api/user-data';
@@ -25,7 +26,7 @@ const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
 
 /**
  * Performance Tab
- * 
+ *
  * User can update performance related settings. For now the only setting
  * that can be changed is performance goal.
  */
@@ -35,21 +36,24 @@ function PerformanceTab() {
   const updatePerformanceGoal = useUpdatePerformanceGoal();
 
   const handlePerformanceGoalChange = (event) => {
-
     // Update user's performance goal in the database
     updatePerformanceGoal(event.target.value);
-  }
+  };
+
+  // Media queries
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
 
   return (
     <List disablePadding>
       {/* Performance gaol */}
       <Box sx={{ my: 1 }}>
         <ListItem>
-          <Hidden xsDown>
+          {!isXs && (
             <ListItemIcon>
               <TrackChangesIcon color="primary" />
             </ListItemIcon>
-          </Hidden>
+          )}
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-performance-goal-label">
@@ -57,8 +61,9 @@ function PerformanceTab() {
             </InputLabel>
 
             {/* Mobile devices */}
-            <Hidden smUp>
+            {isXs && (
               <Select
+                id="mobile"
                 native
                 label="Performance Goal"
                 labelId="select-performance-goal-label"
@@ -71,11 +76,12 @@ function PerformanceTab() {
                   </option>
                 ))}
               </Select>
-            </Hidden>
+            )}
 
             {/* Up mobile devices */}
-            <Hidden xsDown>
+            {!isXs && (
               <Select
+                id="mobile up"
                 label="Performance Goal"
                 labelId="select-performance-goal-label"
                 value={performanceGoal}
@@ -87,7 +93,7 @@ function PerformanceTab() {
                   </MenuItem>
                 ))}
               </Select>
-            </Hidden>
+            )}
           </FormControl>
         </ListItem>
       </Box>

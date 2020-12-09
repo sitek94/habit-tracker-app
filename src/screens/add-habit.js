@@ -76,47 +76,47 @@ function AddHabitScreen() {
   const disableActions = isAddingHabit;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormHeader>
-        <FormPrimaryText>Create new habit</FormPrimaryText>
-        <FormErrorText>{errorText || ' '}</FormErrorText>
-      </FormHeader>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormHeader>
+          <FormPrimaryText>Create new habit</FormPrimaryText>
+          <FormErrorText>{errorText || ' '}</FormErrorText>
+        </FormHeader>
 
-      <FormBody>
-        <TextField
-          inputRef={register}
-          name="name"
-          label="Habit name"
-          error={!!errors?.name}
-          variant="outlined"
-          disabled={disableActions}
-          fullWidth
-        />
+        <FormBody>
+          <TextField
+            inputRef={register}
+            name="name"
+            label="Habit name"
+            error={!!errors?.name}
+            variant="outlined"
+            disabled={disableActions}
+            fullWidth
+          />
 
-        <TextField
-          inputRef={register}
-          name="description"
-          label="Question (optional)"
-          error={!!errors?.description}
-          variant="outlined"
-          disabled={disableActions}
-          fullWidth
-        />
+          <TextField
+            inputRef={register}
+            name="description"
+            label="Question (optional)"
+            error={!!errors?.description}
+            variant="outlined"
+            disabled={disableActions}
+            fullWidth
+          />
 
-        <CheckboxGroup
-          label="Frequency"
-          name="frequency"
-          control={control}
-          getValues={getValues}
-          values={weekdays}
-          error={!!errors?.frequency}
-        />
+          <CheckboxGroup
+            label="Frequency"
+            name="frequency"
+            control={control}
+            getValues={getValues}
+            values={weekdays}
+            error={!!errors?.frequency}
+          />
 
-        <FormButton type="submit" pending={isAddingHabit}>
-          Create habit
-        </FormButton>
-      </FormBody>
-    </Form>
+          <FormButton type="submit" pending={isAddingHabit}>
+            Create habit
+          </FormButton>
+        </FormBody>
+      </Form>
   );
 }
 

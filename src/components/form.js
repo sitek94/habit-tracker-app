@@ -1,88 +1,87 @@
+import { LoadingButton } from '@material-ui/lab';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Divider,
   Typography,
   FormHelperText,
-  makeStyles,
   Box,
   Paper,
   Link,
+  useTheme,
 } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
-import { Link as RouterLink } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  // Container
-  paper: {
-    maxWidth: 550,
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-
-  // Form
-  form: {
-    maxWidth: 320,
-    margin: theme.spacing(6, 14),
-  },
-  formHeader: {
-    textAlign: 'center',
-    marginBottom: theme.spacing(2),
-  },
-  formBody: {
-    '& > *:not(:last-child)': {
-      marginBottom: theme.spacing(2),
-    },
-  },
-
-  // Helper text
-  errorText: {
-    textAlign: 'center',
-    ...theme.typography.subtitle2,
-  },
-
-  // Divider
-  dividerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  divider: {
-    flex: 1,
-  },
-  span: {
-    color: theme.palette.text.secondary,
-    padding: theme.spacing(0, 1),
-  },
-}));
-
-function FormLink(props) {
-  return <Link component={RouterLink} {...props} />;
-}
-
-function FormDivider() {
-  const classes = useStyles();
+/**
+ * Main form wrapper component
+ */
+function Form({ children, ...props }) {
+  const theme = useTheme();
 
   return (
-    <div className={classes.dividerContainer}>
-      <Divider className={classes.divider} />
-      <span className={classes.span}>OR</span>
-      <Divider className={classes.divider} />
-    </div>
-  );
-}
-
-function Form({ onSubmit, children }) {
-  const classes = useStyles();
-
-  return (
-    <Paper elevation={5} className={classes.paper}>
-      <form className={classes.form} onSubmit={onSubmit} noValidate>
+    <Box
+      component={Paper}
+      sx={{
+        maxWidth: 550,
+        height: { xs: '100%', sm: 'auto' },
+        width: { xs: '100%', sm: 'auto' },
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        boxShadow: 5,
+      }}
+    >
+      <Box
+        component="form"
+        sx={{
+          maxWidth: 320,
+          margin: { sm: theme.spacing(6, 14) },
+          paddingTop: { xs: theme.spacing(3), sm: 0 },
+        }}
+        {...props}
+      >          
         {children}
-      </form>
-    </Paper>
+      </Box>
+    </Box>
   );
 }
 
+/**
+ * Form header
+ */
+function FormHeader({ children }) {
+  return (
+    <Box
+      sx={{
+        marginBottom: 2,
+      }}
+    >
+      {children}
+    </Box>
+  );
+}
+
+/**
+ * Form body
+ */
+function FormBody({ children }) {
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        '& > *:not(:last-child)': {
+          marginBottom: theme.spacing(2),
+        },
+      }}
+    >
+      {children}
+    </Box>
+  );
+}
+
+/**
+ * Form primary text
+ */
 function FormPrimaryText({ children }) {
   return (
     <Typography component="h1" variant="h5" align="center" gutterBottom>
@@ -91,6 +90,9 @@ function FormPrimaryText({ children }) {
   );
 }
 
+/**
+ * Form secondary text
+ */
 function FormSecondaryText({ children, ...props }) {
   return (
     <Typography color="textSecondary" component="div" align="center" {...props}>
@@ -105,36 +107,72 @@ function FormSecondaryText({ children, ...props }) {
   );
 }
 
-function FormErrorText({ children }) {
-  const classes = useStyles();
-
-  return (
-    <FormHelperText error className={classes.errorText}>
-      {children}
-    </FormHelperText>
-  );
+/**
+ * Form link
+ *
+ * Combined Material-ui Link and RouterLink.
+ */
+function FormLink(props) {
+  return <Link component={RouterLink} {...props} />;
 }
 
+/**
+ * Form button
+ */
 function FormButton(props) {
   return <LoadingButton fullWidth variant="contained" {...props} />;
 }
 
-function FormHeader({ children }) {
+/**
+ * Form divider
+ *
+ * Uses two horizontal dividers and "or" in between.
+ */
+function FormDivider() {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
-        mb: 2,
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
-      {children}
+      <Box sx={{ flex: 1 }} clone>
+        <Divider />
+      </Box>
+      <Box
+        component="span"
+        sx={{
+          color: theme.palette.text.secondary,
+          padding: theme.spacing(0, 1),
+        }}
+      >
+        OR
+      </Box>
+      <Box sx={{ flex: 1 }} clone>
+        <Divider />
+      </Box>
     </Box>
   );
 }
 
-function FormBody({ children }) {
-  const classes = useStyles();
+/**
+ * Form error text
+ */
+function FormErrorText({ children }) {
+  const theme = useTheme();
 
-  return <div className={classes.formBody}>{children}</div>;
+  return (
+    <Box
+      sx={{
+        textAlign: 'center',
+        ...theme.typography.subtitle2,
+      }}
+    >
+      <FormHelperText error>{children}</FormHelperText>
+    </Box>
+  );
 }
 
 export {

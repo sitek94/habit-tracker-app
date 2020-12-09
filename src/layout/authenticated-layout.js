@@ -24,12 +24,16 @@ const LayoutContext = React.createContext();
 function Layout({ children }) {
   // Open/close drawer
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
   const onDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
   const context = {
     isDrawerOpen,
+    closeDrawer,
     onDrawerToggle,
   };
 
@@ -55,9 +59,13 @@ function Content({ children }) {
         flexDirection: 'column',
       }}
     >
+      {/* Toolbar spacer */}
       <Toolbar />
+
+      {/* Content */}
       <Box
         sx={{
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -87,7 +95,7 @@ const useNavbarStyles = makeStyles((theme) => ({
   },
 }));
 
-function Navbar({ onMenuClick, children }) {
+function Navbar({ children }) {
   const classes = useNavbarStyles();
 
   const { onDrawerToggle } = React.useContext(LayoutContext);
@@ -133,7 +141,7 @@ const useSidebarStyles = makeStyles((theme) => ({
 function Sidebar({ children }) {
   const classes = useSidebarStyles();
 
-  const { isDrawerOpen, onDrawerToggle } = React.useContext(LayoutContext);
+  const { isDrawerOpen, closeDrawer, onDrawerToggle } = React.useContext(LayoutContext);
 
   return (
     <>
@@ -143,6 +151,7 @@ function Sidebar({ children }) {
           anchor="left"
           variant="temporary"
           open={isDrawerOpen}
+          onClick={closeDrawer}
           onClose={onDrawerToggle}
           className={classes.drawer}
           classes={{

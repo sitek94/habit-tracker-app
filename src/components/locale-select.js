@@ -28,7 +28,7 @@ function LocaleSelect({ selectedLocale, onLocaleClick }) {
     <>
       <Button
         disableElevation
-        aria-controls="simple-menu"
+        aria-controls="select-language"
         aria-haspopup="true"
         variant="contained"
         startIcon={<SvgIcon>{selectedLocale.icon}</SvgIcon>}
@@ -38,7 +38,7 @@ function LocaleSelect({ selectedLocale, onLocaleClick }) {
       </Button>
 
       <Menu
-        id="simple-menu"
+        id="select-language"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}

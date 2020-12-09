@@ -6,6 +6,8 @@ import {
   ListItem,
   // ListItemIcon,
   ListItemText,
+  useMediaQuery,
+  useTheme,
 } from '@material-ui/core';
 import {
   Delete as DeleteIcon,
@@ -48,6 +50,9 @@ function HabitListItem({ habit }) {
   // Disable buttons when the habit is being deleted
   const disableActions = isLoading;
 
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+
   return (
     <ListItem button>
       {/* TODO: Let user choose icon */}
@@ -66,6 +71,7 @@ function HabitListItem({ habit }) {
       >
         {weekdays.map((day, i) => (
           <Chip
+            size={isXs ? "small" : "medium"}
             key={day}
             label={day.slice(0, 1)}
             color={frequency.includes(i) ? 'primary' : 'default'}
@@ -75,6 +81,7 @@ function HabitListItem({ habit }) {
 
       {/* Edit link */}
       <IconButton
+        size={isXs ? "small" : "medium"}
         component={RouterLink}
         to={`/edit-habit/${id}`}
         aria-label="Edit habit"
@@ -85,6 +92,7 @@ function HabitListItem({ habit }) {
 
       {/* Delete button */}
       <IconButton
+        size={isXs ? "small" : "medium"}
         onClick={handleDeleteClick}
         aria-label="Delete habit"
         disabled={disableActions}

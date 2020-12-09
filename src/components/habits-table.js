@@ -1,5 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { format, isToday } from 'date-fns';
+import { getComparator } from 'utils/misc';
+import { HabitRow } from './habit-row';
+import { useLocale } from 'locale';
+import { useTranslation } from 'locale';
 import {
   makeStyles,
   Table,
@@ -11,10 +16,6 @@ import {
   TableSortLabel,
   Typography,
 } from '@material-ui/core';
-import { format, isToday } from 'date-fns';
-import { getComparator } from 'utils/misc';
-import { HabitRow } from './habit-row';
-import { useLocale } from 'locale';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -41,9 +42,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Translations
+const translations = {
+  habitName: {
+    "pl": "Nawyk",
+    "es": "Hábito",
+    "en": "Habit",
+  }
+}
+
 // Sortable Table
 function HabitsTable({ habits, checkmarks, dates }) {
   const locale = useLocale();
+  const t = useTranslation(translations);
   const classes = useStyles();
 
   const [order, setOrder] = React.useState('desc');
@@ -59,7 +70,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
   // Cells with option to sort the habits
   const sortableCells = [
     // { id: 'position', label: 'Nº', align: 'center' },
-    { id: 'name', label: 'Habit name', align: 'left' },
+    { id: 'name', label: t('habitName'), align: 'left' },
   ];
 
   // Currently selected date range cells

@@ -48,7 +48,7 @@ function AccountTab({ disabled }) {
   return (
     <List disablePadding>
       <ListItem>
-        <Hidden xsDown>
+        <Hidden smDown>
           <ListItemIcon>
             <DeleteForeverIcon />
           </ListItemIcon>

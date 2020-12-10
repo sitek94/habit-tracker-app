@@ -50,11 +50,6 @@ const translations = {
     es: 'Hábito borrado!',
     en: 'Habit deleted!',
   },
-  errorMessage: {
-    pl: 'Coś poszło nie tak :(',
-    es: 'Algo salió mal :(',
-    en: 'Something went wrong :(',
-  },
   editButton: {
     pl: 'Edytuj nawyk',
     es: 'Editar el hábito',
@@ -78,17 +73,18 @@ function HabitListItem({ habit }) {
 
   const [deleteHabit, { isLoading }] = useDeleteHabit();
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = () => {
     // Open the dialog to ask the user if they're sure to delete the habit
     openDialog({
       title: `${t('dialogTitle')} "${name}"?`,
       description: t('dialogDescription'),
       confirmText: t('dialogConfirmButton'),
-      onConfirm: () =>
+      onConfirm: () => {
         deleteHabit(id, {
           onSuccess: () => openSnackbar('success', t('successMessage')),
-          onError: () => openSnackbar('error', t('errorMessage')),
-        }),
+          onError: (error) => openSnackbar('error', error.message),
+        });
+      },
       color: 'secondary',
     });
   };

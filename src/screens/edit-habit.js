@@ -18,7 +18,7 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Translations
 const translations = {

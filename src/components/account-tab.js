@@ -4,7 +4,7 @@ import { useDeleteUserData } from 'api/user-data';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 import {
   Button,
   Hidden,

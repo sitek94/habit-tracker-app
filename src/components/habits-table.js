@@ -4,7 +4,7 @@ import { format, isToday } from 'date-fns';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
 import { useLocale } from 'localization';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 import {
   makeStyles,
   Table,

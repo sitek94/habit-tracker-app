@@ -15,13 +15,15 @@ import {
   FormPrimaryText,
   FormSecondaryText,
 } from 'components/form';
+import { useTranslation } from 'translations';
 
 /**
  * Reset Password Screen
- * 
+ *
  * Here the user can reset their password by entering their email address.
  */
 function ResetPasswordScreen() {
+  const t = useTranslation();
   const { resetPassword } = useAuth();
   const { openSnackbar } = useSnackbar();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
@@ -46,7 +48,8 @@ function ResetPasswordScreen() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>Reset password</FormPrimaryText>
+        <FormPrimaryText>{t('resetPassword')}</FormPrimaryText>
+        <FormSecondaryText>{t('resetPasswordDescription')}</FormSecondaryText>
         <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
       </FormHeader>
 
@@ -55,19 +58,20 @@ function ResetPasswordScreen() {
           inputRef={register}
           name="email"
           autoComplete="email"
-          label="Email address"
-          placeholder="john@doe.com"
+          label={t('email')}
+          placeholder={t('emailPlaceholder')}
           error={!!errors?.email}
           disabled={isLoading}
           variant="outlined"
           fullWidth
         />
         <FormButton type="submit" pending={isLoading}>
-          Reset
+          {t('resetPasswordButton')}
         </FormButton>
 
         <FormSecondaryText>
-          Already have an account? <FormLink to="/signin">Sign in</FormLink>
+          {t('hasAccountQuestion')}{' '}
+          <FormLink to="/signin">{t('signIn')}</FormLink>
         </FormSecondaryText>
       </FormBody>
     </Form>

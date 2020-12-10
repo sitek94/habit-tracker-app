@@ -9,7 +9,7 @@ import {
   Equalizer as EqualizerIcon,
   Palette as PaletteIcon,
 } from '@material-ui/icons';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Translations
 const translations = {

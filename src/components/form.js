@@ -9,7 +9,7 @@ import {
   Link,
   useTheme,
 } from '@material-ui/core';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 const translations = {
   or: {
@@ -120,7 +120,11 @@ function FormSecondaryText({ children, ...props }) {
  * Combined Material-ui Link and RouterLink.
  */
 function FormLink(props) {
-  return <Link component={RouterLink} {...props} />;
+  const { palette } = useTheme();
+
+  const isDarkMode = palette.mode === 'dark';
+
+  return <Link component={RouterLink} color={isDarkMode ? 'textPrimary' : 'primary'} {...props} />;
 }
 
 /**
@@ -137,7 +141,7 @@ function FormButton(props) {
  */
 function FormDivider() {
   const theme = useTheme();
-  const t = useTranslation(translations);
+  const t = useTranslation();
 
   return (
     <Box

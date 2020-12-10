@@ -14,10 +14,13 @@ import {
 } from 'components/form';
 import { useAuth } from 'context/auth-context';
 import { signInSchema } from 'data/constraints';
+import { useTranslation, translations } from 'translations';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 
 function SignInScreen() {
+  const t = useTranslation(translations);
+
   const { signIn, signInWithAuthProvider } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
@@ -36,7 +39,7 @@ function SignInScreen() {
     event.preventDefault();
 
     run(signInWithAuthProvider(provider));
-  }
+  };
 
   const errorMessages = Object.values(errors);
   const isError = isAuthError || errorMessages.length !== 0;
@@ -45,16 +48,17 @@ function SignInScreen() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>Sign in</FormPrimaryText>
+        <FormPrimaryText>{t('signIn')}</FormPrimaryText>
         <FormSecondaryText>
-          Don't have an account? <FormLink to="/signup">Sign up</FormLink>
+          {t('noAccountQuestion')}{' '}
+          <FormLink to="/signup">{t('signUp')}</FormLink>
         </FormSecondaryText>
         <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
       </FormHeader>
 
       <FormBody>
         <AuthProviderList
-          text="Sign in with"
+          text={t('signInWith')}
           onAuthProviderClick={handleAuthProviderClick}
           disabled={isLoading}
         />
@@ -65,8 +69,8 @@ function SignInScreen() {
           inputRef={register}
           name="email"
           autoComplete="email"
-          label="Email address"
-          placeholder="john@doe.com"
+          label={t('email')}
+          placeholder={t('emailPlaceholder')}
           error={!!errors?.email}
           disabled={isLoading}
           variant="outlined"
@@ -78,7 +82,7 @@ function SignInScreen() {
           name="password"
           type="password"
           autoComplete="current-password"
-          label="Password"
+          label={t('password')}
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           error={!!errors?.password}
           disabled={isLoading}
@@ -87,11 +91,11 @@ function SignInScreen() {
         />
 
         <FormButton type="submit" pending={isLoading}>
-          Sign in
+          {t('signIn')}
         </FormButton>
 
         <FormSecondaryText>
-          Forgot password? <FormLink to="/reset-password">Reset here</FormLink>
+          <FormLink to="/reset-password">{t('forgotPassword')}</FormLink>
         </FormSecondaryText>
       </FormBody>
     </Form>

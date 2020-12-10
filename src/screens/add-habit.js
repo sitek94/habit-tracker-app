@@ -16,7 +16,7 @@ import {
   FormPrimaryText,
 } from 'components/form';
 import { useLocale } from 'localization';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Initial habit
 const initialHabit = {

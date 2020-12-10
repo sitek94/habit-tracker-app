@@ -1,15 +1,20 @@
 import * as React from 'react';
-import { locales } from 'localization';
+import { locales, useLocale } from 'localization';
 import {
-  Button,
   Menu,
   MenuItem,
   ListItemIcon,
   SvgIcon,
   Typography,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core';
+import { useTranslation } from 'translations';
 
-function LocaleSelect({ selectedLocale, onLocaleClick }) {
+function LocaleSelect({ onLocaleClick = () => {} }) {
+  const { code, setLocaleByCode } = useLocale();
+  const t  = useTranslation();
+
   // Open/close menu
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = (event) => {
@@ -21,21 +26,26 @@ function LocaleSelect({ selectedLocale, onLocaleClick }) {
 
   const handleMenuItemClick = (clickedLocaleCode) => {
     onLocaleClick(clickedLocaleCode);
+    setLocaleByCode(clickedLocaleCode);
     closeMenu();
   };
 
+  // Currently selected locale object
+  const selectedLocale = locales.find((locale) => locale.code === code);
+
   return (
     <>
-      <Button
-        disableElevation
-        aria-controls="select-language"
-        aria-haspopup="true"
-        variant="contained"
-        startIcon={<SvgIcon>{selectedLocale.icon}</SvgIcon>}
-        onClick={openMenu}
-      >
-        {selectedLocale.label}
-      </Button>
+      <Tooltip title={t('selectLanguage')}>
+        <IconButton
+          color="inherit"
+          aria-controls="select-language"
+          aria-label={t('selectLanguage')}
+          aria-haspopup="true"
+          onClick={openMenu}
+        >
+          <SvgIcon>{selectedLocale.icon}</SvgIcon>
+        </IconButton>
+      </Tooltip>
 
       <Menu
         id="select-language"

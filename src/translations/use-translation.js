@@ -1,6 +1,7 @@
-import { useLocale } from './use-locale';
+import { useLocale } from '../localization/use-locale';
+import { translations } from './translations';
 
-export function useTranslation(source = {}) {
+export function useTranslation(source = translations) {
   const { code } = useLocale();
 
   return (key) => {

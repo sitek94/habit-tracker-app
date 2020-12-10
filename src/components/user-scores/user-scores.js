@@ -10,7 +10,7 @@ import {
   isCheckmarkThisWeek,
   isCheckmarkToday,
 } from './helpers';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Translations
 const translations = {

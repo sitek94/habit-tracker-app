@@ -20,7 +20,7 @@ import { useDeleteHabit } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'localization';
 
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Translations
 const translations = {

@@ -24,7 +24,7 @@ import {
   FormatColorReset as FormatColorResetIcon,
 } from '@material-ui/icons';
 import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 // Translations
 const translations = {

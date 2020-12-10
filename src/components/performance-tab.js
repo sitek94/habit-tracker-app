@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import { TrackChanges as TrackChangesIcon } from '@material-ui/icons';
 import { useUpdatePerformanceGoal } from 'api/user-data';
-import { useTranslation } from 'localization';
+import { useTranslation } from 'translations';
 
 const translations = {
   performanceGoal: {

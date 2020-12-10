@@ -24,6 +24,51 @@ import {
   FormatColorReset as FormatColorResetIcon,
 } from '@material-ui/icons';
 import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
+import { useTranslation } from 'localization';
+
+// Translations
+const translations = {
+  primaryColor: {
+    pl: 'Kolor podstawowy',
+    es: 'Color primario',
+    en: 'Primary color',
+  },
+  secondaryColor: {
+    pl: 'Kolor dodatkowy',
+    es: 'Color secundario',
+    en: 'Secondary color',
+  },
+  darkMode: {
+    pl: 'Tryb nocny',
+    es: 'Modo oscuro',
+    en: 'Dark mode',
+  },
+  darkModeDescription: {
+    pl: `Zmniejsz ilość niebieskiego światła`,
+    es: `Ahorrar batería y cuidar tus ojos`,
+    en: `Displays mostly dark surfaces`,
+  },
+  resetTheme: {
+    pl: 'Zresetuj motyw',
+    es: 'Reinicializar tema',
+    en: 'Reset theme',
+  },
+  resetThemeDescription: {
+    pl: 'Zmiany zostaną zresetowane',
+    es: 'Los cambios se restablecerán',
+    en: 'Changes will be reset',
+  },
+  resetThemeButton: {
+    pl: 'Zresetuj',
+    es: 'Reiniciar',
+    en: 'Reset',
+  },
+  resetThemeNoChanges: {
+    pl: 'Nie wprowadzono żadnych zmian',
+    es: 'No se hicieron cambios',
+    en: 'No changes made',
+  }
+};
 
 /**
  * Appearance Tab
@@ -32,6 +77,7 @@ import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
  */
 function AppearanceTab({ disabled }) {
   const theme = useTheme();
+  const t = useTranslation(translations);
 
   const updateTheme = useUpdateTheme();
   const resetTheme = useRemoveTheme();
@@ -106,14 +152,14 @@ function AppearanceTab({ disabled }) {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-primary-color-label">
-              Primary color
+              {t('primaryColor')}
             </InputLabel>
 
             {/* Mobile devices */}
             {isXs && (
               <Select
                 native
-                label="Primary color"
+                label={t('primaryColor')}
                 labelId="select-primary-color-label"
                 value={theme.primaryColor.id}
                 onChange={handlePrimaryColorChange}
@@ -133,7 +179,7 @@ function AppearanceTab({ disabled }) {
             {/* Up mobile devices */}
             {!isXs && (
               <Select
-                label="Primary color"
+                label={t('primaryColor')}
                 labelId="select-primary-color-label"
                 value={theme.primaryColor.id}
                 onChange={handlePrimaryColorChange}
@@ -164,14 +210,14 @@ function AppearanceTab({ disabled }) {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-secondary-color-label">
-              Secondary color
+            {t('secondaryColor')}
             </InputLabel>
 
             {/* Mobile devices */}
             {isXs && (
               <Select
                 native
-                label="Secondary color"
+                label={t('secondaryColor')}
                 labelId="select-secondary-color-label"
                 value={theme.secondaryColor.id}
                 onChange={handleSecondaryColorChange}
@@ -191,7 +237,7 @@ function AppearanceTab({ disabled }) {
             {/* Up mobile devices */}
             {!isXs && (
               <Select
-                label="Secondary color"
+                label={t('secondaryColor')}
                 labelId="select-secondary-color-label"
                 value={theme.secondaryColor.id}
                 onChange={handleSecondaryColorChange}
@@ -221,8 +267,8 @@ function AppearanceTab({ disabled }) {
           )}
 
           <ListItemText
-            primary="Dark mode"
-            secondary="Displays mostly dark surfaces"
+            primary={t('darkMode')}
+            secondary={t('darkModeDescription')}
           />
 
           <ListItemSecondaryAction>
@@ -258,11 +304,11 @@ function AppearanceTab({ disabled }) {
           )}
 
           <ListItemText
-            primary="Reset theme"
+            primary={t('resetTheme')}
             secondary={
               isDefaultTheme(theme)
-                ? 'No changes made'
-                : 'Changes will be reset'
+                ? t('resetThemeNoChanges')
+                : t('resetThemeDescription')
             }
           />
 
@@ -277,7 +323,7 @@ function AppearanceTab({ disabled }) {
               variant="contained"
               onClick={handleResetThemeClick}
             >
-              Reset
+              {t('resetThemeButton')}
             </Button>
           </ListItemSecondaryAction>
         </ListItem>

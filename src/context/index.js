@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ReactQueryDevtools } from 'react-query-devtools';
 import { ReactQueryCacheProvider, QueryCache } from 'react-query';
-import { MainThemeProvider, UserThemeProvider } from 'theme';
+import { ThemeProvider } from 'theme';
 import { MainLocaleProvider, UserLocaleProvider } from 'locale';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
@@ -20,7 +20,7 @@ function AppProviders({ children }) {
     <MainLocaleProvider>
       <ReactQueryCacheProvider queryCache={queryCache}>
         <Router>
-          <MainThemeProvider>
+          <ThemeProvider>
             <FirebaseProvider>
               <DialogProvider>
                 <SnackbarProvider>
@@ -28,7 +28,7 @@ function AppProviders({ children }) {
                 </SnackbarProvider>
               </DialogProvider>
             </FirebaseProvider>
-          </MainThemeProvider>
+          </ThemeProvider>
         </Router>
         <ReactQueryDevtools position="bottom-left" />
       </ReactQueryCacheProvider>
@@ -42,9 +42,7 @@ function AppProviders({ children }) {
 function AuthenticatedAppProviders({ children }) {
   return (
     <UserDataProvider>
-      <UserLocaleProvider>
-        <UserThemeProvider>{children}</UserThemeProvider>
-      </UserLocaleProvider>
+      <UserLocaleProvider>{children}</UserLocaleProvider>
     </UserDataProvider>
   );
 }

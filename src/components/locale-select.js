@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { locales } from 'locale';
+import { locales } from 'localization';
 import {
   Button,
   Menu,

@@ -3,7 +3,7 @@ import { useCheckmarks } from 'api/checkmarks';
 import { useHabits } from 'api/habits';
 import { NoHabitsScreen } from 'screens/no-habits';
 import { useUserData } from 'context/user-config-context';
-import { useLocale } from 'locale';
+import { useLocale } from 'localization';
 import { WeekBarChart } from 'components/week-bar-chart';
 import { HabitsTable } from 'components/habits-table';
 import { FullPageSpinner } from 'components/lib';

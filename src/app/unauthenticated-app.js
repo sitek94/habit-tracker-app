@@ -7,8 +7,8 @@ import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
 import { SignUpScreen } from 'screens/sign-up';
 import { LocaleSelect } from 'components/locale-select';
-import { useLocale } from 'locale';
-import { locales } from 'locale';
+import { useLocale } from 'localization';
+import { locales } from 'localization';
 
 const useStyles = makeStyles((theme) => ({
   // App

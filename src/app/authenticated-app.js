@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { locales, useLocale } from 'locale';
+import { locales, useLocale, useTranslation } from 'localization';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router-dom';
 import { AddHabitScreen } from 'screens/add-habit';
@@ -38,6 +38,30 @@ import {
   SidebarLink,
 } from 'layout/authenticated-layout';
 
+// Translations
+const translations = {
+  addHabit: {
+    "pl": "Dodaj nawyk",
+    "es": "Agregar hábito",
+    "en": "Add habit",
+  },
+  manageHabits: {
+    "pl": "Edytuj nawyki",
+    "es": "Editar hábitos",
+    "en": "Manage habits",
+  },
+  settings: {
+    "pl": "Ustawienia",
+    "es": "Configuración",
+    "en": "Settings"
+  },
+  logout: {
+    "pl": "Wyloguj",
+    "es": "Cerrar sesión",
+    "en": "Logout"
+  }
+}
+
 /**
  * Authenticated App 
  */
@@ -57,8 +81,8 @@ function AuthenticatedApp() {
     });
   };
 
-  const { code } = useLocale();
-  const selectedLocale = locales.find((locale) => locale.code === code);
+  const { code: localeCode } = useLocale();
+  const selectedLocale = locales.find((locale) => locale.code === localeCode);
 
   const updateLocaleCode = useUpdateLocaleCode();
 
@@ -66,6 +90,8 @@ function AuthenticatedApp() {
   const handleLocaleClick = (clickedLocaleCode) => {
     updateLocaleCode(clickedLocaleCode);
   };
+
+  const t = useTranslation(translations);
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
@@ -79,11 +105,12 @@ function AuthenticatedApp() {
           <Tooltip title="GitHub repository">
             <IconButton
               target="_blank"
+              color="inherit"
               label="GitHub repository"
               rel="noopener noreferrer"
               href="https://github.com/sitek94/pocket-globe-app"
             >
-              <GitHubIcon color="inherit" />
+              <GitHubIcon />
             </IconButton>
           </Tooltip>
         </Navbar>
@@ -102,20 +129,20 @@ function AuthenticatedApp() {
             </SidebarLink>
 
             <SidebarLink to="/add-habit" icon={<AddIcon />}>
-              Add habit
+              {t('addHabit')}
             </SidebarLink>
 
             <SidebarLink to="/manage-habits" icon={<ListIcon />}>
-              Manage habits
+              {t('manageHabits')}
             </SidebarLink>
           </List>
           <Divider />
           <List>
             <SidebarLink to="/settings" icon={<SettingsIcon />}>
-              Settings
+              {t('settings')}
             </SidebarLink>
             <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
-              Logout
+              {t('logout')}
             </SidebarButton>
           </List>
         </Sidebar>

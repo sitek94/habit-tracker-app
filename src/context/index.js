@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ReactQueryDevtools } from 'react-query-devtools';
 import { ReactQueryCacheProvider, QueryCache } from 'react-query';
 import { ThemeProvider } from 'theme';
-import { MainLocaleProvider, UserLocaleProvider } from 'locale';
+import { MainLocaleProvider, UserLocaleProvider } from 'localization';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';

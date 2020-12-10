@@ -15,8 +15,8 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
-import { useLocale, } from 'locale';
-import { useTranslation } from 'locale';
+import { useLocale } from 'localization';
+import { useTranslation } from 'localization';
 
 // Initial habit
 const initialHabit = {
@@ -28,31 +28,31 @@ const initialHabit = {
 // Translations
 const translations = {
   title: {
-    pl: "Dodaj nowy nawyk",
-    es: "Añadir un nuevo hábito",
+    pl: 'Dodaj nowy nawyk',
+    es: 'Añadir un nuevo hábito',
     en: 'Create new habit',
   },
   button: {
-    pl: "Dodaj nawyk",
-    es: "Añadir hábito",
+    pl: 'Dodaj nawyk',
+    es: 'Añadir hábito',
     en: 'Create habit',
   },
   nameLabel: {
-    pl: "Nawyk",
-    es: "Hábito",
-    en: "Habit name",
+    pl: 'Nawyk',
+    es: 'Hábito',
+    en: 'Habit name',
   },
   descriptionLabel: {
-    pl: "Opis",
-    es: "Descripción ",
-    en: "Description",
+    pl: 'Opis',
+    es: 'Descripción ',
+    en: 'Description',
   },
   frequencyLabel: {
-    pl: "Częstotliwość",
-    es: "Frecuencia ",
-    en: "Frequency",
+    pl: 'Częstotliwość',
+    es: 'Frecuencia ',
+    en: 'Frequency',
   },
-}
+};
 
 function AddHabitScreen() {
   const t = useTranslation(translations);
@@ -106,47 +106,47 @@ function AddHabitScreen() {
   const disableActions = isAddingHabit;
 
   return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormHeader>
-          <FormPrimaryText>{t('title')}</FormPrimaryText>
-          <FormErrorText>{errorText || ' '}</FormErrorText>
-        </FormHeader>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <FormPrimaryText>{t('title')}</FormPrimaryText>
+        <FormErrorText>{errorText || ' '}</FormErrorText>
+      </FormHeader>
 
-        <FormBody>
-          <TextField
-            inputRef={register}
-            name="name"
-            label={t('nameLabel')}
-            error={!!errors?.name}
-            variant="outlined"
-            disabled={disableActions}
-            fullWidth
-          />
+      <FormBody>
+        <TextField
+          inputRef={register}
+          name="name"
+          label={t('nameLabel')}
+          error={!!errors?.name}
+          variant="outlined"
+          disabled={disableActions}
+          fullWidth
+        />
 
-          <TextField
-            inputRef={register}
-            name="description"
-            label={t('descriptionLabel')}
-            error={!!errors?.description}
-            variant="outlined"
-            disabled={disableActions}
-            fullWidth
-          />
+        <TextField
+          inputRef={register}
+          name="description"
+          label={t('descriptionLabel')}
+          error={!!errors?.description}
+          variant="outlined"
+          disabled={disableActions}
+          fullWidth
+        />
 
-          <CheckboxGroup
-            label={t('frequencyLabel')}
-            name="frequency"
-            control={control}
-            getValues={getValues}
-            values={weekdays}
-            error={!!errors?.frequency}
-          />
+        <CheckboxGroup
+          label={t('frequencyLabel')}
+          name="frequency"
+          control={control}
+          getValues={getValues}
+          values={weekdays}
+          error={!!errors?.frequency}
+        />
 
-          <FormButton type="submit" pending={isAddingHabit}>
-            {t('button')}
-          </FormButton>
-        </FormBody>
-      </Form>
+        <FormButton type="submit" pending={isAddingHabit}>
+          {t('button')}
+        </FormButton>
+      </FormBody>
+    </Form>
   );
 }
 

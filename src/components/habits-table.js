@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { format, isToday } from 'date-fns';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
-import { useLocale } from 'locale';
-import { useTranslation } from 'locale';
+import { useLocale } from 'localization';
+import { useTranslation } from 'localization';
 import {
   makeStyles,
   Table,

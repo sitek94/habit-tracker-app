@@ -8,7 +8,7 @@ import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
 import { useHabitById, useUpdateHabit } from 'api/habits';
-import { useLocale } from 'locale';
+import { useLocale } from 'localization';
 import { NotFoundHabitScreen } from './not-found-habit';
 import {
   Form,
@@ -18,6 +18,36 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
+import { useTranslation } from 'localization';
+
+// Translations
+const translations = {
+  title: {
+    pl: 'Edytuj nawyk',
+    es: 'Editar el hábito',
+    en: 'Edit habit',
+  },
+  button: {
+    pl: 'Zapisz',
+    es: 'Guardar',
+    en: 'Save',
+  },
+  nameLabel: {
+    pl: 'Nawyk',
+    es: 'Hábito',
+    en: 'Habit name',
+  },
+  descriptionLabel: {
+    pl: 'Opis',
+    es: 'Descripción ',
+    en: 'Description',
+  },
+  frequencyLabel: {
+    pl: 'Częstotliwość',
+    es: 'Frecuencia ',
+    en: 'Frequency',
+  },
+};
 
 // Default habit values
 const defaultHabit = {
@@ -28,7 +58,8 @@ const defaultHabit = {
 
 function EditHabitScreen() {
   const navigate = useNavigate();
-  
+
+  const t = useTranslation(translations);
   const { weekdays } = useLocale();
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
@@ -99,7 +130,7 @@ function EditHabitScreen() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>Edit habit</FormPrimaryText>
+        <FormPrimaryText>{t('title')}</FormPrimaryText>
         <FormErrorText>{errorText || ' '}</FormErrorText>
       </FormHeader>
 
@@ -107,7 +138,7 @@ function EditHabitScreen() {
         <TextField
           inputRef={register}
           name="name"
-          label="Habit name"
+          label={t('nameLabel')}
           error={!!errors?.name}
           variant="outlined"
           disabled={disableActions}
@@ -117,7 +148,7 @@ function EditHabitScreen() {
         <TextField
           inputRef={register}
           name="description"
-          label="Question"
+          label={t('descriptionLabel')}
           error={!!errors?.description}
           variant="outlined"
           disabled={disableActions}
@@ -126,7 +157,7 @@ function EditHabitScreen() {
 
         <CheckboxGroup
           name="frequency"
-          label="Frequency"
+          label={t('frequencyLabel')}
           control={control}
           getValues={getValues}
           values={weekdays}
@@ -134,7 +165,7 @@ function EditHabitScreen() {
         />
 
         <FormButton type="submit" pending={isUpdatingHabit}>
-          Save habit
+          {t('button')}
         </FormButton>
       </FormBody>
     </Form>

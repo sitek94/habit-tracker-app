@@ -3,8 +3,9 @@ import { FullPageSpinner, FullPageErrorFallback } from 'components/lib';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
 import { useAuth } from './auth-context';
-import { defaultLocale } from 'locale/locales';
-import { defaultThemeConstants } from 'theme';
+import { defaultLocale } from 'localization/locales';
+import { createTheme, defaultThemeConstants } from 'theme';
+import { useTheme } from '@material-ui/core';
 
 const UserDataContext = React.createContext();
 UserDataContext.displayName = 'UserDataContext';
@@ -40,6 +41,7 @@ function UserDataProvider({ children }) {
 
   const { db } = useFirebase();
   const { user } = useAuth();
+  const { setTheme } = useTheme();
 
   React.useEffect(() => {
     const userDataRef = db.ref(`users/${user.uid}`);
@@ -66,6 +68,14 @@ function UserDataProvider({ children }) {
     // Detach snapshot listener
     return () => userDataRef.off();
   }, [db, user, setUserData]);
+
+  const { theme } = userData;
+
+  React.useEffect(() => {
+    if (theme) {
+      setTheme(createTheme(theme));
+    }
+  }, [theme, setTheme]);
 
   // User data is loading
   if (isLoading || isIdle) {

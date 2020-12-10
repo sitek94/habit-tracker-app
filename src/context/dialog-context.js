@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useRef } from 'react';
 
 import React from 'react';
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -11,21 +10,33 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
+import { useTranslation } from 'localization';
+
+// Translations
+const translations = {
+  cancelButton: {
+    pl: 'Anuluj',
+    es: 'Cancelar',
+    en: 'Cancel',
+  },
+};
+
 // Context
 const DialogContext = createContext();
 
 // Provider
 const DialogProvider = ({ children }) => {
+  const t = useTranslation(translations);
   const [dialogs, setDialogs] = useState([]);
 
-  const openDialog = props => {
+  const openDialog = (props) => {
     const dialog = { ...props, open: true };
 
-    setDialogs(dialogs => [...dialogs, dialog]);
+    setDialogs((dialogs) => [...dialogs, dialog]);
   };
 
   const closeDialog = () => {
-    setDialogs(dialogs => {
+    setDialogs((dialogs) => {
       const latestDialog = dialogs.pop();
 
       if (!latestDialog) return dialogs;
@@ -41,14 +52,17 @@ const DialogProvider = ({ children }) => {
     <DialogContext.Provider value={contextValue.current}>
       {children}
       {dialogs.map(
-        ({
-          open,
-          title,
-          description,
-          confirmText,
-          onConfirm,
-          color = 'primary',
-        }, i) => (
+        (
+          {
+            open,
+            title,
+            description,
+            confirmText,
+            onConfirm,
+            color = 'primary',
+          },
+          i
+        ) => (
           <Dialog
             key={`${i}-${title}`}
             open={open}
@@ -66,7 +80,7 @@ const DialogProvider = ({ children }) => {
 
             <DialogActions>
               <Button onClick={closeDialog} color={color}>
-                Cancel
+                {t('cancelButton')}
               </Button>
               <Button
                 onClick={() => {

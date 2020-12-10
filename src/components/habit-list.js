@@ -18,9 +18,57 @@ import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
 import { useDeleteHabit } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
-import { useLocale } from 'locale';
+import { useLocale } from 'localization';
+
+import { useTranslation } from 'localization';
+
+// Translations
+const translations = {
+  dialogTitle: {
+    pl: 'Usunąć',
+    es: 'Borrar',
+    en: 'Delete',
+  },
+  dialogDescription: {
+    pl: `
+    Usunięty nawyk nie może zostać odzyskany. Wszystkie dane
+    zostanę usunięte.`,
+    es: `
+    Esta acción eliminará permanentemente este hábito. Esto no se puede deshacer.
+    `,
+    en: `
+    Deleted habit can't be recovered. All data 
+    associated with this habit will be deleted.`,
+  },
+  dialogConfirmButton: {
+    pl: 'Usuń',
+    es: 'Borrar',
+    en: 'Delete',
+  },
+  successMessage: {
+    pl: 'Nawyk usunięty!',
+    es: 'Hábito borrado!',
+    en: 'Habit deleted!',
+  },
+  errorMessage: {
+    pl: 'Coś poszło nie tak :(',
+    es: 'Algo salió mal :(',
+    en: 'Something went wrong :(',
+  },
+  editButton: {
+    pl: 'Edytuj nawyk',
+    es: 'Editar el hábito',
+    en: 'Edit habit',
+  },
+  deleteButton: {
+    pl: 'Usuń nawyk',
+    es: 'Borrar el hábito',
+    en: 'Delete habit',
+  },
+};
 
 function HabitListItem({ habit }) {
+  const t = useTranslation(translations);
   const { weekdays } = useLocale();
 
   const { id, name, description, frequency } = habit;
@@ -33,15 +81,13 @@ function HabitListItem({ habit }) {
   const handleDeleteClick = async () => {
     // Open the dialog to ask the user if they're sure to delete the habit
     openDialog({
-      title: `Remove "${name}" habit?`,
-      description: `
-      Deleted habit can't be recovered. All data 
-      associated with this habit will be deleted.`,
-      confirmText: 'Delete',
+      title: `${t('dialogTitle')} "${name}"?`,
+      description: t('dialogDescription'),
+      confirmText: t('dialogConfirmButton'),
       onConfirm: () =>
         deleteHabit(id, {
-          onSuccess: () => openSnackbar('success', 'Habit removed!'),
-          onError: () => openSnackbar('error', 'Error!'),
+          onSuccess: () => openSnackbar('success', t('successMessage')),
+          onError: () => openSnackbar('error', t('errorMessage')),
         }),
       color: 'secondary',
     });
@@ -71,7 +117,7 @@ function HabitListItem({ habit }) {
       >
         {weekdays.map((day, i) => (
           <Chip
-            size={isXs ? "small" : "medium"}
+            size={isXs ? 'small' : 'medium'}
             key={day}
             label={day.slice(0, 1)}
             color={frequency.includes(i) ? 'primary' : 'default'}
@@ -81,10 +127,10 @@ function HabitListItem({ habit }) {
 
       {/* Edit link */}
       <IconButton
-        size={isXs ? "small" : "medium"}
+        size={isXs ? 'small' : 'medium'}
         component={RouterLink}
         to={`/edit-habit/${id}`}
-        aria-label="Edit habit"
+        aria-label={t('editButton')}
         disabled={disableActions}
       >
         <EditIcon />
@@ -92,9 +138,9 @@ function HabitListItem({ habit }) {
 
       {/* Delete button */}
       <IconButton
-        size={isXs ? "small" : "medium"}
+        size={isXs ? 'small' : 'medium'}
         onClick={handleDeleteClick}
-        aria-label="Delete habit"
+        aria-label={t('deleteButton')}
         disabled={disableActions}
       >
         <DeleteIcon />

@@ -4,6 +4,7 @@ import { useDeleteUserData } from 'api/user-data';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
+import { useTranslation } from 'localization';
 import {
   Button,
   Hidden,
@@ -14,6 +15,45 @@ import {
   ListItemText,
 } from '@material-ui/core';
 
+// Translations
+const translations = {
+  dialogTitle: {
+    pl: 'Usunąć konto?',
+    es: 'Eliminar cuenta?',
+    en: 'Delete account?',
+  },
+  dialogDescription: {
+    pl: `Usuniętego konta nie można odzyskać. Wszystkie dane zostanę usunięte.`,
+    es: `Esta acción eliminará permanentemente todos tus hábitos e datos. Esto no se puede deshacer.`,
+    en: `Deleted accounts can't be recovered. All data associated with your account will be deleted.`,
+  },
+  dialogConfirmButton: {
+    pl: 'Usuń konto',
+    es: 'Eliminar cuenta',
+    en: 'Delete account',
+  },
+  successMessage: {
+    pl: 'Konto usunięte!',
+    es: 'Cuenta eliminida!',
+    en: 'Account deleted!',
+  },
+  listItemPrimary: {
+    pl: 'Usuń konto',
+    es: 'Eliminar cuenta',
+    en: 'Delete account',
+  },
+  listItemSecondary: {
+    pl: `Wszystkie dane zostanę usunięte.`,
+    es: `Esto no se puede deshacer.`,
+    en: `Accounts can't be recovered`,
+  },
+  listItemButton: {
+    pl: 'Usuń',
+    es: 'Eliminar',
+    en: 'Delete',
+  }
+};
+
 /**
  * Account Tab
  *
@@ -23,20 +63,21 @@ function AccountTab({ disabled }) {
   const { deleteAccount } = useAuth();
   const { openDialog } = useDialog();
   const { openSnackbar } = useSnackbar();
+  const t = useTranslation(translations);
 
   const deleteUserData = useDeleteUserData();
 
   const handleDeleteAccountClick = () => {
     openDialog({
-      title: 'Delete account?',
-      description: `Deleted accounts can't be recovered. All data associated with your account will be deleted.`,
-      confirmText: 'Delete',
+      title: t('dialogTitle'),
+      description: t('dialogDescription'),
+      confirmText: t('dialogConfirmButton'),
       onConfirm: async () => {
         try {
           await deleteAccount();
           await deleteUserData();
 
-          openSnackbar('success', 'Account deleted!');
+          openSnackbar('success', t('successMessage'));
         } catch (error) {
           openSnackbar('error', error.message);
         }
@@ -55,8 +96,8 @@ function AccountTab({ disabled }) {
         </Hidden>
 
         <ListItemText
-          primary="Delete account"
-          secondary="Accounts can't be recovered"
+          primary={t('listItemPrimary')}
+          secondary={t('listItemSecondary')}
         />
 
         <ListItemSecondaryAction>
@@ -66,7 +107,7 @@ function AccountTab({ disabled }) {
             variant="contained"
             onClick={handleDeleteAccountClick}
           >
-            Delete
+            {t('listItemButton')}
           </Button>
         </ListItemSecondaryAction>
       </ListItem>

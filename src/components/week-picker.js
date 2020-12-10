@@ -2,7 +2,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { TextField, makeStyles } from '@material-ui/core';
 import { StaticDatePicker, PickersDay } from '@material-ui/lab';
-import { useLocale } from 'locale';
+import { useLocale } from 'localization';
 import {
   add,
   endOfWeek,

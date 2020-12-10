@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { locales, useLocale } from 'locale';
+import { useTranslation } from 'translations';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router-dom';
 import { AddHabitScreen } from 'screens/add-habit';
@@ -13,19 +13,11 @@ import { FullPageErrorFallback, ErrorFallback } from 'components/lib';
 import { LocaleSelect } from 'components/locale-select';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
-import {
-  Divider,
-  IconButton,
-  List,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Divider, List, Toolbar, Typography } from '@material-ui/core';
 import {
   Add as AddIcon,
   Dashboard as DashboardIcon,
   ExitToApp as ExitIcon,
-  GitHub as GitHubIcon,
   List as ListIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
@@ -37,9 +29,34 @@ import {
   SidebarButton,
   SidebarLink,
 } from 'layout/authenticated-layout';
+import { GithubRepoLink } from 'components/github-repo-link';
+
+// Translations
+const translations = {
+  addHabit: {
+    pl: 'Dodaj nawyk',
+    es: 'Agregar hábito',
+    en: 'Add habit',
+  },
+  manageHabits: {
+    pl: 'Edytuj nawyki',
+    es: 'Editar hábitos',
+    en: 'Manage habits',
+  },
+  settings: {
+    pl: 'Ustawienia',
+    es: 'Configuración',
+    en: 'Settings',
+  },
+  logout: {
+    pl: 'Wyloguj',
+    es: 'Cerrar sesión',
+    en: 'Logout',
+  },
+};
 
 /**
- * Authenticated App 
+ * Authenticated App
  */
 function AuthenticatedApp() {
   const { signOut } = useAuth();
@@ -57,9 +74,6 @@ function AuthenticatedApp() {
     });
   };
 
-  const { code } = useLocale();
-  const selectedLocale = locales.find((locale) => locale.code === code);
-
   const updateLocaleCode = useUpdateLocaleCode();
 
   // When locale is clicked, user's data in the database is updated
@@ -67,25 +81,15 @@ function AuthenticatedApp() {
     updateLocaleCode(clickedLocaleCode);
   };
 
+  const t = useTranslation(translations);
+
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <Layout>
         {/* Navbar */}
         <Navbar>
-          <LocaleSelect
-            selectedLocale={selectedLocale}
-            onLocaleClick={handleLocaleClick}
-          />
-          <Tooltip title="GitHub repository">
-            <IconButton
-              target="_blank"
-              label="GitHub repository"
-              rel="noopener noreferrer"
-              href="https://github.com/sitek94/pocket-globe-app"
-            >
-              <GitHubIcon color="inherit" />
-            </IconButton>
-          </Tooltip>
+          <LocaleSelect onLocaleClick={handleLocaleClick} />
+          <GithubRepoLink />
         </Navbar>
 
         {/* Sidebar */}
@@ -102,20 +106,20 @@ function AuthenticatedApp() {
             </SidebarLink>
 
             <SidebarLink to="/add-habit" icon={<AddIcon />}>
-              Add habit
+              {t('addHabit')}
             </SidebarLink>
 
             <SidebarLink to="/manage-habits" icon={<ListIcon />}>
-              Manage habits
+              {t('manageHabits')}
             </SidebarLink>
           </List>
           <Divider />
           <List>
             <SidebarLink to="/settings" icon={<SettingsIcon />}>
-              Settings
+              {t('settings')}
             </SidebarLink>
             <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
-              Logout
+              {t('logout')}
             </SidebarButton>
           </List>
         </Sidebar>

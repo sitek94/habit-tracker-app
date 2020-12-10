@@ -3,8 +3,10 @@ import { FullPageSpinner, FullPageErrorFallback } from 'components/lib';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
 import { useAuth } from './auth-context';
-import { defaultLocale } from 'locale/locales';
-import { defaultThemeConstants } from 'theme';
+import { defaultLocale } from 'localization/locales';
+import { createTheme, defaultThemeConstants } from 'theme';
+import { useTheme } from '@material-ui/core';
+import { useLocale } from 'localization';
 
 const UserDataContext = React.createContext();
 UserDataContext.displayName = 'UserDataContext';
@@ -20,7 +22,7 @@ const defaultUserData = {
 
 /**
  * User Data Provider
- * 
+ *
  * Provides user data object, which is updated whenever user data
  * changes in the database.
  */
@@ -41,13 +43,13 @@ function UserDataProvider({ children }) {
   const { db } = useFirebase();
   const { user } = useAuth();
 
+  /**
+   * User data snasphot listener
+   */
   React.useEffect(() => {
     const userDataRef = db.ref(`users/${user.uid}`);
 
-    /**
-     * Set up snapshot listener that updates user data whenever it
-     * changes in the database
-     */
+    // Set up snapshot listener
     userDataRef.on('value', (snapshot) => {
       // Check if user has a data point in the database
       const userHasData = snapshot.exists();
@@ -66,6 +68,30 @@ function UserDataProvider({ children }) {
     // Detach snapshot listener
     return () => userDataRef.off();
   }, [db, user, setUserData]);
+
+  const { theme } = userData;
+  const { setTheme } = useTheme();
+
+  /**
+   * Watch for theme changes in user data
+   */
+  React.useEffect(() => {
+    if (theme) {
+      setTheme(createTheme(theme));
+    }
+  }, [theme, setTheme]);
+
+  const { locale } = userData;
+  const { setLocaleByCode } = useLocale();
+
+  /**
+   * Watch for locale changes in user data
+   */
+  React.useEffect(() => {
+    if (locale) {
+      setLocaleByCode(locale.code);
+    }
+  }, [locale, setLocaleByCode]);
 
   // User data is loading
   if (isLoading || isIdle) {

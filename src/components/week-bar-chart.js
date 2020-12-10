@@ -4,6 +4,7 @@ import { useTheme } from '@material-ui/core';
 import { countBy } from 'lodash';
 import { format } from 'date-fns';
 import { COMPLETED, FAILED } from 'data/constants';
+import { useLocale } from 'localization';
 
 function WeekBarChart({ checkmarks, dates, habitsCount }) {
 
@@ -29,8 +30,10 @@ function WeekBarChart({ checkmarks, dates, habitsCount }) {
       }
   });
 
+  const locale = useLocale();
+  
   // Label formats
-  const xValueFormat = date => format(new Date(date), 'd-MMM');
+  const xValueFormat = date => format(new Date(date), 'd-MMM', { locale });
   const yValueFormat = value => Math.floor((value / habitsCount) * 100) + '%';
 
   return (

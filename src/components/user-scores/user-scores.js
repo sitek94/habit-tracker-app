@@ -10,15 +10,21 @@ import {
   isCheckmarkThisWeek,
   isCheckmarkToday,
 } from './helpers';
-
-// Score types that we track is 'last week', 'this week' and 'today'
-const scoreTypeList = [
-  createScoreType('Last week', isCheckmarkLastWeek),
-  createScoreType('This week', isCheckmarkThisWeek),
-  createScoreType('Today', isCheckmarkToday),
-];
+import { useTranslation } from 'translations';
 
 function UserScores({ checkmarks, goal }) {
+  const t = useTranslation();
+
+  // Score types that we track is 'last week', 'this week' and 'today'
+  const scoreTypeList = React.useMemo(
+    () => [
+      createScoreType(t('lastWeek'), isCheckmarkLastWeek),
+      createScoreType(t('thisWeek'), isCheckmarkThisWeek),
+      createScoreType(t('today'), isCheckmarkToday),
+    ],
+    [t]
+  );
+
   // Use user's checkmarks and score types list to generate the data for pie chart
   const scoreTypeDataList = getScoreTypeDataList(checkmarks, scoreTypeList);
 
@@ -30,7 +36,7 @@ function UserScores({ checkmarks, goal }) {
     <>
       {/* Title */}
       <Typography component="h2" variant="h6" color="primary">
-        Your Performance
+        {t('yourPerformance')}
       </Typography>
 
       <FixedHeightDivider />
@@ -53,12 +59,16 @@ function UserScores({ checkmarks, goal }) {
                   {hasReachedGoal ? (
                     <DoneIcon fontSize="large" color="primary" />
                   ) : (
-                    <GoalLabel>{goal}%</GoalLabel>
+                    <GoalLabel>
+                      {t('goal')}:
+                      <br />
+                      <span>{goal}%</span>
+                    </GoalLabel>
                   )}
                 </CenteredBox>
               </ChartContainer>
 
-              <Label>{label}</Label>
+              <Label variant="body2">{label}</Label>
             </Grid>
           );
         })}
@@ -68,7 +78,7 @@ function UserScores({ checkmarks, goal }) {
 
       {/* Bottom text */}
       <Typography align="left" color="textSecondary">
-        Overall All Time Performance: {allTimeScore}%
+        {t('overallPerformance')}: {allTimeScore}%
       </Typography>
     </>
   );
@@ -88,9 +98,9 @@ function FixedHeightDivider() {
   );
 }
 
-function Label({ children }) {
+function Label({ children, ...props }) {
   return (
-    <Typography align="center" color="textSecondary">
+    <Typography align="center" color="textSecondary" {...props}>
       {children}
     </Typography>
   );
@@ -101,19 +111,19 @@ function GoalLabel({ children }) {
     <Box
       clone
       sx={{
+        // This margin is added so that the text looks more centered
+        marginTop: '5px',
         fontSize: 12,
-        lineHeight: 1,
+        lineHeight: 1.2,
       }}
     >
       <Typography
         variant="subtitle2"
         color="textSecondary"
         component="label"
-        align="right"
+        align="center"
       >
-        Goal:
-        <br />
-        <span>{children}</span>
+        {children}
       </Typography>
     </Box>
   );
@@ -126,7 +136,7 @@ function CenteredBox({ children }) {
     <Box
       sx={{
         position: 'absolute',
-        width: CHART_SIZE,
+        width: '100%',
         height: CHART_SIZE,
         display: 'flex',
         justifyContent: 'center',
@@ -145,6 +155,8 @@ function ChartContainer({ children }) {
     <Box
       sx={{
         position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
       }}
     >
       {children}

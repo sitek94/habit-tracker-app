@@ -24,6 +24,7 @@ import {
   FormatColorReset as FormatColorResetIcon,
 } from '@material-ui/icons';
 import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
+import { useTranslation } from 'translations';
 
 /**
  * Appearance Tab
@@ -32,6 +33,7 @@ import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
  */
 function AppearanceTab({ disabled }) {
   const theme = useTheme();
+  const t = useTranslation();
 
   const updateTheme = useUpdateTheme();
   const resetTheme = useRemoveTheme();
@@ -106,14 +108,14 @@ function AppearanceTab({ disabled }) {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-primary-color-label">
-              Primary color
+              {t('primaryColor')}
             </InputLabel>
 
             {/* Mobile devices */}
             {isXs && (
               <Select
                 native
-                label="Primary color"
+                label={t('primaryColor')}
                 labelId="select-primary-color-label"
                 value={theme.primaryColor.id}
                 onChange={handlePrimaryColorChange}
@@ -133,7 +135,7 @@ function AppearanceTab({ disabled }) {
             {/* Up mobile devices */}
             {!isXs && (
               <Select
-                label="Primary color"
+                label={t('primaryColor')}
                 labelId="select-primary-color-label"
                 value={theme.primaryColor.id}
                 onChange={handlePrimaryColorChange}
@@ -164,14 +166,14 @@ function AppearanceTab({ disabled }) {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-secondary-color-label">
-              Secondary color
+            {t('secondaryColor')}
             </InputLabel>
 
             {/* Mobile devices */}
             {isXs && (
               <Select
                 native
-                label="Secondary color"
+                label={t('secondaryColor')}
                 labelId="select-secondary-color-label"
                 value={theme.secondaryColor.id}
                 onChange={handleSecondaryColorChange}
@@ -191,7 +193,7 @@ function AppearanceTab({ disabled }) {
             {/* Up mobile devices */}
             {!isXs && (
               <Select
-                label="Secondary color"
+                label={t('secondaryColor')}
                 labelId="select-secondary-color-label"
                 value={theme.secondaryColor.id}
                 onChange={handleSecondaryColorChange}
@@ -221,8 +223,8 @@ function AppearanceTab({ disabled }) {
           )}
 
           <ListItemText
-            primary="Dark mode"
-            secondary="Displays mostly dark surfaces"
+            primary={t('darkMode')}
+            secondary={t('darkModeDescription')}
           />
 
           <ListItemSecondaryAction>
@@ -258,11 +260,11 @@ function AppearanceTab({ disabled }) {
           )}
 
           <ListItemText
-            primary="Reset theme"
+            primary={t('resetTheme')}
             secondary={
               isDefaultTheme(theme)
-                ? 'No changes made'
-                : 'Changes will be reset'
+                ? t('resetThemeNoChanges')
+                : t('resetThemeDescription')
             }
           />
 
@@ -277,7 +279,7 @@ function AppearanceTab({ disabled }) {
               variant="contained"
               onClick={handleResetThemeClick}
             >
-              Reset
+              {t('resetThemeButton')}
             </Button>
           </ListItemSecondaryAction>
         </ListItem>

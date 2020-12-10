@@ -9,35 +9,54 @@ import {
   Equalizer as EqualizerIcon,
   Palette as PaletteIcon,
 } from '@material-ui/icons';
+import { useTranslation } from 'translations';
+
+// Translations
+const translations = {
+  account: {
+    pl: 'Konto',
+    es: 'Cuenta',
+    en: 'Account',
+  },
+  performance: {
+    pl: 'Wyniki',
+    es: 'Resultados',
+    en: 'Performance',
+  },
+  appearance: {
+    pl: 'Motyw',
+    es: 'Tema',
+    en: 'Appearance',
+  },
+};
 
 // Available tabs
 const tabs = [
   {
     key: 'account',
     icon: <AccountCircleIcon />,
-    label: 'Account',
   },
 
   {
     key: 'performance',
     icon: <EqualizerIcon />,
-    label: 'Performance',
   },
 
   {
     key: 'appearance',
     icon: <PaletteIcon />,
-    label: 'Appearance',
   },
 ];
 
 /**
  * User Settings Screen
- * 
+ *
  * The settings are displayed as swipeable tabs. The settings that are available
  * are: account, performance, appearance.
  */
 export default function UserSettingsScreen() {
+  const t = useTranslation(translations);
+
   // Selected tab
   const [selectedTab, setSelectedTab] = React.useState(0);
   const handleTabChange = (event, newValue) => {
@@ -70,8 +89,8 @@ export default function UserSettingsScreen() {
           indicatorColor="primary"
           textColor="primary"
         >
-          {tabs.map(({ key, icon, label }, index) => {
-            return <Tab key={key} icon={icon} label={label} value={index} />;
+          {tabs.map(({ key, icon }, index) => {
+            return <Tab key={key} icon={icon} label={t(key)} value={index} />;
           })}
         </Tabs>
 

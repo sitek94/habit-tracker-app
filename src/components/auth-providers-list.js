@@ -5,6 +5,7 @@ import {
   createMuiTheme,
   makeStyles,
   ThemeProvider,
+  useTheme,
 } from '@material-ui/core/styles';
 import authProviders from 'data/auth-providers';
 
@@ -20,13 +21,14 @@ const useStyles = makeStyles((theme) => ({
   // Button
   root: {
     justifyContent: 'flex-start',
+    textTransform: 'none',
   },
   icon: {
     padding: theme.spacing(0, 2),
   },
 }));
 
-const AuthProviderButton = ({ providerColor, ...rest }) => {
+const AuthProviderButton = ({ providerColor, ...props }) => {
   const classes = useStyles();
 
   // Create a theme with primary color set to corresponding auth provider color
@@ -34,7 +36,9 @@ const AuthProviderButton = ({ providerColor, ...rest }) => {
     () =>
       createMuiTheme({
         palette: {
-          primary: providerColor,
+          primary: {
+            main: providerColor,
+          },
         },
       }),
     [providerColor]
@@ -47,7 +51,7 @@ const AuthProviderButton = ({ providerColor, ...rest }) => {
           root: classes.root,
           startIcon: classes.icon,
         }}
-        {...rest}
+        {...props}
       />
     </ThemeProvider>
   );
@@ -55,6 +59,7 @@ const AuthProviderButton = ({ providerColor, ...rest }) => {
 
 function AuthProviderList({ text, disabled, onAuthProviderClick }) {
   const classes = useStyles();
+  const { palette } = useTheme();
 
   return (
     <div className={classes.list}>
@@ -65,7 +70,7 @@ function AuthProviderList({ text, disabled, onAuthProviderClick }) {
           onClick={(event) => onAuthProviderClick(event, { id, scopes })}
           disabled={disabled}
           startIcon={icon}
-          variant="outlined"
+          variant={palette.mode === 'dark' ? 'contained' : 'outlined'}
           fullWidth
         >
           {text} {name}

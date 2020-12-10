@@ -9,6 +9,7 @@ import {
   Link,
   useTheme,
 } from '@material-ui/core';
+import { useTranslation } from 'translations';
 
 /**
  * Main form wrapper component
@@ -31,15 +32,13 @@ function Form({ children, ...props }) {
       }}
     >
       <Box
-        component="form"
         sx={{
           maxWidth: 320,
           margin: { sm: theme.spacing(6, 14) },
           paddingTop: { xs: theme.spacing(3), sm: 0 },
         }}
-        {...props}
-      >          
-        {children}
+      >
+        <form {...props}>{children}</form>
       </Box>
     </Box>
   );
@@ -113,7 +112,11 @@ function FormSecondaryText({ children, ...props }) {
  * Combined Material-ui Link and RouterLink.
  */
 function FormLink(props) {
-  return <Link component={RouterLink} {...props} />;
+  const { palette } = useTheme();
+
+  const isDarkMode = palette.mode === 'dark';
+
+  return <Link component={RouterLink} color={isDarkMode ? 'textPrimary' : 'primary'} {...props} />;
 }
 
 /**
@@ -130,6 +133,7 @@ function FormButton(props) {
  */
 function FormDivider() {
   const theme = useTheme();
+  const t = useTranslation();
 
   return (
     <Box
@@ -146,9 +150,10 @@ function FormDivider() {
         sx={{
           color: theme.palette.text.secondary,
           padding: theme.spacing(0, 1),
+          textTransform: 'uppercase',
         }}
       >
-        OR
+        {t('or')}
       </Box>
       <Box sx={{ flex: 1 }} clone>
         <Divider />

@@ -4,6 +4,7 @@ import { useDeleteUserData } from 'api/user-data';
 import { useAuth } from 'context/auth-context';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
+import { useTranslation } from 'translations';
 import {
   Button,
   Hidden,
@@ -23,20 +24,21 @@ function AccountTab({ disabled }) {
   const { deleteAccount } = useAuth();
   const { openDialog } = useDialog();
   const { openSnackbar } = useSnackbar();
+  const t = useTranslation();
 
   const deleteUserData = useDeleteUserData();
 
   const handleDeleteAccountClick = () => {
     openDialog({
-      title: 'Delete account?',
-      description: `Deleted accounts can't be recovered. All data associated with your account will be deleted.`,
-      confirmText: 'Delete',
+      title: t('deleteAccountQuestion'),
+      description: t('deleteAccountWarning'),
+      confirmText: t('deleteAccount'),
       onConfirm: async () => {
         try {
           await deleteAccount();
           await deleteUserData();
 
-          openSnackbar('success', 'Account deleted!');
+          openSnackbar('success', t('accountDeleted'));
         } catch (error) {
           openSnackbar('error', error.message);
         }
@@ -55,8 +57,8 @@ function AccountTab({ disabled }) {
         </Hidden>
 
         <ListItemText
-          primary="Delete account"
-          secondary="Accounts can't be recovered"
+          primary={t('deleteAccount')}
+          secondary={t('deleteAccountWarningShort')}
         />
 
         <ListItemSecondaryAction>
@@ -66,7 +68,7 @@ function AccountTab({ disabled }) {
             variant="contained"
             onClick={handleDeleteAccountClick}
           >
-            Delete
+            {t('deleteAccountConfirmation')}
           </Button>
         </ListItemSecondaryAction>
       </ListItem>

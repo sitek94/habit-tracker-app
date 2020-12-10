@@ -6,7 +6,6 @@ import { TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
 import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
-import { useLocale } from 'locale';
 import { useAddHabit, useHabits } from 'api/habits';
 import {
   Form,
@@ -16,6 +15,8 @@ import {
   FormHeader,
   FormPrimaryText,
 } from 'components/form';
+import { useLocale } from 'localization';
+import { useTranslation } from 'translations';
 
 // Initial habit
 const initialHabit = {
@@ -24,9 +25,38 @@ const initialHabit = {
   frequency: [],
 };
 
-function AddHabitScreen() {
-  const { weekdays } = useLocale();
+// Translations
+const translations = {
+  title: {
+    pl: 'Dodaj nowy nawyk',
+    es: 'Añadir un nuevo hábito',
+    en: 'Create new habit',
+  },
+  button: {
+    pl: 'Dodaj nawyk',
+    es: 'Añadir hábito',
+    en: 'Create habit',
+  },
+  nameLabel: {
+    pl: 'Nawyk',
+    es: 'Hábito',
+    en: 'Habit name',
+  },
+  descriptionLabel: {
+    pl: 'Opis',
+    es: 'Descripción ',
+    en: 'Description',
+  },
+  frequencyLabel: {
+    pl: 'Częstotliwość',
+    es: 'Frecuencia ',
+    en: 'Frequency',
+  },
+};
 
+function AddHabitScreen() {
+  const t = useTranslation(translations);
+  const { weekdays } = useLocale();
   const { openSnackbar } = useSnackbar();
 
   const { data: habits, isLoading } = useHabits();
@@ -76,47 +106,47 @@ function AddHabitScreen() {
   const disableActions = isAddingHabit;
 
   return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormHeader>
-          <FormPrimaryText>Create new habit</FormPrimaryText>
-          <FormErrorText>{errorText || ' '}</FormErrorText>
-        </FormHeader>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <FormPrimaryText>{t('title')}</FormPrimaryText>
+        <FormErrorText>{errorText || ' '}</FormErrorText>
+      </FormHeader>
 
-        <FormBody>
-          <TextField
-            inputRef={register}
-            name="name"
-            label="Habit name"
-            error={!!errors?.name}
-            variant="outlined"
-            disabled={disableActions}
-            fullWidth
-          />
+      <FormBody>
+        <TextField
+          inputRef={register}
+          name="name"
+          label={t('nameLabel')}
+          error={!!errors?.name}
+          variant="outlined"
+          disabled={disableActions}
+          fullWidth
+        />
 
-          <TextField
-            inputRef={register}
-            name="description"
-            label="Question (optional)"
-            error={!!errors?.description}
-            variant="outlined"
-            disabled={disableActions}
-            fullWidth
-          />
+        <TextField
+          inputRef={register}
+          name="description"
+          label={t('descriptionLabel')}
+          error={!!errors?.description}
+          variant="outlined"
+          disabled={disableActions}
+          fullWidth
+        />
 
-          <CheckboxGroup
-            label="Frequency"
-            name="frequency"
-            control={control}
-            getValues={getValues}
-            values={weekdays}
-            error={!!errors?.frequency}
-          />
+        <CheckboxGroup
+          label={t('frequencyLabel')}
+          name="frequency"
+          control={control}
+          getValues={getValues}
+          values={weekdays}
+          error={!!errors?.frequency}
+        />
 
-          <FormButton type="submit" pending={isAddingHabit}>
-            Create habit
-          </FormButton>
-        </FormBody>
-      </Form>
+        <FormButton type="submit" pending={isAddingHabit}>
+          {t('button')}
+        </FormButton>
+      </FormBody>
+    </Form>
   );
 }
 

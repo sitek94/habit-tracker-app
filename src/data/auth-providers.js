@@ -1,14 +1,14 @@
 // import { Apple as AppleIcon } from "mdi-material-ui";
-import { Facebook as FacebookIcon } from "mdi-material-ui";
-import { Github as GitHubIcon } from "mdi-material-ui";
-import { Google as GoogleIcon } from "mdi-material-ui";
+import { Facebook as FacebookIcon } from 'mdi-material-ui';
+import { Github as GitHubIcon } from 'mdi-material-ui';
+import { Google as GoogleIcon } from 'mdi-material-ui';
 // import { Microsoft as MicrosoftIcon } from "mdi-material-ui";
 // import { Twitter as TwitterIcon } from "mdi-material-ui";
 // import { Yahoo as YahooIcon } from "mdi-material-ui";
 
 /**
  * I created all the color objects using Material Design Color Tool
- * 
+ *
  * https://material.io/resources/color/#!/
  */
 const authProviders = [
@@ -19,35 +19,23 @@ const authProviders = [
   //   name: "Apple",
   // },
   {
-    id: "facebook.com",
-    color: {
-      main: '#3c5a99',
-      light: '#6e87ca',
-      dark: '#00316a',
-    },
+    id: 'facebook.com',
+    color: '#3c5a99',
     icon: <FacebookIcon />,
-    name: "Facebook",
+    name: 'Facebook',
   },
   {
-    id: "github.com",
-    color: {
-      main: '#24292e',
-      light: '#4c5157',
-      dark: '#000004',
-    },
+    id: 'github.com',
+    color: '#24292e',
     icon: <GitHubIcon />,
-    name: "GitHub",
+    name: 'GitHub',
     // scopes: ["repo"],
   },
   {
-    id: "google.com",
-    color: {
-      main: '#de5246',
-      light: '#ff8472',
-      dark: '#a61c1e',
-    },
+    id: 'google.com',
+    color: '#de5246',
     icon: <GoogleIcon />,
-    name: "Google",
+    name: 'Google',
   },
   // {
   //   id: "microsoft.com",

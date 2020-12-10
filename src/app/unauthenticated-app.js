@@ -1,14 +1,15 @@
 import * as React from 'react';
 import Button from '@material-ui/core/Button';
 import { Link as RouterLink, Route, Routes } from 'react-router-dom';
-import { AppBar, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, ButtonGroup, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { LandingScreen } from 'screens/landing';
 import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
 import { SignUpScreen } from 'screens/sign-up';
 import { LocaleSelect } from 'components/locale-select';
-import { useLocale } from 'locale';
-import { locales } from 'locale';
+import { useTranslation } from 'translations';
+import { GithubRepoLink } from 'components/github-repo-link';
+import { DarkModeSwitch } from 'components/dark-mode-switch';
 
 const useStyles = makeStyles((theme) => ({
   // App
@@ -29,8 +30,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   title: {
-    flex: 1,
+    marginRight: 'auto',
+    textTransform: 'none',
   },
+
+  // Button group
+  buttonGroup: {
+    marginLeft: 12,
+  }
 }));
 
 // App
@@ -48,37 +55,31 @@ function UnathenticatedApp() {
 }
 
 // Nav link
-function NavLink(props) {
-  return <Button component={RouterLink} color="inherit" {...props} />;
+function NavButton(props) {
+  return <Button component={RouterLink} color="inherit" disableElevation {...props} />;
 }
 
 // Navigation
 function Nav() {
+  const t = useTranslation();
   const classes = useStyles();
-
-  const { code, setLocale } = useLocale();
-
-  // Handle clicking on locale
-  const handleLocaleClick = (clickedLocaleCode) => {
-    const clickedLocale = locales.find(locale => locale.code === clickedLocaleCode);
-
-    setLocale(clickedLocale.import);
-  }
-
-  // Currently selected locale object
-  const selectedLocale = locales.find(locale => locale.code === code);
 
   return (
     <AppBar position="absolute">
       <Toolbar className={classes.toolbar}>
-        <Typography variant="h6" className={classes.title}>
-          Habit Tracker
-        </Typography>
+        <NavButton to="/home" className={classes.title}>
+          <Typography variant="h6">
+            Habit Tracker
+          </Typography>
+        </NavButton>
 
-        <NavLink to="/home">Home</NavLink>
-        <LocaleSelect selectedLocale={selectedLocale} onLocaleClick={handleLocaleClick} />
-        <NavLink to="/signin">Sign in</NavLink>
-        <NavLink to="/signup">Sign up</NavLink>
+        <DarkModeSwitch />
+        <GithubRepoLink />
+        <LocaleSelect />
+        <ButtonGroup variant="outlined" color="inherit" className={classes.buttonGroup}>
+          <NavButton to="/signin">{t('signIn')}</NavButton>
+          <NavButton to="/signup">{t('signUp')}</NavButton>
+        </ButtonGroup>
       </Toolbar>
     </AppBar>
   );

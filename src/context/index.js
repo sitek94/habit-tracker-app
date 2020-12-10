@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ReactQueryDevtools } from 'react-query-devtools';
+// import { ReactQueryDevtools } from 'react-query-devtools';
 import { ReactQueryCacheProvider, QueryCache } from 'react-query';
-import { MainThemeProvider, UserThemeProvider } from 'theme';
-import { MainLocaleProvider, UserLocaleProvider } from 'locale';
+import { ThemeProvider } from 'theme';
+import { LocaleProvider } from 'localization';
 import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { UserDataProvider } from './user-config-context';
+import { UserDataProvider } from './user-data-context';
 
 const queryCache = new QueryCache();
 
@@ -17,10 +17,10 @@ const queryCache = new QueryCache();
  */
 function AppProviders({ children }) {
   return (
-    <MainLocaleProvider>
+    <LocaleProvider>
       <ReactQueryCacheProvider queryCache={queryCache}>
         <Router>
-          <MainThemeProvider>
+          <ThemeProvider>
             <FirebaseProvider>
               <DialogProvider>
                 <SnackbarProvider>
@@ -28,11 +28,11 @@ function AppProviders({ children }) {
                 </SnackbarProvider>
               </DialogProvider>
             </FirebaseProvider>
-          </MainThemeProvider>
+          </ThemeProvider>
         </Router>
-        <ReactQueryDevtools position="bottom-left" />
+        {/* <ReactQueryDevtools position="bottom-left" /> */}
       </ReactQueryCacheProvider>
-    </MainLocaleProvider>
+    </LocaleProvider>
   );
 }
 
@@ -40,13 +40,7 @@ function AppProviders({ children }) {
  * Context used only when the user is authenticated
  */
 function AuthenticatedAppProviders({ children }) {
-  return (
-    <UserDataProvider>
-      <UserLocaleProvider>
-        <UserThemeProvider>{children}</UserThemeProvider>
-      </UserLocaleProvider>
-    </UserDataProvider>
-  );
+  return <UserDataProvider>{children}</UserDataProvider>;
 }
 
 export { AppProviders, AuthenticatedAppProviders };

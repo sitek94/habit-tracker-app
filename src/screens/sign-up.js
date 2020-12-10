@@ -16,8 +16,11 @@ import { signUpSchema } from 'data/constraints';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 import { AuthProviderList } from 'components/auth-providers-list';
+import { useTranslation } from 'translations';
 
 function SignUpScreen() {
+  const t = useTranslation();
+
   const { signUp, signInWithAuthProvider } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
@@ -35,7 +38,7 @@ function SignUpScreen() {
     event.preventDefault();
 
     run(signInWithAuthProvider(provider));
-  }
+  };
 
   const errorMessages = Object.values(errors);
   const isError = isAuthError || errorMessages.length !== 0;
@@ -44,16 +47,16 @@ function SignUpScreen() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>Sign up</FormPrimaryText>
+        <FormPrimaryText>{t('signUp')}</FormPrimaryText>
         <FormSecondaryText>
-          Already have an account? <FormLink to="/signin">Sign in</FormLink>
+          {t('hasAccountQuestion')} <FormLink to="/signin">{t('signIn')}</FormLink>
         </FormSecondaryText>
         <FormErrorText>{isError ? errorMessage : ' '}</FormErrorText>
       </FormHeader>
 
       <FormBody>
         <AuthProviderList
-          text="Sign up with"
+          text={t('signUpWith')}
           onAuthProviderClick={handleAuthProviderClick}
           disabled={isLoading}
         />
@@ -64,7 +67,7 @@ function SignUpScreen() {
           inputRef={register}
           name="email"
           autoComplete="email"
-          label="Email address"
+          label={t('email')}
           placeholder="john@doe.com"
           error={!!errors?.email}
           disabled={isLoading}
@@ -77,7 +80,7 @@ function SignUpScreen() {
           name="password"
           type="password"
           autoComplete="current-password"
-          label="Password"
+          label={t('password')}
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           error={!!errors?.password}
           disabled={isLoading}
@@ -89,7 +92,7 @@ function SignUpScreen() {
           name="passwordConfirmation"
           type="password"
           autoComplete="password"
-          label="Password confirmation"
+          label={t('passwordConfirmation')}
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           error={!!errors?.passwordConfirmation}
           disabled={isLoading}
@@ -98,7 +101,7 @@ function SignUpScreen() {
         />
 
         <FormButton type="submit" pending={isLoading}>
-          Sign up
+          {t('signUp')}
         </FormButton>
       </FormBody>
     </Form>

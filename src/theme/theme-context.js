@@ -12,8 +12,7 @@ function ThemeProvider({ children }) {
     // Theme object has to be spread here so that it properties can be accessed directly.
     ...theme,
 
-    // In addition to the theme object pass down `setTheme` so its possible to update
-    // the theme.
+    // Additional properties
     setTheme
   }
 

@@ -8,7 +8,7 @@ import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { UserDataProvider } from './user-config-context';
+import { UserDataProvider } from './user-data-context';
 
 const queryCache = new QueryCache();
 

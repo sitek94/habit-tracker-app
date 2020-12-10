@@ -16,14 +16,6 @@ import { TrackChanges as TrackChangesIcon } from '@material-ui/icons';
 import { useUpdatePerformanceGoal } from 'api/user-data';
 import { useTranslation } from 'translations';
 
-const translations = {
-  performanceGoal: {
-    "pl": "Dzienny cel",
-    "es": "Objetivo diario",
-    "en": "Daily goal"
-  }
-}
-
 // Create array of available values  [5, 10, ..., 100]
 const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
   const value = i * 5 + 5;
@@ -41,7 +33,7 @@ const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
  */
 function PerformanceTab() {
   const { performanceGoal } = useUserData();
-  const t = useTranslation(translations);
+  const t = useTranslation();
 
   const updatePerformanceGoal = useUpdatePerformanceGoal();
 
@@ -67,7 +59,7 @@ function PerformanceTab() {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-performance-goal-label">
-              {t('performanceGoal')}
+              {t('dailyGoal')}
             </InputLabel>
 
             {/* Mobile devices */}
@@ -75,7 +67,7 @@ function PerformanceTab() {
               <Select
                 id="mobile"
                 native
-                label={t('performanceGoal')}
+                label={t('dailyGoal')}
                 labelId="select-performance-goal-label"
                 value={performanceGoal}
                 onChange={handlePerformanceGoalChange}
@@ -92,7 +84,7 @@ function PerformanceTab() {
             {!isXs && (
               <Select
                 id="mobile up"
-                label={t('performanceGoal')}
+                label={t('dailyGoal')}
                 labelId="select-performance-goal-label"
                 value={performanceGoal}
                 onChange={handlePerformanceGoalChange}

@@ -42,19 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Translations
-const translations = {
-  habitName: {
-    "pl": "Nawyk",
-    "es": "Hábito",
-    "en": "Habit",
-  }
-}
-
 // Sortable Table
 function HabitsTable({ habits, checkmarks, dates }) {
   const locale = useLocale();
-  const t = useTranslation(translations);
+  const t = useTranslation();
   const classes = useStyles();
 
   const [order, setOrder] = React.useState('desc');
@@ -70,7 +61,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
   // Cells with option to sort the habits
   const sortableCells = [
     // { id: 'position', label: 'Nº', align: 'center' },
-    { id: 'name', label: t('habitName'), align: 'left' },
+    { id: 'name', label: t('habit'), align: 'left' },
   ];
 
   // Currently selected date range cells

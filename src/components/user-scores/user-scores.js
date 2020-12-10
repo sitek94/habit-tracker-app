@@ -12,42 +12,8 @@ import {
 } from './helpers';
 import { useTranslation } from 'translations';
 
-// Translations
-const translations = {
-  lastWeek: {
-    pl: 'Zeszły tydzień',
-    es: 'Semana pasada',
-    en: 'Last week',
-  },
-  thisWeek: {
-    pl: 'Obecny tydzień',
-    es: 'Esta semana',
-    en: 'This week',
-  },
-  today: {
-    pl: 'Dzisiaj',
-    es: 'Hoy',
-    en: 'Today',
-  },
-  yourPerformance: {
-    pl: 'Twoje wyniki',
-    es: 'Tus resultados',
-    en: 'Your performance',
-  },
-  goal: {
-    pl: 'Cel',
-    es: 'Objetivo',
-    en: 'Goal',
-  },
-  overallPerformance: {
-    pl: 'Wyniki całościowe',
-    es: 'Resultados totales',
-    en: 'Overall All Time Performance'
-  }
-};
-
 function UserScores({ checkmarks, goal }) {
-  const t = useTranslation(translations);
+  const t = useTranslation();
 
   // Score types that we track is 'last week', 'this week' and 'today'
   const scoreTypeList = React.useMemo(
@@ -102,7 +68,7 @@ function UserScores({ checkmarks, goal }) {
                 </CenteredBox>
               </ChartContainer>
 
-              <Label>{label}</Label>
+              <Label variant="body2">{label}</Label>
             </Grid>
           );
         })}
@@ -132,9 +98,9 @@ function FixedHeightDivider() {
   );
 }
 
-function Label({ children }) {
+function Label({ children, ...props }) {
   return (
-    <Typography align="center" color="textSecondary">
+    <Typography align="center" color="textSecondary" {...props}>
       {children}
     </Typography>
   );

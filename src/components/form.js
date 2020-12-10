@@ -11,14 +11,6 @@ import {
 } from '@material-ui/core';
 import { useTranslation } from 'translations';
 
-const translations = {
-  or: {
-    pl: 'lub',
-    es: 'o',
-    en: 'or',
-  },
-};
-
 /**
  * Main form wrapper component
  */

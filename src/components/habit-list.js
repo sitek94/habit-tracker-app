@@ -6,6 +6,7 @@ import {
   ListItem,
   // ListItemIcon,
   ListItemText,
+  Tooltip,
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
@@ -19,51 +20,10 @@ import { useSnackbar } from 'context/snackbar-context';
 import { useDeleteHabit } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'localization';
-
 import { useTranslation } from 'translations';
 
-// Translations
-const translations = {
-  dialogTitle: {
-    pl: 'Usunąć',
-    es: 'Borrar',
-    en: 'Delete',
-  },
-  dialogDescription: {
-    pl: `
-    Usunięty nawyk nie może zostać odzyskany. Wszystkie dane
-    zostanę usunięte.`,
-    es: `
-    Esta acción eliminará permanentemente este hábito. Esto no se puede deshacer.
-    `,
-    en: `
-    Deleted habit can't be recovered. All data 
-    associated with this habit will be deleted.`,
-  },
-  dialogConfirmButton: {
-    pl: 'Usuń',
-    es: 'Borrar',
-    en: 'Delete',
-  },
-  successMessage: {
-    pl: 'Nawyk usunięty!',
-    es: 'Hábito borrado!',
-    en: 'Habit deleted!',
-  },
-  editButton: {
-    pl: 'Edytuj nawyk',
-    es: 'Editar el hábito',
-    en: 'Edit habit',
-  },
-  deleteButton: {
-    pl: 'Usuń nawyk',
-    es: 'Borrar el hábito',
-    en: 'Delete habit',
-  },
-};
-
 function HabitListItem({ habit }) {
-  const t = useTranslation(translations);
+  const t = useTranslation();
   const { weekdays } = useLocale();
 
   const { id, name, description, frequency } = habit;
@@ -76,12 +36,12 @@ function HabitListItem({ habit }) {
   const handleDeleteClick = () => {
     // Open the dialog to ask the user if they're sure to delete the habit
     openDialog({
-      title: `${t('dialogTitle')} "${name}"?`,
-      description: t('dialogDescription'),
-      confirmText: t('dialogConfirmButton'),
+      title: `${t('deleteHabitQuestion')} "${name}"?`,
+      description: t('deleteHabitWarning'),
+      confirmText: t('deleteHabitConfirmation'),
       onConfirm: () => {
         deleteHabit(id, {
-          onSuccess: () => openSnackbar('success', t('successMessage')),
+          onSuccess: () => openSnackbar('success', t('habitDeleted')),
           onError: (error) => openSnackbar('error', error.message),
         });
       },
@@ -122,25 +82,29 @@ function HabitListItem({ habit }) {
       </Box>
 
       {/* Edit link */}
-      <IconButton
-        size={isXs ? 'small' : 'medium'}
-        component={RouterLink}
-        to={`/edit-habit/${id}`}
-        aria-label={t('editButton')}
-        disabled={disableActions}
-      >
-        <EditIcon />
-      </IconButton>
+      <Tooltip title={t('editHabit')}>
+        <IconButton
+          size={isXs ? 'small' : 'medium'}
+          component={RouterLink}
+          to={`/edit-habit/${id}`}
+          aria-label={t('editHabit')}
+          disabled={disableActions}
+        >
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
 
       {/* Delete button */}
-      <IconButton
-        size={isXs ? 'small' : 'medium'}
-        onClick={handleDeleteClick}
-        aria-label={t('deleteButton')}
-        disabled={disableActions}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title={t('deleteHabit')}>
+        <IconButton
+          size={isXs ? 'small' : 'medium'}
+          onClick={handleDeleteClick}
+          aria-label={t('deleteHabit')}
+          disabled={disableActions}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </ListItem>
   );
 }

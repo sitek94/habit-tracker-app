@@ -26,50 +26,6 @@ import {
 import { useUpdateTheme, useRemoveTheme } from 'api/appearance';
 import { useTranslation } from 'translations';
 
-// Translations
-const translations = {
-  primaryColor: {
-    pl: 'Kolor podstawowy',
-    es: 'Color primario',
-    en: 'Primary color',
-  },
-  secondaryColor: {
-    pl: 'Kolor dodatkowy',
-    es: 'Color secundario',
-    en: 'Secondary color',
-  },
-  darkMode: {
-    pl: 'Tryb nocny',
-    es: 'Modo oscuro',
-    en: 'Dark mode',
-  },
-  darkModeDescription: {
-    pl: `Zmniejsz ilość niebieskiego światła`,
-    es: `Ahorrar batería y cuidar tus ojos`,
-    en: `Displays mostly dark surfaces`,
-  },
-  resetTheme: {
-    pl: 'Zresetuj motyw',
-    es: 'Reinicializar tema',
-    en: 'Reset theme',
-  },
-  resetThemeDescription: {
-    pl: 'Zmiany zostaną zresetowane',
-    es: 'Los cambios se restablecerán',
-    en: 'Changes will be reset',
-  },
-  resetThemeButton: {
-    pl: 'Zresetuj',
-    es: 'Reiniciar',
-    en: 'Reset',
-  },
-  resetThemeNoChanges: {
-    pl: 'Nie wprowadzono żadnych zmian',
-    es: 'No se hicieron cambios',
-    en: 'No changes made',
-  }
-};
-
 /**
  * Appearance Tab
  *
@@ -77,7 +33,7 @@ const translations = {
  */
 function AppearanceTab({ disabled }) {
   const theme = useTheme();
-  const t = useTranslation(translations);
+  const t = useTranslation();
 
   const updateTheme = useUpdateTheme();
   const resetTheme = useRemoveTheme();

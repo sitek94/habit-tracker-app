@@ -15,45 +15,6 @@ import {
   ListItemText,
 } from '@material-ui/core';
 
-// Translations
-const translations = {
-  dialogTitle: {
-    pl: 'Usunąć konto?',
-    es: 'Eliminar cuenta?',
-    en: 'Delete account?',
-  },
-  dialogDescription: {
-    pl: `Usuniętego konta nie można odzyskać. Wszystkie dane zostanę usunięte.`,
-    es: `Esta acción eliminará permanentemente todos tus hábitos e datos. Esto no se puede deshacer.`,
-    en: `Deleted accounts can't be recovered. All data associated with your account will be deleted.`,
-  },
-  dialogConfirmButton: {
-    pl: 'Usuń konto',
-    es: 'Eliminar cuenta',
-    en: 'Delete account',
-  },
-  successMessage: {
-    pl: 'Konto usunięte!',
-    es: 'Cuenta eliminida!',
-    en: 'Account deleted!',
-  },
-  listItemPrimary: {
-    pl: 'Usuń konto',
-    es: 'Eliminar cuenta',
-    en: 'Delete account',
-  },
-  listItemSecondary: {
-    pl: `Wszystkie dane zostanę usunięte.`,
-    es: `Esto no se puede deshacer.`,
-    en: `Accounts can't be recovered`,
-  },
-  listItemButton: {
-    pl: 'Usuń',
-    es: 'Eliminar',
-    en: 'Delete',
-  }
-};
-
 /**
  * Account Tab
  *
@@ -63,21 +24,21 @@ function AccountTab({ disabled }) {
   const { deleteAccount } = useAuth();
   const { openDialog } = useDialog();
   const { openSnackbar } = useSnackbar();
-  const t = useTranslation(translations);
+  const t = useTranslation();
 
   const deleteUserData = useDeleteUserData();
 
   const handleDeleteAccountClick = () => {
     openDialog({
-      title: t('dialogTitle'),
-      description: t('dialogDescription'),
-      confirmText: t('dialogConfirmButton'),
+      title: t('deleteAccountQuestion'),
+      description: t('deleteAccountWarning'),
+      confirmText: t('deleteAccount'),
       onConfirm: async () => {
         try {
           await deleteAccount();
           await deleteUserData();
 
-          openSnackbar('success', t('successMessage'));
+          openSnackbar('success', t('accountDeleted'));
         } catch (error) {
           openSnackbar('error', error.message);
         }
@@ -96,8 +57,8 @@ function AccountTab({ disabled }) {
         </Hidden>
 
         <ListItemText
-          primary={t('listItemPrimary')}
-          secondary={t('listItemSecondary')}
+          primary={t('deleteAccount')}
+          secondary={t('deleteAccountWarningShort')}
         />
 
         <ListItemSecondaryAction>
@@ -107,7 +68,7 @@ function AccountTab({ disabled }) {
             variant="contained"
             onClick={handleDeleteAccountClick}
           >
-            {t('listItemButton')}
+            {t('deleteAccountConfirmation')}
           </Button>
         </ListItemSecondaryAction>
       </ListItem>

@@ -105,8 +105,21 @@ const translations = {
 
   /**
    * Appearance
-   *
    */
+
+  // Primary color
+  primaryColor: {
+    pl: 'Kolor podstawowy',
+    es: 'Color primario',
+    en: 'Primary color',
+  },
+
+  // Secondary color
+  secondaryColor: {
+    pl: 'Kolor dodatkowy',
+    es: 'Color secundario',
+    en: 'Secondary color',
+  },
 
   // Dark mode
   darkMode: {
@@ -124,6 +137,8 @@ const translations = {
     es: 'Encender/apagar modo oscuro',
     en: 'Toggle dark mode',
   },
+
+  // Reset theme
   resetTheme: {
     pl: 'Zresetuj motyw',
     es: 'Reinicializar tema',
@@ -136,13 +151,71 @@ const translations = {
   },
   resetThemeButton: {
     pl: 'Zresetuj',
-    es: 'Reiniciar',
+    es: 'Reinicia',
     en: 'Reset',
   },
   resetThemeNoChanges: {
     pl: 'Nie wprowadzono żadnych zmian',
     es: 'No se hicieron cambios',
     en: 'No changes made',
+  },
+
+  /**
+   * Account
+   */
+  deleteAccount: {
+    pl: 'Usuń konto',
+    es: 'Eliminar cuenta',
+    en: 'Delete account',
+  },
+  deleteAccountQuestion: {
+    pl: 'Usunąć konto?',
+    es: 'Eliminar cuenta?',
+    en: 'Delete account?',
+  },
+  deleteAccountWarning: {
+    pl: `Usuniętego konta nie można odzyskać. Wszystkie dane zostanę usunięte.`,
+    es: `Esta acción eliminará permanentemente todos tus hábitos e datos. Esto no se puede deshacer.`,
+    en: `Deleted accounts can't be recovered. All data associated with your account will be deleted.`,
+  },
+  deleteAccountWarningShort: {
+    pl: `Wszystkie dane zostanę usunięte.`,
+    es: `Esto no se puede deshacer.`,
+    en: `Accounts can't be recovered`,
+  },
+  deleteAccountConfirmation: {
+    pl: 'Usuń',
+    es: 'Eliminar',
+    en: 'Delete',
+  },
+  accountDeleted: {
+    pl: 'Konto usunięte!',
+    es: 'Cuenta eliminida!',
+    en: 'Account deleted!',
+  },
+
+  /**
+   * Performance
+   */
+  dailyGoal: {
+    pl: 'Dzienny cel',
+    es: 'Objetivo diario',
+    en: 'Daily goal',
+  },
+  yourPerformance: {
+    pl: 'Twoje wyniki',
+    es: 'Tus resultados',
+    en: 'Your performance',
+  },
+  goal: {
+    pl: 'Cel',
+    es: 'Objetivo',
+    en: 'Goal',
+  },
+  overallPerformance: {
+    pl: 'Wyniki całościowe',
+    es: 'Resultados totales',
+    en: 'Overall All Time Performance'
   },
 
   /**
@@ -155,9 +228,71 @@ const translations = {
   },
 
   /**
+   * Habits
+   */
+  habit: {
+    "pl": "Nawyk",
+    "es": "Hábito",
+    "en": "Habit",
+  },
+  deleteHabitQuestion: {
+    pl: 'Usunąć',
+    es: 'Eliminar',
+    en: 'Delete',
+  },
+  deleteHabitWarning: {
+    pl: `Usunięty nawyk nie może zostać odzyskany. Wszystkie dane zostanę usunięte.`,
+    es: `Esta acción eliminará permanentemente este hábito. Esto no se puede deshacer.`,
+    en: `Deleted habit can't be recovered. All data associated with this habit will be deleted.`,
+  },
+  deleteHabitConfirmation: {
+    pl: 'Usuń',
+    es: 'Eliminar',
+    en: 'Delete',
+  },
+  habitDeleted: {
+    pl: 'Nawyk usunięty!',
+    es: 'Hábito borrado!',
+    en: 'Habit deleted!',
+  },
+  editHabit: {
+    pl: 'Edytuj nawyk',
+    es: 'Edita el hábito',
+    en: 'Edit habit',
+  },
+  deleteHabit: {
+    pl: 'Usuń nawyk',
+    es: 'Elimina el hábito',
+    en: 'Delete habit',
+  },
+
+  /**
+   * Dates
+   */
+  lastWeek: {
+    pl: 'Zeszły tydzień',
+    es: 'Semana pasada',
+    en: 'Last week',
+  },
+  thisWeek: {
+    pl: 'Obecny tydzień',
+    es: 'Esta semana',
+    en: 'This week',
+  },
+  today: {
+    pl: 'Dzisiaj',
+    es: 'Hoy',
+    en: 'Today',
+  },
+
+  /**
    * Other
    */
-
+  delete: {
+    pl: 'Usuń',
+    es: 'Eliminar',
+    en: 'Delete',
+  },
   or: {
     pl: 'Lub',
     es: 'O',

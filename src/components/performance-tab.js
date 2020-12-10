@@ -14,6 +14,15 @@ import {
 } from '@material-ui/core';
 import { TrackChanges as TrackChangesIcon } from '@material-ui/icons';
 import { useUpdatePerformanceGoal } from 'api/user-data';
+import { useTranslation } from 'localization';
+
+const translations = {
+  performanceGoal: {
+    "pl": "Dzienny cel",
+    "es": "Objetivo diario",
+    "en": "Daily goal"
+  }
+}
 
 // Create array of available values  [5, 10, ..., 100]
 const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
@@ -32,6 +41,7 @@ const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
  */
 function PerformanceTab() {
   const { performanceGoal } = useUserData();
+  const t = useTranslation(translations);
 
   const updatePerformanceGoal = useUpdatePerformanceGoal();
 
@@ -57,7 +67,7 @@ function PerformanceTab() {
 
           <FormControl fullWidth variant="outlined">
             <InputLabel id="select-performance-goal-label">
-              Performance Goal
+              {t('performanceGoal')}
             </InputLabel>
 
             {/* Mobile devices */}
@@ -65,7 +75,7 @@ function PerformanceTab() {
               <Select
                 id="mobile"
                 native
-                label="Performance Goal"
+                label={t('performanceGoal')}
                 labelId="select-performance-goal-label"
                 value={performanceGoal}
                 onChange={handlePerformanceGoalChange}
@@ -82,7 +92,7 @@ function PerformanceTab() {
             {!isXs && (
               <Select
                 id="mobile up"
-                label="Performance Goal"
+                label={t('performanceGoal')}
                 labelId="select-performance-goal-label"
                 value={performanceGoal}
                 onChange={handlePerformanceGoalChange}

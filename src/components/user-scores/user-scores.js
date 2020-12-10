@@ -31,7 +31,7 @@ const translations = {
   },
   yourPerformance: {
     pl: 'Twoje wyniki',
-    es: 'Tu actuación',
+    es: 'Tus resultados',
     en: 'Your performance',
   },
   goal: {
@@ -40,8 +40,8 @@ const translations = {
     en: 'Goal',
   },
   overallPerformance: {
-    pl: 'Wynik całościowy',
-    es: 'Actuación total',
+    pl: 'Wyniki całościowe',
+    es: 'Resultados totales',
     en: 'Overall All Time Performance'
   }
 };

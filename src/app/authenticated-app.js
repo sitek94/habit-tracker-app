@@ -62,7 +62,7 @@ function AuthenticatedApp() {
         {/* Navbar */}
         <Navbar>
           <LocaleSelect onLocaleClick={handleLocaleClick} />
-          <GithubRepoLink />
+          <GithubRepoLink color="inherit" />
         </Navbar>
 
         {/* Sidebar */}

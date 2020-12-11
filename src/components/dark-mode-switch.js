@@ -15,7 +15,6 @@ function DarkModeSwitch(props) {
   return (
     <Tooltip title={label}>
       <IconButton
-        color="inherit"
         label={label}
         onClick={toggleDarkMode}
         {...props}

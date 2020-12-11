@@ -8,7 +8,7 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { LandingScreen } from 'screens/landing';
+import { FullPageImageBackground, LandingScreen } from 'screens/landing';
 import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
 import { SignUpScreen } from 'screens/sign-up';
@@ -54,7 +54,9 @@ function UnathenticatedApp() {
     <div className={classes.container}>
       <Nav />
       <main className={classes.content}>
-        <AppRoutes />
+        <FullPageImageBackground>
+          <AppRoutes />
+        </FullPageImageBackground>
       </main>
     </div>
   );
@@ -65,7 +67,7 @@ function NavButton(props) {
   return (
     <Button
       component={RouterLink}
-      color="inherit"
+      color="primary"
       disableElevation
       {...props}
     />
@@ -78,21 +80,21 @@ function Nav() {
   const classes = useStyles();
 
   return (
-    <AppBar position="absolute">
+    <AppBar color="inherit" position="absolute">
       <Toolbar className={classes.toolbar}>
         <NavButton to="/" className={classes.title}>
           <Typography variant="h6">Habit Tracker</Typography>
         </NavButton>
 
-        <DarkModeSwitch />
+        <DarkModeSwitch color="primary" />
 
-        <GithubRepoLink />
+        <GithubRepoLink color="primary" />
 
         <LocaleSelect />
 
         <ButtonGroup
           variant="outlined"
-          color="inherit"
+          color="primary"
           className={classes.buttonGroup}
         >
           <NavButton to="/signin">{t('signIn')}</NavButton>

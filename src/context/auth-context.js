@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useFirebase } from './firebase-context';
 import { useAsync } from 'utils/hooks';
 import { FullPageSpinner, FullPageErrorFallback } from 'components/lib';
+import { useNavigate } from 'react-router';
+import { useTheme } from '@material-ui/core';
 
 const AuthContext = React.createContext();
 AuthContext.displayName = 'AuthContext';
@@ -19,17 +21,20 @@ function AuthProvider(props) {
   } = useAsync();
 
   const { firebase, auth } = useFirebase();
+  const { resetTheme } = useTheme();
+  const navigate = useNavigate();
 
   // Auth state change observer
   React.useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setData(user);
+        navigate('dashboard')
       } else {
         setData(null);
       }
     });
-  }, [auth, setData]);
+  }, [auth, setData, navigate]);
 
   // Sign in (email, password)
   const signIn = React.useCallback(
@@ -65,8 +70,11 @@ function AuthProvider(props) {
 
   // Sign out
   const signOut = React.useCallback(() => {
-    return auth.signOut();
-  }, [auth]);
+    return auth.signOut()
+      .then(() => {
+        resetTheme();
+      });
+  }, [auth, resetTheme]);
 
   // Reset password
   const resetPassword = React.useCallback(

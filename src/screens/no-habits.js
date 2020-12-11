@@ -2,6 +2,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { ReactComponent as EmptyBox } from 'images/empty-box.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import { Fab, Box, Typography } from '@material-ui/core';
+import { useTranslation } from 'translations';
 
 /**
  * No Habits Screen
@@ -12,6 +13,8 @@ import { Fab, Box, Typography } from '@material-ui/core';
  * There is a big button that navigates the user to 'Add Habit Screen'
  */
 function NoHabitsScreen() {
+  const t = useTranslation();
+
   return (
     <Box
       sx={{
@@ -40,10 +43,10 @@ function NoHabitsScreen() {
         }}
       >
         <Typography variant="h5" gutterBottom>
-          There are no habits
+          {t('noHabitsTitle')}
         </Typography>
         <Typography variant="body1">
-          It looks like you don't have any habits yet, why don't you add one?
+          {t('noHabitsDescription')}
         </Typography>
       </Box>
       <Fab
@@ -60,7 +63,7 @@ function NoHabitsScreen() {
         >
           <AddIcon />
         </Box>
-        Add habit
+        {t('addHabit')}
       </Fab>
     </Box>
   );

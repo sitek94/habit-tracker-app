@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useUserData } from 'context/user-data-context';
+import { useUser } from 'context/user-context';
 import {
   Box,
   FormControl,
@@ -32,7 +32,7 @@ const performanceGoalValues = Array.from(Array(20)).map((_, i) => {
  * that can be changed is performance goal.
  */
 function PerformanceTab() {
-  const { performanceGoal } = useUserData();
+  const { performanceGoal } = useUser();
   const t = useTranslation();
 
   const updatePerformanceGoal = useUpdatePerformanceGoal();

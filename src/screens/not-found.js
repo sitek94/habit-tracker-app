@@ -2,6 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Fab, Box, Typography } from '@material-ui/core';
 import { Home as HomeIcon } from '@material-ui/icons';
 import { ReactComponent as HelloDarkness } from 'images/hello-darkness.svg';
+import { useTranslation } from 'translations';
 
 /**
  * Not Found Screen
@@ -11,6 +12,8 @@ import { ReactComponent as HelloDarkness } from 'images/hello-darkness.svg';
  * There is a big button that takes the user back to the 'Dashboard Screen'.
  */
 function NotFoundScreen() {
+  const t = useTranslation();
+
   return (
     <Box
       sx={{
@@ -37,7 +40,7 @@ function NotFoundScreen() {
           margin: 2,
         }}
       >
-        <Typography variant="h4">Sorry... nothing here.</Typography>
+        <Typography variant="h4">{t('notFoundMessage')}</Typography>
       </Box>
       <Fab
         variant="extended"
@@ -53,7 +56,7 @@ function NotFoundScreen() {
         >
           <HomeIcon />
         </Box>
-        Home
+        {t('goBack')}
       </Fab>
     </Box>
   );

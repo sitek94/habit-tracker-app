@@ -6,17 +6,17 @@ import { useTranslation } from 'translations';
 /**
  * Github Repo Link
  */
-function GithubRepoLink() {
+function GithubRepoLink(props) {
   const t = useTranslation();
 
   return (
     <Tooltip title={t('githubRepo')}>
       <IconButton
         target="_blank"
-        color="inherit"
         label={t('githubRepo')}
         rel="noopener noreferrer"
         href="https://github.com/sitek94/pocket-globe-app"
+        {...props}
       >
         <GitHubIcon />
       </IconButton>

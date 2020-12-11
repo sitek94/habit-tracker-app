@@ -50,7 +50,7 @@ const translations = {
 
   // Sign in
   signIn: {
-    pl: 'Zaloguj się',
+    pl: 'Login',
     es: 'Inicia sesión',
     en: 'Sign in',
   },
@@ -61,6 +61,11 @@ const translations = {
   },
 
   // Sign out
+  signOut: {
+    pl: 'Wyloguj',
+    es: 'Cerrar sesión',
+    en: 'Logout',
+  },
   signOutQuestion: {
     pl: 'Wylogować?',
     es: 'Salir?',
@@ -79,8 +84,8 @@ const translations = {
 
   // Sign up
   signUp: {
-    pl: 'Utwórz konto',
-    es: 'Crea una cuenta',
+    pl: 'Rejestracja',
+    es: 'Regístrate',
     en: 'Sign up',
   },
   signUpWith: {
@@ -215,7 +220,7 @@ const translations = {
   overallPerformance: {
     pl: 'Wyniki całościowe',
     es: 'Resultados totales',
-    en: 'Overall All Time Performance'
+    en: 'Overall All Time Performance',
   },
 
   /**
@@ -231,10 +236,69 @@ const translations = {
    * Habits
    */
   habit: {
-    "pl": "Nawyk",
-    "es": "Hábito",
-    "en": "Habit",
+    pl: 'Nawyk',
+    es: 'Hábito',
+    en: 'Habit',
   },
+
+  addHabit: {
+    pl: 'Dodaj nawyk',
+    es: 'Agregar hábito',
+    en: 'Add habit',
+  },
+  manageHabits: {
+    pl: 'Edytuj nawyki',
+    es: 'Editar hábitos',
+    en: 'Manage habits',
+  },
+
+  createNewHabit: {
+    pl: 'Dodaj nowy nawyk',
+    es: 'Crea un nuevo hábito',
+    en: 'Create new habit',
+  },
+  createHabit: {
+    pl: 'Dodaj nawyk',
+    es: 'Crear hábito',
+    en: 'Create habit',
+  },
+  habitNameLabel: {
+    pl: 'Nawyk',
+    es: 'Hábito',
+    en: 'Habit name',
+  },
+  habitDescriptionLabel: {
+    pl: 'Opis',
+    es: 'Descripción ',
+    en: 'Description',
+  },
+  habitFrequencyLabel: {
+    pl: 'Częstotliwość',
+    es: 'Frecuencia ',
+    en: 'Frequency',
+  },
+  habitAdded: {
+    pl: 'Nawyk dodany!',
+    es: 'Hábito creado!',
+    en: 'Habit added!',
+  },
+
+  editHabit: {
+    pl: 'Edytuj nawyk',
+    es: 'Editar el hábito',
+    en: 'Edit habit',
+  },
+  saveHabit: {
+    pl: 'Zapisz nawyk',
+    es: 'Guardar el hábito',
+    en: 'Save habit',
+  },
+  habitSaved: {
+    pl: 'Nawyk zapisany!',
+    es: 'Hábito guardado!',
+    en: 'Habit saved!',
+  },
+
   deleteHabitQuestion: {
     pl: 'Usunąć',
     es: 'Eliminar',
@@ -255,15 +319,35 @@ const translations = {
     es: 'Hábito borrado!',
     en: 'Habit deleted!',
   },
-  editHabit: {
-    pl: 'Edytuj nawyk',
-    es: 'Edita el hábito',
-    en: 'Edit habit',
-  },
   deleteHabit: {
     pl: 'Usuń nawyk',
     es: 'Elimina el hábito',
     en: 'Delete habit',
+  },
+
+  habitList: {
+    pl: 'Lista nawyków',
+    es: 'Lista de hábitos',
+    en: 'Habit list',
+  },
+
+  /**
+   * Landing page
+   */
+  landingQuoteFirstLine: {
+    pl: 'Najpierw tworzymy sami swoje nawyki,',
+    es: 'Primero hacemos nuestros hábitos',
+    en: 'We first make our habits,',
+  },
+  landingQuoteSecondLine: {
+    pl: 'potem nawyki tworzą nas.',
+    es: 'y luego nuestros hábitos nos hacen.',
+    en: 'then our habits make us.',
+  },
+  getStarted: {
+    pl: 'Zacznij teraz',
+    es: 'Comienza ahora',
+    en: 'Get started',
   },
 
   /**
@@ -288,6 +372,11 @@ const translations = {
   /**
    * Other
    */
+  settings: {
+    pl: 'Ustawienia',
+    es: 'Configuración',
+    en: 'Settings',
+  },
   delete: {
     pl: 'Usuń',
     es: 'Eliminar',
@@ -297,6 +386,38 @@ const translations = {
     pl: 'Lub',
     es: 'O',
     en: 'Or',
+  },
+
+  // Not found
+  notFoundMessage: {
+    pl: 'Nic tutaj nie ma!',
+    es: 'Parece que estás perdido!',
+    en: 'Are you lost?',
+  },
+  goBack: {
+    pl: 'Powrót',
+    es: 'Volver',
+    en: 'Go back',
+  },
+
+  // Habit not found
+  habitNotFound: {
+    pl: 'Hmmm, ten nawyk nie istnieje...',
+    es: 'Este hábito no existe!',
+    en: `This habit doesn't exist!`,
+  },
+
+  // No habits
+  noHabitsTitle: {
+    pl: 'Brak nawyków',
+    es: 'No hay hábitos',
+    en: 'There are no habits',
+  },
+  noHabitsDescription: {
+    pl:
+      'Wygląda na to, że nie masz jeszcze żadnych nawyków, może jakiś dodasz?',
+    es: 'Parece que aún no tienes ningún hábito, ¿por qué no agregas uno?',
+    en: `It looks like you don't have any habits yet, why don't you add one?`,
   },
 
   // Github repo

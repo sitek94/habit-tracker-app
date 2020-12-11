@@ -4,7 +4,7 @@ import {
   CssBaseline,
   MuiThemeProvider,
 } from '@material-ui/core';
-import { createTheme, defaultTheme } from './theme';
+import { createDefaultTheme, defaultTheme } from './theme';
 
 /**
  * Theme provider
@@ -13,18 +13,26 @@ function ThemeProvider({ children }) {
   const [theme, setTheme] = React.useState(defaultTheme);
 
   const toggleDarkMode = React.useCallback(() => {
-    const {
-      palette: { mode },
-    } = theme;
+    const { mode, primary, secondary } = theme.palette;
 
     setTheme(
       createMuiTheme({
         palette: {
+          primary,
+          secondary,
           mode: mode === 'light' ? 'dark' : 'light',
         },
       })
     );
   }, [theme]);
+
+  const resetTheme = React.useCallback(
+    () => {
+      const { mode } = theme.palette;
+      console.log(mode);
+      setTheme(createDefaultTheme(mode))
+    }, [theme]
+  )
 
   const themeValue = {
     // Theme object has to be spread here so that it properties can be accessed directly.
@@ -33,6 +41,7 @@ function ThemeProvider({ children }) {
     // Additional properties
     setTheme,
     toggleDarkMode,
+    resetTheme,
   };
 
   return (

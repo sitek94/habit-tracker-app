@@ -31,44 +31,19 @@ import {
 } from 'layout/authenticated-layout';
 import { GithubRepoLink } from 'components/github-repo-link';
 
-// Translations
-const translations = {
-  addHabit: {
-    pl: 'Dodaj nawyk',
-    es: 'Agregar hábito',
-    en: 'Add habit',
-  },
-  manageHabits: {
-    pl: 'Edytuj nawyki',
-    es: 'Editar hábitos',
-    en: 'Manage habits',
-  },
-  settings: {
-    pl: 'Ustawienia',
-    es: 'Configuración',
-    en: 'Settings',
-  },
-  logout: {
-    pl: 'Wyloguj',
-    es: 'Cerrar sesión',
-    en: 'Logout',
-  },
-};
-
 /**
  * Authenticated App
  */
 function AuthenticatedApp() {
   const { signOut } = useAuth();
   const { openDialog } = useDialog();
+  const t = useTranslation();
 
   const handleLogoutClick = () => {
     openDialog({
-      title: 'Sign out?',
-      description: `
-        While signed out you are unable to manage your profile and
-        conduct other activities that require you to be signed in.`,
-      confirmText: 'Sign out',
+      title: t('signOutQuestion'),
+      description: t('signOutDescription'),
+      confirmText: t('signOutConfirm'),
       onConfirm: signOut,
       color: 'secondary',
     });
@@ -80,8 +55,6 @@ function AuthenticatedApp() {
   const handleLocaleClick = (clickedLocaleCode) => {
     updateLocaleCode(clickedLocaleCode);
   };
-
-  const t = useTranslation(translations);
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
@@ -119,7 +92,7 @@ function AuthenticatedApp() {
               {t('settings')}
             </SidebarLink>
             <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
-              {t('logout')}
+              {t('signOut')}
             </SidebarButton>
           </List>
         </Sidebar>

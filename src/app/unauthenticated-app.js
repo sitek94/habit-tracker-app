@@ -1,7 +1,13 @@
 import * as React from 'react';
 import Button from '@material-ui/core/Button';
-import { Link as RouterLink, Route, Routes } from 'react-router-dom';
-import { AppBar, ButtonGroup, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { Link as RouterLink, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  AppBar,
+  ButtonGroup,
+  makeStyles,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import { LandingScreen } from 'screens/landing';
 import { ResetPasswordScreen } from 'screens/reset-password';
 import { SignInScreen } from 'screens/sign-in';
@@ -37,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   // Button group
   buttonGroup: {
     marginLeft: 12,
-  }
+  },
 }));
 
 // App
@@ -56,7 +62,14 @@ function UnathenticatedApp() {
 
 // Nav link
 function NavButton(props) {
-  return <Button component={RouterLink} color="inherit" disableElevation {...props} />;
+  return (
+    <Button
+      component={RouterLink}
+      color="inherit"
+      disableElevation
+      {...props}
+    />
+  );
 }
 
 // Navigation
@@ -67,16 +80,21 @@ function Nav() {
   return (
     <AppBar position="absolute">
       <Toolbar className={classes.toolbar}>
-        <NavButton to="/home" className={classes.title}>
-          <Typography variant="h6">
-            Habit Tracker
-          </Typography>
+        <NavButton to="/" className={classes.title}>
+          <Typography variant="h6">Habit Tracker</Typography>
         </NavButton>
 
         <DarkModeSwitch />
+
         <GithubRepoLink />
+
         <LocaleSelect />
-        <ButtonGroup variant="outlined" color="inherit" className={classes.buttonGroup}>
+
+        <ButtonGroup
+          variant="outlined"
+          color="inherit"
+          className={classes.buttonGroup}
+        >
           <NavButton to="/signin">{t('signIn')}</NavButton>
           <NavButton to="/signup">{t('signUp')}</NavButton>
         </ButtonGroup>
@@ -89,10 +107,11 @@ function Nav() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/home" element={<LandingScreen />} />
+      <Route path="/" element={<LandingScreen />} />
       <Route path="/signin" element={<SignInScreen />} />
       <Route path="/signup" element={<SignUpScreen />} />
       <Route path="/reset-password" element={<ResetPasswordScreen />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }

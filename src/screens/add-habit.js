@@ -25,37 +25,8 @@ const initialHabit = {
   frequency: [],
 };
 
-// Translations
-const translations = {
-  title: {
-    pl: 'Dodaj nowy nawyk',
-    es: 'Añadir un nuevo hábito',
-    en: 'Create new habit',
-  },
-  button: {
-    pl: 'Dodaj nawyk',
-    es: 'Añadir hábito',
-    en: 'Create habit',
-  },
-  nameLabel: {
-    pl: 'Nawyk',
-    es: 'Hábito',
-    en: 'Habit name',
-  },
-  descriptionLabel: {
-    pl: 'Opis',
-    es: 'Descripción ',
-    en: 'Description',
-  },
-  frequencyLabel: {
-    pl: 'Częstotliwość',
-    es: 'Frecuencia ',
-    en: 'Frequency',
-  },
-};
-
 function AddHabitScreen() {
-  const t = useTranslation(translations);
+  const t = useTranslation();
   const { weekdays } = useLocale();
   const { openSnackbar } = useSnackbar();
 
@@ -82,7 +53,7 @@ function AddHabitScreen() {
     addHabit(
       { name, description, frequency, position },
       {
-        onSuccess: () => openSnackbar('success', 'Habit added!'),
+        onSuccess: () => openSnackbar('success', t('habitAdded')),
       }
     );
     reset(initialHabit);
@@ -108,7 +79,7 @@ function AddHabitScreen() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
-        <FormPrimaryText>{t('title')}</FormPrimaryText>
+        <FormPrimaryText>{t('createNewHabit')}</FormPrimaryText>
         <FormErrorText>{errorText || ' '}</FormErrorText>
       </FormHeader>
 
@@ -116,7 +87,7 @@ function AddHabitScreen() {
         <TextField
           inputRef={register}
           name="name"
-          label={t('nameLabel')}
+          label={t('habitNameLabel')}
           error={!!errors?.name}
           variant="outlined"
           disabled={disableActions}
@@ -126,7 +97,7 @@ function AddHabitScreen() {
         <TextField
           inputRef={register}
           name="description"
-          label={t('descriptionLabel')}
+          label={t('habitDescriptionLabel')}
           error={!!errors?.description}
           variant="outlined"
           disabled={disableActions}
@@ -134,7 +105,7 @@ function AddHabitScreen() {
         />
 
         <CheckboxGroup
-          label={t('frequencyLabel')}
+          label={t('habitFrequencyLabel')}
           name="frequency"
           control={control}
           getValues={getValues}
@@ -143,7 +114,7 @@ function AddHabitScreen() {
         />
 
         <FormButton type="submit" pending={isAddingHabit}>
-          {t('button')}
+          {t('createHabit')}
         </FormButton>
       </FormBody>
     </Form>

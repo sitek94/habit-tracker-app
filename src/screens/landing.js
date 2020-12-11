@@ -1,6 +1,7 @@
 import { Fab, makeStyles, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import landscape from 'images/landscape.jpg';
+import { useTranslation } from 'translations';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -23,26 +24,27 @@ const useStyles = makeStyles((theme) => ({
 
 function LandingScreen() {
   const classes = useStyles();
+  const t = useTranslation();
 
   return (
     <div className={classes.image}>
       <div className={classes.textBox}>
         <Typography variant="h2" component="h1">
-          Achieve anything
+          {t('landingMainText')}
         </Typography>
 
         <Typography variant="h3" gutterBottom>
-          one step at a time
+          {t('landingSecondaryText')}
         </Typography>
 
         <Fab
           to="/signup"
           component={RouterLink}
-          aria-label="Get started"
+          aria-label={t('getStarted')}
           color="primary"
           variant="extended"
         >
-          Get Started
+          {t('getStarted')}
         </Fab>
       </div>
     </div>

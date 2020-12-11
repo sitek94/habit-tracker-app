@@ -70,7 +70,7 @@ function WeekBarChart({ checkmarks, dates, habitsCount }) {
       labelTextColor={getContrastText(primary.main)}
 
       // Animation disabled in development
-      animate={false}
+      // animate={false}
 
       // Interactivity - for the moment disabled. In the future might add some details.
       isInteractive={false}

@@ -8,8 +8,8 @@ import { createTheme, defaultThemeConstants } from 'theme';
 import { useTheme } from '@material-ui/core';
 import { useLocale } from 'localization';
 
-const UserDataContext = React.createContext();
-UserDataContext.displayName = 'UserDataContext';
+const UserContext = React.createContext();
+UserContext.displayName = 'UserContext';
 
 // Default user data object
 const defaultUserData = {
@@ -26,7 +26,7 @@ const defaultUserData = {
  * Provides user data object, which is updated whenever user data
  * changes in the database.
  */
-function UserDataProvider({ children }) {
+function UserProvider({ children }) {
   const {
     data: userData,
     setData: setUserData,
@@ -106,21 +106,21 @@ function UserDataProvider({ children }) {
   // User data successfully loaded
   if (isSuccess) {
     return (
-      <UserDataContext.Provider value={userData}>
+      <UserContext.Provider value={userData}>
         {children}
-      </UserDataContext.Provider>
+      </UserContext.Provider>
     );
   }
 
   throw new Error(`Unhandled status: ${status}`);
 }
 
-function useUserData() {
-  const context = React.useContext(UserDataContext);
+function useUser() {
+  const context = React.useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUserData must be used within a UserDataProvider`);
+    throw new Error(`useUser must be used within a UserProvider`);
   }
   return context;
 }
 
-export { UserDataProvider, useUserData };
+export { UserProvider, useUser };

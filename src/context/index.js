@@ -8,7 +8,7 @@ import { AuthProvider } from './auth-context';
 import { FirebaseProvider } from './firebase-context';
 import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
-import { UserDataProvider } from './user-data-context';
+import { UserProvider } from './user-context';
 
 const queryCache = new QueryCache();
 
@@ -40,7 +40,7 @@ function AppProviders({ children }) {
  * Context used only when the user is authenticated
  */
 function AuthenticatedAppProviders({ children }) {
-  return <UserDataProvider>{children}</UserDataProvider>;
+  return <UserProvider>{children}</UserProvider>;
 }
 
 export { AppProviders, AuthenticatedAppProviders };

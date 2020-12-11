@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCheckmarks } from 'api/checkmarks';
 import { useHabits } from 'api/habits';
 import { NoHabitsScreen } from 'screens/no-habits';
-import { useUserData } from 'context/user-data-context';
+import { useUser } from 'context/user-context';
 import { useLocale } from 'localization';
 import { WeekBarChart } from 'components/week-bar-chart';
 import { HabitsTable } from 'components/habits-table';
@@ -45,7 +45,7 @@ function DashboardScreen() {
   // Checkmarks data
   const { data: checkmarks, isError: isCheckmarksError } = useCheckmarks();
 
-  const { performanceGoal } = useUserData();
+  const { performanceGoal } = useUser();
 
   // Date
   const [selectedDate, setSelectedDate] = React.useState(new Date());

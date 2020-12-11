@@ -163,7 +163,7 @@ const translations = {
     pl: 'Nie wprowadzono żadnych zmian',
     es: 'No se hicieron cambios',
     en: 'No changes made',
-  },  
+  },
 
   /**
    * Account
@@ -240,7 +240,7 @@ const translations = {
     es: 'Hábito',
     en: 'Habit',
   },
-  
+
   addHabit: {
     pl: 'Dodaj nawyk',
     es: 'Agregar hábito',
@@ -325,7 +325,6 @@ const translations = {
     en: 'Delete habit',
   },
 
-  
   habitList: {
     pl: 'Lista nawyków',
     es: 'Lista de hábitos',
@@ -335,15 +334,15 @@ const translations = {
   /**
    * Landing page
    */
-  landingMainText: {
-    pl: 'Osiągnij wszystko',
-    es: 'Consigue cualquier cosa',
-    en: 'Achieve anything',
+  landingQuoteFirstLine: {
+    pl: 'Najpierw tworzymy sami swoje nawyki,',
+    es: 'Primero hacemos nuestros hábitos',
+    en: 'We first make our habits,',
   },
-  landingSecondaryText: {
-    pl: 'krok po kroku',
-    es: 'paso a paso',
-    en: 'one step a time',
+  landingQuoteSecondLine: {
+    pl: 'potem nawyki tworzą nas.',
+    es: 'y luego nuestros hábitos nos hacen.',
+    en: 'then our habits make us.',
   },
   getStarted: {
     pl: 'Zacznij teraz',
@@ -409,8 +408,16 @@ const translations = {
   },
 
   // No habits
-  noHabits: {
-    pl: 'Brak nawy'
+  noHabitsTitle: {
+    pl: 'Brak nawyków',
+    es: 'No hay hábitos',
+    en: 'There are no habits',
+  },
+  noHabitsDescription: {
+    pl:
+      'Wygląda na to, że nie masz jeszcze żadnych nawyków, może jakiś dodasz?',
+    es: 'Parece que aún no tienes ningún hábito, ¿por qué no agregas uno?',
+    en: `It looks like you don't have any habits yet, why don't you add one?`,
   },
 
   // Github repo

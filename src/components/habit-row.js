@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Checkmark } from 'components/checkmark';
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 import { getDay, isFuture } from 'date-fns';
-import { useAddCheckmark, useDeleteCheckmark, useUpdateCheckmarkValue } from 'api/checkmarks';
-import { COMPLETED, EMPTY, FAILED } from 'data/constants';
+import { EMPTY } from 'data/constants';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -19,29 +18,7 @@ const useStyles = makeStyles((theme) => ({
 function HabitRow({ habit, dates, checkmarks }) {
   const classes = useStyles();
 
-  const { id, name, frequency, /* position */ } = habit;
-
-  const [addCheckmark] = useAddCheckmark();
-  const [updateCheckmarkValue] = useUpdateCheckmarkValue();
-  const [deleteCheckmark] = useDeleteCheckmark();
-
-  const handleCheckmarkClick = React.useCallback(
-    ({ checkmarkId, date, value }) => {
-      // Add `completed` checkmark if it doesn't exists
-      if (value === EMPTY) {
-        addCheckmark({ habitId: id, date, value: COMPLETED });
-
-        // Update checkmark to `failed` if it is `completed`
-      } else if (value === COMPLETED) {
-        updateCheckmarkValue({ id: checkmarkId, value: FAILED });
-
-        // If checkmark is `failed` remove it from the database
-      } else if (value === FAILED) {
-        deleteCheckmark(checkmarkId);
-      }
-    },
-    [id, addCheckmark, updateCheckmarkValue, deleteCheckmark]
-  );
+  const { id, name, frequency /* position */ } = habit;
 
   return (
     <TableRow hover>
@@ -67,20 +44,17 @@ function HabitRow({ habit, dates, checkmarks }) {
         // Checkmark is disabled if the date is not tracked or date is in the future
         const disabled =
           !frequency.includes(getDay(dateObj)) || isFuture(dateObj);
-          
-        // Get checkmark's `id` and `value`. If `undefined` use default values.
-        const { id, value } = checkmarks.find((d) => d.date === date) || {
-          id: '',
-          value: EMPTY,
-        };
+
+        // Find checkmark
+        const checkmark = checkmarks.find((d) => d.date === date);
 
         return (
-          <TableCell align="center" key={date}  className={classes.minWidth}>
+          <TableCell align="center" key={date} className={classes.minWidth}>
             <Checkmark
-              value={value}
-              onClick={() =>
-                handleCheckmarkClick({ checkmarkId: id, value, date })
-              }
+              id={checkmark?.id || null}
+              initialValue={checkmark?.value || EMPTY}
+              habitId={id}
+              date={date}
               disabled={disabled}
             />
           </TableCell>

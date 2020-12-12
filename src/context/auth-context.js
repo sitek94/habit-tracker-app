@@ -26,7 +26,7 @@ function AuthProvider(props) {
 
   // Auth state change observer
   React.useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setData(user);
         navigate('dashboard')
@@ -34,6 +34,10 @@ function AuthProvider(props) {
         setData(null);
       }
     });
+
+    return () => {
+      unsubscribe();
+    }
   }, [auth, setData, navigate]);
 
   // Sign in (email, password)

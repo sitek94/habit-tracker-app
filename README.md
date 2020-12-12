@@ -5,10 +5,28 @@
 **Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science).
 The app lets you keep track of your habits. You can add new habit and edit or delete existing ones.
 
-In the **Dashboard** section you can change the completion state of each habit. Also, you will be given some immediate feedback on your progress, such as
-a weekly performance bar chart.
+### Screenshots
 
-Sign in/up using **Facebook**, **GitHub**, **Google** or create a new account using your email address.
+* Landing Page
+![Landing Page](screenshots/landing.png)
+
+* Sign up using **Facebook**, **GitHub**, **Google** or create a new account using your email address.
+![Sign in](screenshots/sign-up.png)
+
+* Create new habit
+![Create habit](screenshots/add-habit.png)
+
+* Manage your habits - preview, edit or delete your habits
+![Manage habits](screenshots/manage-habits.png)
+
+* Keep track of your habits in the Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+* Change your settings
+![Settings](screenshots/settings.png)
+
+* Customize the app the way you want
+![Custom theme](layout-theme.png)
 
 ## Technologies and libraries used
 

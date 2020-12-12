@@ -6,35 +6,50 @@ import { format } from 'date-fns';
 import { COMPLETED, FAILED } from 'data/constants';
 import { useLocale } from 'localization';
 
-function WeekBarChart({ checkmarks, dates, habitsCount }) {
-
+function WeekBarChart({ checkmarks, dates }) {
   // Style
   const { palette } = useTheme();
   const { primary, secondary, getContrastText, text } = palette;
 
   // Data
-  const data = dates.map((date) => {  
+  const data = dates.map((date) => {
     // Values for the current date
     const values = checkmarks
-      .filter(checkmark => checkmark.date === date)
-      .map(checkmark => checkmark.value);
-      
+      .filter((checkmark) => checkmark.date === date)
+      .map((checkmark) => checkmark.value);
+    
+    // There are no checkmarks for this date
+    if (!values.length) {
+      return {
+        date,
+        completed: null,
+        failed: null
+      }
+    } 
+    
     // Count completed and failed values
     const counts = countBy(values);
-      
+
+    const avg = (value) => Math.round((value / values.length) * 100);
+
+    const completed = avg(counts[COMPLETED]) || null;
+    const failed = -avg(counts[FAILED]) || null;
+
     // Return object in the shape accepted by bar chart
     return {
-        date,
-        completed: counts[COMPLETED] || null,
-        failed: -counts[FAILED] || null,
-      }
+      date,
+      completed,
+      failed,
+    };
   });
 
   const locale = useLocale();
-  
+
   // Label formats
-  const xValueFormat = date => format(new Date(date), 'd-MMM', { locale });
-  const yValueFormat = value => Math.floor((value / habitsCount) * 100) + '%';
+  const xValueFormat = (date) => format(new Date(date), 'd-MMM', { locale });
+
+  // Check if value exists to prevent funny outputs like `null%`
+  const yValueFormat = (v) => v ? v + '%' : '';
 
   return (
     <ResponsiveBar
@@ -42,9 +57,10 @@ function WeekBarChart({ checkmarks, dates, habitsCount }) {
       keys={['completed', 'failed']}
       indexBy="date"
       margin={{ top: 16, right: 16, bottom: 32, left: 16 }}
+      padding={0.3}
       colors={[primary.main, secondary.main]}
       theme={{
-        textColor: text.secondary
+        textColor: text.secondary,
       }}
       valueScale={{ type: 'linear' }}
       axisLeft={false}
@@ -53,7 +69,6 @@ function WeekBarChart({ checkmarks, dates, habitsCount }) {
         tickSize: 0,
         tickPadding: 12,
       }}
-
       // Horizontal line between positive and negative bars
       markers={[
         {
@@ -68,7 +83,6 @@ function WeekBarChart({ checkmarks, dates, habitsCount }) {
       labelSkipWidth={12}
       labelSkipHeight={12}
       labelTextColor={getContrastText(primary.main)}
-
       // Animation disabled in development
       // animate={false}
 

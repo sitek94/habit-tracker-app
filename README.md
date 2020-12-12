@@ -2,8 +2,8 @@
 
 ## About
 
-**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science).
-The app lets you keep track of your habits. You can add new habit and edit or delete existing ones.
+**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science). 
+What can I say, **Habit Tracker** lets you keep track of your habits :fireworks: :ok_hand: :tada:
 
 ### Screenshots
 

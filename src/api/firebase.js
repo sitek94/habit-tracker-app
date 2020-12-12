@@ -6,10 +6,15 @@ import 'firebase/firestore';
 
 import firebaseConfig from './firebase-config';
 
-firebase.initializeApp(firebaseConfig);
+class Firebase {
+  constructor() {
+    firebase.initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
-export const database = firebase.database();
+    this.firebase = firebase;
+    this.auth = firebase.auth();
+    this.firestore = firebase.firestore();
+    this.db = firebase.database();
+  }
+}
 
-export default firebase;
+export default Firebase;

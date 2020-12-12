@@ -29,6 +29,10 @@ const variants = {
 function Checkmark({ id, initialValue, habitId, date, disabled }) {
   const [value, setValue] = React.useState(initialValue);
 
+  React.useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const updateCheckmarkInDb = useUpdateCheckmarkInDb();
 
   // Debounced update function

@@ -6,16 +6,10 @@ import { useUser } from 'context/user-context';
 import { useLocale } from 'localization';
 import { WeekBarChart } from 'components/week-bar-chart';
 import { HabitsTable } from 'components/habits-table';
-import { FullPageSpinner } from 'components/lib';
+import { FullPageErrorFallback, FullPageSpinner } from 'components/lib';
 import { UserScores } from 'components/user-scores';
 import { WeekPicker } from 'components/week-picker';
-import {
-  Box,
-  Container,
-  Grid,
-  Hidden,
-  Paper,
-} from '@material-ui/core';
+import { Box, Container, Grid, Hidden, Paper } from '@material-ui/core';
 import {
   eachDayOfInterval,
   endOfWeek,
@@ -39,11 +33,11 @@ function DashboardScreen() {
   // Habits data
   const {
     data: habits,
+    error: habitsError,
     isLoading: isLoadingHabits,
-    isError: isHabitsError,
   } = useHabits();
   // Checkmarks data
-  const { data: checkmarks, isError: isCheckmarksError } = useCheckmarks();
+  const { data: checkmarks, error: checkmarksError } = useCheckmarks();
 
   const { performanceGoal } = useUser();
 
@@ -62,18 +56,24 @@ function DashboardScreen() {
     selectedDates.includes(checkmark.date)
   );
 
+  // Loading habits data
   if (isLoadingHabits) {
     return <FullPageSpinner />;
   }
 
-  if (isHabitsError || isCheckmarksError) {
-    return <div>Error</div>;
+  const error = habitsError || checkmarksError;
+
+  // Ignore cancelled errors
+  if (error && checkmarksError.constructor.name !== 'CancelledError') {
+    return <FullPageErrorFallback error={error} />;
   }
 
+  // There are no habits
   if (!habits.length) {
     return <NoHabitsScreen />;
   }
 
+  // Bar chart
   const barChart = (
     <SmallPaper>
       <WeekBarChart
@@ -84,6 +84,7 @@ function DashboardScreen() {
     </SmallPaper>
   );
 
+  // Week picker
   const weekPicker = (
     <SmallPaper>
       <WeekPicker
@@ -93,6 +94,7 @@ function DashboardScreen() {
     </SmallPaper>
   );
 
+  // Habits and checkmarks table
   const habitsTable = (
     <LargePaper>
       <HabitsTable
@@ -103,6 +105,7 @@ function DashboardScreen() {
     </LargePaper>
   );
 
+  // User scores panel
   const userScores = (
     <SmallPaper>
       <UserScores checkmarks={checkmarks} goal={performanceGoal} />

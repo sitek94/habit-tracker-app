@@ -63,8 +63,16 @@ function DashboardScreen() {
 
   const error = habitsError || checkmarksError;
 
+  /**
+   * Temporary fix
+   * 
+   * Cancelled query is throwing `CancelledError`. In V3 cancellation will not throw an error anymore.
+   * https://github.com/tannerlinsley/react-query/discussions/1179
+   */
+  const isCancelledError = checkmarksError && checkmarksError.hasOwnProperty('silent');
+
   // Ignore cancelled errors
-  if (error && checkmarksError.constructor.name !== 'CancelledError') {
+  if (error && !isCancelledError) {
     return <FullPageErrorFallback error={error} />;
   }
 

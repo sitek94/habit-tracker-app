@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+# Habit Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## About
+
+**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science).
+The app lets you keep track of your habits. You can add new habit and edit or delete existing ones.
+
+In the **Dashboard** section you can change the completion state of each habit. Also, you will be given some immediate feedback on your progress, such as
+a weekly performance bar chart.
+
+Sign in/up using **Facebook**, **GitHub**, **Google** or create a new account using your email address.
+
+## Technologies and libraries used
+
+* React
+* React Query
+* React Router
+* React Hook Form
+* Material UI
+* Firebase
+  * Authentication
+  * Realtime Database
+
+## Challenges
+
+I learned a lot while building the project and for sure I'm going to learn a lot more while maintaining it. 
+That's why I want to keep track of the challenges that I've had along the way so that I can reference them in the future.
+
+### Database and data structure
+
+How should I store habit's completion state for each day? Should each habit have an array with the dates 
+when it was performed or should I store dates and each date would keep track of the habits that where performed on that day? 
+
+I tried to structure the data so that it is saved and retrieved as easily as possible. To do so I've been following 
+[Firebase guidelines](https://firebase.google.com/docs/database/web/structure-data) and in the end came up with the following data structure:
+
+```json
+{
+    "habits": {
+        "user-one": {
+            "habit-one": {
+                "name": "Reading",
+                "description": "Read a book for at least 30 min in the morning",
+                "frequency": [0,1,2,3,4]
+            }
+        }
+    },
+    "checkmarks": {
+        "user-one": {
+            "checkmark-id": {
+                "habitId": "habit-one",
+                "date": "2020-11-11",
+                "value": "completed",
+            }
+        }
+    },
+    "users": {
+        "user-one": {
+            "locale": {
+                "code": "en-GB"
+            },
+            "theme": {
+                "primaryColor": "blue",
+                "secondaryColor": "red",
+                "dark": true
+            },
+            "performanceGoal": 80
+        }
+    }
+}
+
+```
+
+### Authentication Layer
+
+For quite some time I was using Private and Public routes to prevent an authenticated user from accessing the parts of the app available only for logged in user.
+It was fine but I wanted to use a different layout for authenticated users (additional sidebar on the left).
+
+I found the perfect solution in a [blog post by Kent C. Dodds](https://kentcdodds.com/blog/authentication-in-react-applications):
+
+```jsx
+function App() {
+  const user = useUser();
+  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+}
+```
+
+### Localization and language
+
+I've never before implemented this in an app and I really wanted to give it a try. My main goal was to give the user an option to change their locale and language.
+Although this goal was achieved, the solution is far from ideal. First of all, I think that it would be better to split these two layers. For example in YouTube one
+can open settings and change either Language or Location.
 
 ## Available Scripts
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 In the project directory, you can run:
 
-### `yarn start`
+- npm start
+- npm test
+- npm run build
+- npm run eject
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For the detailed description of available scripts see [CRA Documentation](https://create-react-app.dev/docs/available-scripts)

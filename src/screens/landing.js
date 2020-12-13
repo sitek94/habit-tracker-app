@@ -15,8 +15,7 @@ function LandingScreen() {
   const t = useTranslation();
 
   return (
-    // <FullPageImageBackground>
-    <CenteredBox>
+    <Box sx={{ textAlign: 'center' }}>
       <QuoteBox>
         <Quote>
           <FaQuoteLeft /> {t('landingQuoteFirstLine')}
@@ -28,7 +27,7 @@ function LandingScreen() {
       </QuoteBox>
 
       <GetStartedButton>{t('getStarted')}</GetStartedButton>
-    </CenteredBox>
+    </Box>
   );
 }
 
@@ -47,32 +46,15 @@ export function FullPageImageBackground({ children }) {
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'stretch',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
         background: `
           linear-gradient(
             to right bottom, 
             ${alpha(lightRgb, 0.3)}, 
             ${alpha(darkRgb, 0.8)}), 
           url(${hero})`,
-      }}
-    >
-      {children}
-    </Box>
-  );
-}
-
-function CenteredBox({ children }) {
-  return (
-    <Box
-      sx={{
-        // Centered box
-        position: 'absolute',
-        top: '60%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        textAlign: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
       }}
     >
       {children}
@@ -88,6 +70,7 @@ function QuoteBox({ children }) {
       sx={{
         textAlign: 'right',
         color: theme.palette.common.white,
+        mb: { xs: theme.spacing(1), sm: 0 },
       }}
     >
       {children}
@@ -97,9 +80,19 @@ function QuoteBox({ children }) {
 
 function Quote({ children }) {
   return (
-    <Typography variant="h2" component="p" align="center" noWrap>
-      {children}
-    </Typography>
+    <Box
+      clone
+      sx={{
+        textAlign: 'center',
+        whiteSpace: { xs: 'initial', sm: 'nowrap' },
+        maxWidth: { xs: 295, sm: 'none' },
+        fontSize: { xs: '2.5rem', md: '3.75rem' },
+      }}
+    >
+      <Typography variant="h2" component="p">
+        {children}
+      </Typography>
+    </Box>
   );
 }
 
@@ -131,12 +124,7 @@ function GetStartedButton(props) {
         fontWeight: theme.typography.fontWeightBold,
       }}
     >
-      <Fab
-        to="/signup"
-        component={RouterLink}
-        variant="extended"
-        {...props}
-      />
+      <Fab to="/signup" component={RouterLink} variant="extended" {...props} />
     </Box>
   );
 }

@@ -2,8 +2,17 @@ import * as React from 'react';
 import Button from '@material-ui/core/Button';
 import { Link as RouterLink, Navigate, Route, Routes } from 'react-router-dom';
 import {
+  AccountCircle as AccountCircleIcon,
+  PersonAdd as PersonAddIcon,
+  MoreVert as MoreVertIcon,
+} from '@material-ui/icons';
+import {
   AppBar,
   ButtonGroup,
+  Hidden,
+  IconButton,
+  Menu,
+  MenuItem,
   makeStyles,
   Toolbar,
   Typography,
@@ -34,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   // Nav
   toolbar: {
     justifyContent: 'flex-end',
+    color: theme.palette.text.primary,
   },
   title: {
     marginRight: 'auto',
@@ -67,7 +77,7 @@ function NavButton(props) {
   return (
     <Button
       component={RouterLink}
-      color="primary"
+      color="inherit"
       disableElevation
       {...props}
     />
@@ -79,29 +89,87 @@ function Nav() {
   const t = useTranslation();
   const classes = useStyles();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <AppBar color="inherit" position="absolute">
-      <Toolbar className={classes.toolbar}>
-        <NavButton to="/" className={classes.title}>
-          <Typography variant="h6">Habit Tracker</Typography>
-        </NavButton>
+    <>
+      <AppBar color="inherit" position="absolute">
+        <Toolbar className={classes.toolbar}>
+          <NavButton to="/" className={classes.title}>
+            <Typography variant="h6">Habit Tracker</Typography>
+          </NavButton>
 
-        <DarkModeSwitch color="primary" />
+          {/* Desktop only */}
+          <Hidden smDown>
+            <LocaleSelect />
 
-        <GithubRepoLink color="primary" />
+            <DarkModeSwitch color="inherit" />
 
-        <LocaleSelect />
+            <GithubRepoLink color="inherit" />
 
-        <ButtonGroup
-          variant="outlined"
-          color="primary"
-          className={classes.buttonGroup}
-        >
-          <NavButton to="/signin">{t('signIn')}</NavButton>
-          <NavButton to="/signup">{t('signUp')}</NavButton>
-        </ButtonGroup>
-      </Toolbar>
-    </AppBar>
+            <ButtonGroup
+              variant="outlined"
+              color="inherit"
+              className={classes.buttonGroup}
+            >
+              <NavButton to="/signin">{t('signIn')}</NavButton>
+              <NavButton to="/signup">{t('signUp')}</NavButton>
+            </ButtonGroup>
+          </Hidden>
+
+          {/* Mobile menu toggler */}
+          <Hidden smUp>
+            <IconButton
+              aria-label="show more"
+              aria-controls="mobile-menu"
+              aria-haspopup="true"
+              onClick={handleMenuClick}
+              color="inherit"
+            >
+              <MoreVertIcon />
+            </IconButton>
+          </Hidden>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile popup menu */}
+      <Menu
+        anchorEl={anchorEl}
+        id="mobile-menu"
+        keepMounted
+        open={isMenuOpen}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose} component={RouterLink} to="signin">
+          <IconButton>
+            <AccountCircleIcon />
+          </IconButton>
+          <p>{t('signIn')}</p>
+        </MenuItem>
+
+        <MenuItem onClick={handleClose} component={RouterLink} to="signup">
+          <IconButton>
+            <PersonAddIcon />
+          </IconButton>
+          <p>{t('signUp')}</p>
+        </MenuItem>
+
+        <GithubRepoLink variant="item" color="inherit" />
+
+        <LocaleSelect variant="item" />
+
+        <DarkModeSwitch variant="item" color="inherit" />
+      </Menu>
+    </>
   );
 }
 

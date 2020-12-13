@@ -7,7 +7,7 @@ import { useLocale } from 'localization';
 import { WeekBarChart } from 'components/week-bar-chart';
 import { HabitsTable } from 'components/habits-table';
 import { FullPageErrorFallback, FullPageSpinner } from 'components/lib';
-import { UserScores } from 'components/user-scores';
+import { PerformancePanel } from 'components/performance-panel';
 import { WeekPicker } from 'components/week-picker';
 import { Box, Container, Grid, Hidden, Paper } from '@material-ui/core';
 import {
@@ -113,10 +113,10 @@ function DashboardScreen() {
     </LargePaper>
   );
 
-  // User scores panel
-  const userScores = (
+  // Performance panel
+  const performancePanel = (
     <SmallPaper>
-      <UserScores checkmarks={checkmarks} goal={performanceGoal} />
+      <PerformancePanel checkmarks={checkmarks} goal={performanceGoal} />
     </SmallPaper>
   );
 
@@ -134,7 +134,7 @@ function DashboardScreen() {
               {habitsTable}
             </Grid>
             <Grid item xs={12}>
-              {userScores}
+              {performancePanel}
             </Grid>
             <Grid item xs={12}>
               {barChart}
@@ -147,7 +147,7 @@ function DashboardScreen() {
           <Box sx={{ p: 1 }}>
             <Grid container spacing={1}>
               <Grid item sm={6}>
-                {userScores}
+                {performancePanel}
               </Grid>
               <Grid item sm={6}>
                 {weekPicker}
@@ -170,7 +170,7 @@ function DashboardScreen() {
                 {barChart}
               </Grid>
               <Grid item md={4}>
-                {userScores}
+                {performancePanel}
               </Grid>
               <Grid item md={4}>
                 {weekPicker}

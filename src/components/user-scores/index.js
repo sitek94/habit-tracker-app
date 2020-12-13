@@ -1,1 +1,0 @@
-export { UserScores } from './user-scores';

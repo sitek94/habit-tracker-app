@@ -47,15 +47,15 @@ export function FullPageImageBackground({ children }) {
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'stretch',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
         background: `
           linear-gradient(
             to right bottom, 
             ${alpha(lightRgb, 0.3)}, 
             ${alpha(darkRgb, 0.8)}), 
           url(${hero})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
       }}
     >
       {children}
@@ -131,12 +131,7 @@ function GetStartedButton(props) {
         fontWeight: theme.typography.fontWeightBold,
       }}
     >
-      <Fab
-        to="/signup"
-        component={RouterLink}
-        variant="extended"
-        {...props}
-      />
+      <Fab to="/signup" component={RouterLink} variant="extended" {...props} />
     </Box>
   );
 }

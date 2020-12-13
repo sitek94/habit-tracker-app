@@ -2,10 +2,7 @@ import * as React from 'react';
 import { Box, Divider, Grid, Typography, useTheme } from '@material-ui/core';
 import { Done as DoneIcon } from '@material-ui/icons';
 import { Pie } from '@nivo/pie';
-import {
-  calculateScore,
-  createPieChartData
-} from './helpers';
+import { calculateScore, createPieChartData } from './helpers';
 import { useTranslation } from 'translations';
 import { getWeek, isThisWeek, isToday, parseISO } from 'date-fns';
 

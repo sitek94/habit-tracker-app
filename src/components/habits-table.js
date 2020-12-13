@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { format, isToday } from 'date-fns';
+import { format, isToday, parseISO } from 'date-fns';
 import { getComparator } from 'utils/misc';
 import { HabitRow } from './habit-row';
 import { useLocale } from 'localization';
@@ -66,7 +66,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
 
   // Currently selected date range cells
   const datesCells = dates.map((d) => {
-    const date = new Date(d);
+    const date = parseISO(d);
 
     return {
       date,

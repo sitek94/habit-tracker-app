@@ -7,21 +7,21 @@ import {
   createPieChartData
 } from './helpers';
 import { useTranslation } from 'translations';
-import { getWeek, isThisWeek, isToday } from 'date-fns';
+import { getWeek, isThisWeek, isToday, parseISO } from 'date-fns';
 
 function PerformancePanel({ checkmarks, goal }) {
   const t = useTranslation();
 
   const todayValues = checkmarks
-    .filter((c) => isToday(new Date(c.date)))
+    .filter((c) => isToday(parseISO(c.date)))
     .map((c) => c.value);
 
   const thisWeekValues = checkmarks
-    .filter((c) => isThisWeek(new Date(c.date)))
+    .filter((c) => isThisWeek(parseISO(c.date)))
     .map((c) => c.value);
 
   const lastWeekValues = checkmarks
-    .filter((c) => getWeek(new Date(c.date)) === getWeek(new Date()) - 1)
+    .filter((c) => getWeek(parseISO(c.date)) === getWeek(new Date()) - 1)
     .map((c) => c.value);
 
   const dataList = [

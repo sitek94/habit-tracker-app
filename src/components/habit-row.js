@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Checkmark } from 'components/checkmark';
 import { makeStyles, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getDay } from 'date-fns';
+import { getDay, parseISO } from 'date-fns';
 import { EMPTY } from 'data/constants';
 
 // Styles
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 // Habit row
 function HabitRow({ habit, dates, checkmarks }) {
   const classes = useStyles();
-
+  
   const { id, name, frequency /* position */ } = habit;
 
   return (
@@ -39,7 +39,7 @@ function HabitRow({ habit, dates, checkmarks }) {
 
       {/* Dates */}
       {dates.map((date) => {
-        const dateObj = new Date(date);
+        const dateObj = parseISO(date);
 
         // Checkmark is disabled if the date is not tracked
         const disabled = !frequency.includes(getDay(dateObj));

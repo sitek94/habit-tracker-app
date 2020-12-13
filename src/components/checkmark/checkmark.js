@@ -23,6 +23,7 @@ const variants = {
   empty: {
     icon: <EmptyCheckmarkIcon />,
     label: 'empty',
+    color: 'default',
   },
 };
 
@@ -39,7 +40,7 @@ function Checkmark({ id, initialValue, habitId, date, disabled }) {
   const debouncedUpdate = React.useRef(
     debounce(({ id, newValue }) => {
       updateCheckmarkInDb({ checkmarkId: id, value: newValue, habitId, date });
-    }, 300)
+    }, 200)
   ).current;
 
   // Handles clicking on checkmark

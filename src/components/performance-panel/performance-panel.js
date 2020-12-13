@@ -4,29 +4,31 @@ import { Done as DoneIcon } from '@material-ui/icons';
 import { Pie } from '@nivo/pie';
 import {
   calculateScore,
-  createScoreType,
-  getScoreTypeDataList,
-  isCheckmarkLastWeek,
-  isCheckmarkThisWeek,
-  isCheckmarkToday,
+  createPieChartData
 } from './helpers';
 import { useTranslation } from 'translations';
+import { getWeek, isThisWeek, isToday, parseISO } from 'date-fns';
 
-function UserScores({ checkmarks, goal }) {
+function PerformancePanel({ checkmarks, goal }) {
   const t = useTranslation();
 
-  // Score types that we track is 'last week', 'this week' and 'today'
-  const scoreTypeList = React.useMemo(
-    () => [
-      createScoreType(t('lastWeek'), isCheckmarkLastWeek),
-      createScoreType(t('thisWeek'), isCheckmarkThisWeek),
-      createScoreType(t('today'), isCheckmarkToday),
-    ],
-    [t]
-  );
+  const todayValues = checkmarks
+    .filter((c) => isToday(parseISO(c.date)))
+    .map((c) => c.value);
 
-  // Use user's checkmarks and score types list to generate the data for pie chart
-  const scoreTypeDataList = getScoreTypeDataList(checkmarks, scoreTypeList);
+  const thisWeekValues = checkmarks
+    .filter((c) => isThisWeek(parseISO(c.date)))
+    .map((c) => c.value);
+
+  const lastWeekValues = checkmarks
+    .filter((c) => getWeek(parseISO(c.date)) === getWeek(new Date()) - 1)
+    .map((c) => c.value);
+
+  const dataList = [
+    { label: t('today'), data: createPieChartData(todayValues) },
+    { label: t('thisWeek'), data: createPieChartData(thisWeekValues) },
+    { label: t('lastWeek'), data: createPieChartData(lastWeekValues) },
+  ];
 
   // Calculate all time user score
   const allTimeValues = checkmarks.map((d) => d.value);
@@ -43,7 +45,7 @@ function UserScores({ checkmarks, goal }) {
 
       {/* Pie charts */}
       <Grid container justifyContent="space-evenly">
-        {scoreTypeDataList.map(({ label, data }) => {
+        {dataList.map(({ label, data }) => {
           const completedValue = data[0].value;
           const hasReachedGoal = completedValue > goal;
 
@@ -183,4 +185,4 @@ function PieChart({ data }) {
   );
 }
 
-export { UserScores };
+export { PerformancePanel };

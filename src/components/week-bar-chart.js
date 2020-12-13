@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { useTheme } from '@material-ui/core';
 import { countBy } from 'lodash';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { COMPLETED, FAILED } from 'data/constants';
 import { useLocale } from 'localization';
 
@@ -46,7 +46,7 @@ function WeekBarChart({ checkmarks, dates }) {
   const locale = useLocale();
 
   // Label formats
-  const xValueFormat = (date) => format(new Date(date), 'd-MMM', { locale });
+  const xValueFormat = (date) => format(parseISO(date), 'd-MMM', { locale });
 
   // Check if value exists to prevent funny outputs like `null%`
   const yValueFormat = (v) => v ? v + '%' : '';

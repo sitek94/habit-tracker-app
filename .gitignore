@@ -12,9 +12,15 @@ src/api/firebase-config.js
 # production
 /build
 
+# firebase
+*.cache
+.firebaserc
+
 # misc
 .DS_Store
 .env
+.env.development
+.env.production
 .env.local
 .env.development.local
 .env.test.local

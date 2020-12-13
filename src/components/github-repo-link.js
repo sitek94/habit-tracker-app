@@ -15,7 +15,7 @@ function GithubRepoLink(props) {
         target="_blank"
         label={t('githubRepo')}
         rel="noopener noreferrer"
-        href="https://github.com/sitek94/pocket-globe-app"
+        href="https://github.com/sitek94/habit-tracker"
         {...props}
       >
         <GitHubIcon />

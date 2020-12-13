@@ -15,27 +15,25 @@ import { useTranslation } from 'translations';
  * Main form wrapper component
  */
 function Form({ children, ...props }) {
-  const theme = useTheme();
-
   return (
     <Box
       component={Paper}
       sx={{
-        maxWidth: 550,
         height: { xs: '100%', sm: 'auto' },
         width: { xs: '100%', sm: 'auto' },
-        margin: '0 auto',
+        mx: 'auto',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: { xs: 'center' },
         boxShadow: 5,
       }}
     >
       <Box
         sx={{
           maxWidth: 320,
-          margin: { sm: theme.spacing(6, 14) },
-          paddingTop: { xs: theme.spacing(3), sm: 0 },
+          mx: { sm: 14 },
+          my: { sm: 6 },
         }}
       >
         <form {...props}>{children}</form>
@@ -51,7 +49,7 @@ function FormHeader({ children }) {
   return (
     <Box
       sx={{
-        marginBottom: 2,
+        mb: 2,
       }}
     >
       {children}
@@ -63,13 +61,11 @@ function FormHeader({ children }) {
  * Form body
  */
 function FormBody({ children }) {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
         '& > *:not(:last-child)': {
-          marginBottom: theme.spacing(2),
+          mb: 2,
         },
       }}
     >
@@ -97,7 +93,7 @@ function FormSecondaryText({ children, ...props }) {
     <Typography color="textSecondary" component="div" align="center" {...props}>
       <Box
         sx={{
-          fontWeight: 'fontWeightMedium',
+          fontWeight: 'medium',
         }}
       >
         {children}
@@ -116,7 +112,13 @@ function FormLink(props) {
 
   const isDarkMode = palette.mode === 'dark';
 
-  return <Link component={RouterLink} color={isDarkMode ? 'textPrimary' : 'primary'} {...props} />;
+  return (
+    <Link
+      component={RouterLink}
+      color={isDarkMode ? 'textPrimary' : 'primary'}
+      {...props}
+    />
+  );
 }
 
 /**
@@ -132,7 +134,6 @@ function FormButton(props) {
  * Uses two horizontal dividers and "or" in between.
  */
 function FormDivider() {
-  const theme = useTheme();
   const t = useTranslation();
 
   return (
@@ -148,8 +149,8 @@ function FormDivider() {
       <Box
         component="span"
         sx={{
-          color: theme.palette.text.secondary,
-          padding: theme.spacing(0, 1),
+          color: 'text.secondary',
+          px: 1,
           textTransform: 'uppercase',
         }}
       >
@@ -166,13 +167,11 @@ function FormDivider() {
  * Form error text
  */
 function FormErrorText({ children }) {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
         textAlign: 'center',
-        ...theme.typography.subtitle2,
+        typography: 'subtitle2',
       }}
     >
       <FormHelperText error>{children}</FormHelperText>

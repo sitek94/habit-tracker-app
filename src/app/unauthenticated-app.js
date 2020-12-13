@@ -16,6 +16,7 @@ import {
   makeStyles,
   Toolbar,
   Typography,
+  Box,
 } from '@material-ui/core';
 import { FullPageImageBackground, LandingScreen } from 'screens/landing';
 import { ResetPasswordScreen } from 'screens/reset-password';
@@ -25,6 +26,7 @@ import { LocaleSelect } from 'components/locale-select';
 import { useTranslation } from 'translations';
 import { GithubRepoLink } from 'components/github-repo-link';
 import { DarkModeSwitch } from 'components/dark-mode-switch';
+import { Copyright } from 'components/copyright';
 
 const useStyles = makeStyles((theme) => ({
   // App
@@ -68,6 +70,7 @@ function UnathenticatedApp() {
           <AppRoutes />
         </FullPageImageBackground>
       </main>
+      <Footer />
     </div>
   );
 }
@@ -170,6 +173,21 @@ function Nav() {
         <DarkModeSwitch variant="item" color="inherit" />
       </Menu>
     </>
+  );
+}
+
+function Footer() {
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+      }}
+    >
+      <Copyright />
+    </Box>
   );
 }
 

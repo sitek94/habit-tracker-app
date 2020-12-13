@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { locales, useLocale } from 'localization';
 import {
   Menu,
@@ -10,10 +11,11 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import { useTranslation } from 'translations';
+import TranslateIcon from '@material-ui/icons/Translate';
 
-function LocaleSelect({ onLocaleClick = () => {} }) {
-  const { code, setLocaleByCode } = useLocale();
-  const t  = useTranslation();
+function LocaleSelect({ variant = 'icon', onLocaleClick = () => {} }) {
+  const { code: selectedCode, setLocaleByCode } = useLocale();
+  const t = useTranslation();
 
   // Open/close menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,22 +32,34 @@ function LocaleSelect({ onLocaleClick = () => {} }) {
     closeMenu();
   };
 
-  // Currently selected locale object
-  const selectedLocale = locales.find((locale) => locale.code === code);
-
   return (
     <>
-      <Tooltip title={t('selectLanguage')}>
-        <IconButton
-          color="inherit"
-          aria-controls="select-language"
-          aria-label={t('selectLanguage')}
-          aria-haspopup="true"
-          onClick={openMenu}
-        >
-          <SvgIcon>{selectedLocale.icon}</SvgIcon>
-        </IconButton>
-      </Tooltip>
+      {variant === 'icon' && (
+        <Tooltip title={t('selectLanguage')}>
+          <IconButton
+            color="inherit"
+            aria-controls="select-language"
+            aria-label={t('selectLanguage')}
+            aria-haspopup="true"
+            onClick={openMenu}
+          >
+            <TranslateIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+
+      {variant === 'item' && (
+        <MenuItem onClick={openMenu}>
+          <IconButton
+            color="inherit"
+            aria-controls="select-language"
+            aria-haspopup="true"
+          >
+            <TranslateIcon />
+          </IconButton>
+          <p>{t('selectLanguage')}</p>
+        </MenuItem>
+      )}
 
       <Menu
         id="select-language"
@@ -55,7 +69,11 @@ function LocaleSelect({ onLocaleClick = () => {} }) {
         onClose={closeMenu}
       >
         {locales.map(({ code, label, icon }) => (
-          <MenuItem key={code} onClick={() => handleMenuItemClick(code)}>
+          <MenuItem
+            key={code}
+            selected={selectedCode === code}
+            onClick={() => handleMenuItemClick(code)}
+          >
             <ListItemIcon>
               <SvgIcon>{icon}</SvgIcon>
             </ListItemIcon>
@@ -66,5 +84,10 @@ function LocaleSelect({ onLocaleClick = () => {} }) {
     </>
   );
 }
+
+LocaleSelect.propTypes = {
+  variant: PropTypes.oneOf(['icon', 'item']),
+  onLocaleClick: PropTypes.func,
+};
 
 export { LocaleSelect };

@@ -36,7 +36,8 @@ const habits = [
 ];
 
 /**
- *
+ * Generates an array of checkmarks with random value.
+ * 
  * @param {string[]} dates - The collection of dates to use.
  * @param {habit[]} habits - The collection of habits to use.
  */
@@ -49,7 +50,7 @@ function generateRandomCheckmarks(dates, habits) {
           id: `${habit.id}-${date}`,
           habitId: habit.id,
           date,
-          value: sample([COMPLETED, FAILED]),
+          value: sample([COMPLETED, COMPLETED, FAILED]),
         });
       }
     });
@@ -65,9 +66,19 @@ const dates = eachDayOfInterval({ start, end }).map((d) =>
   format(d, 'yyyy-MM-dd')
 );
 
+// Random checkmarks for last 14 days
 const checkmarks = generateRandomCheckmarks(dates, habits);
 
-export const guest = {
-  habits,
-  checkmarks,
-};
+// Converts array of objects to an object using each object `id` as key
+function convertToObj(array) {
+  return array.reduce((acc, { id, ...obj }) => {
+    acc[id] = obj;
+    return acc;
+  }, {});
+}
+
+// Convert the data so it can be used in the database.
+const dbHabits = convertToObj(habits);
+const dbCheckmarks = convertToObj(checkmarks);
+
+export { habits, dbHabits, checkmarks, dbCheckmarks };

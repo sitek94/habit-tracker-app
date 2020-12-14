@@ -1,5 +1,4 @@
 import { eachDayOfInterval, format, getDay, parseISO, sub } from 'date-fns';
-import { sample } from 'lodash';
 import { COMPLETED, FAILED } from './constants';
 
 const habits = [
@@ -50,7 +49,7 @@ function generateRandomCheckmarks(dates, habits) {
           id: `${habit.id}-${date}`,
           habitId: habit.id,
           date,
-          value: sample([COMPLETED, COMPLETED, FAILED]),
+          value: Math.random() > .25 ? COMPLETED : FAILED,
         });
       }
     });

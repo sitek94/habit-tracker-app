@@ -17,11 +17,12 @@ import { signInSchema } from 'data/constraints';
 import { useTranslation, translations } from 'translations';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
+import { SignInAsGuestButton } from 'components/sign-in-as-guest-button';
 
 function SignInScreen() {
   const t = useTranslation(translations);
 
-  const { signIn, signInWithAuthProvider } = useAuth();
+  const { signIn, signInWithAuthProvider, signInAsGuest } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
   const { register, handleSubmit, errors, reset } = useForm({
@@ -39,6 +40,10 @@ function SignInScreen() {
     event.preventDefault();
 
     run(signInWithAuthProvider(provider));
+  };
+
+  const handleSignInAsGuestClick = () => {
+    run(signInAsGuest());
   };
 
   const errorMessages = Object.values(errors);
@@ -61,6 +66,11 @@ function SignInScreen() {
           text={t('signInWith')}
           onAuthProviderClick={handleAuthProviderClick}
           disabled={isLoading}
+        />
+
+        <SignInAsGuestButton
+          disabled={isLoading}
+          onClick={handleSignInAsGuestClick}
         />
 
         <FormDivider />

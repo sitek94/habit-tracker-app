@@ -59,6 +59,11 @@ const translations = {
     es: 'Inicia sesión con',
     en: 'Sign in with',
   },
+  signInAsGuest: {
+    pl: 'Zaloguj się jako Gość',
+    es: 'Inicia sesión como Invitado',
+    en: 'Sign in as Guest'
+  },
 
   // Sign out
   signOut: {

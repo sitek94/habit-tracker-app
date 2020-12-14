@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthProviderButton = ({ providerColor, ...props }) => {
+function AuthProviderButton({ providerColor, ...props }) {
   const classes = useStyles();
 
   // Create a theme with primary color set to corresponding auth provider color
@@ -55,7 +55,7 @@ const AuthProviderButton = ({ providerColor, ...props }) => {
       />
     </ThemeProvider>
   );
-};
+}
 
 function AuthProviderList({ text, disabled, onAuthProviderClick }) {
   const classes = useStyles();
@@ -93,4 +93,4 @@ AuthProviderList.propTypes = {
   onAuthProviderClick: PropTypes.func.isRequired,
 };
 
-export { AuthProviderList };
+export { AuthProviderList, AuthProviderButton };

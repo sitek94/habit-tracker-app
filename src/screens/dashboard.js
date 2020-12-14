@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useCheckmarks } from 'api/checkmarks';
-import { useHabits } from 'api/habits';
+import { useCheckmarksQuery } from 'api/checkmarks';
+import { useHabitsQuery } from 'api/habits';
 import { NoHabitsScreen } from 'screens/no-habits';
 import { useUser } from 'context/user-context';
 import { useLocale } from 'localization';
@@ -35,9 +35,9 @@ function DashboardScreen() {
     data: habits,
     error: habitsError,
     isLoading: isLoadingHabits,
-  } = useHabits();
+  } = useHabitsQuery();
   // Checkmarks data
-  const { data: checkmarks, error: checkmarksError } = useCheckmarks();
+  const { data: checkmarks, error: checkmarksError } = useCheckmarksQuery();
 
   const { performanceGoal } = useUser();
 

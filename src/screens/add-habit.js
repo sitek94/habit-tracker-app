@@ -6,7 +6,7 @@ import { TextField } from '@material-ui/core';
 import { CheckboxGroup } from 'components/checkbox-group';
 import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
-import { useAddHabit, useHabits } from 'api/habits';
+import { useAddHabitMutation, useHabitsQuery } from 'api/habits';
 import {
   Form,
   FormBody,
@@ -30,11 +30,8 @@ function AddHabitScreen() {
   const { weekdays } = useLocale();
   const { openSnackbar } = useSnackbar();
 
-  const { data: habits, isLoading } = useHabits();
-  const [
-    addHabit,
-    { error: addingError, isLoading: isAddingHabit },
-  ] = useAddHabit();
+  const { data: habits, isLoading } = useHabitsQuery();
+  const addHabitMutation = useAddHabitMutation();
 
   // Form
   const { control, register, handleSubmit, errors, getValues, reset } = useForm(
@@ -50,7 +47,7 @@ function AddHabitScreen() {
     // Habit's position is based on the number of habits
     const position = habits.length;
 
-    addHabit(
+    addHabitMutation.mutate(
       { name, description, frequency, position },
       {
         onSuccess: () => openSnackbar('success', t('habitAdded')),
@@ -67,14 +64,14 @@ function AddHabitScreen() {
   // Get array of errors from the form
   const formErrors = Object.values(errors);
 
-  const errorText = addingError
+  const errorText = addHabitMutation.isError
     ? // If there is an error when adding the habit it display it first
-      addingError.message
+      addHabitMutation.error.message
     : // Otherwise display first form error if any
       formErrors[0]?.message;
 
   // Disable form actions when the habit is being added
-  const disableActions = isAddingHabit;
+  const disableActions = addHabitMutation.isLoading;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -113,7 +110,7 @@ function AddHabitScreen() {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" pending={isAddingHabit}>
+        <FormButton type="submit" pending={disableActions}>
           {t('createHabit')}
         </FormButton>
       </FormBody>

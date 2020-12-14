@@ -17,7 +17,7 @@ import {
 } from '@material-ui/icons';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
-import { useDeleteHabit } from 'api/habits';
+import { useDeleteHabitMutationMutation } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'localization';
 import { useTranslation } from 'translations';
@@ -31,7 +31,7 @@ function HabitListItem({ habit }) {
   const { openSnackbar } = useSnackbar();
   const { openDialog } = useDialog();
 
-  const [deleteHabit, { isLoading }] = useDeleteHabit();
+  const deleteHabitMutation = useDeleteHabitMutationMutation();
 
   const handleDeleteClick = () => {
     // Open the dialog to ask the user if they're sure to delete the habit
@@ -40,7 +40,7 @@ function HabitListItem({ habit }) {
       description: t('deleteHabitWarning'),
       confirmText: t('deleteHabitConfirmation'),
       onConfirm: () => {
-        deleteHabit(id, {
+        deleteHabitMutation.mutate(id, {
           onSuccess: () => openSnackbar('success', t('habitDeleted')),
           onError: (error) => openSnackbar('error', error.message),
         });
@@ -50,7 +50,7 @@ function HabitListItem({ habit }) {
   };
 
   // Disable buttons when the habit is being deleted
-  const disableActions = isLoading;
+  const disableActions = deleteHabitMutation.isLoading;
 
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only('xs'));

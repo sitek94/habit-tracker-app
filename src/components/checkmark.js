@@ -5,7 +5,7 @@ import {
   CheckBoxOutlineBlank as EmptyCheckmarkIcon,
   IndeterminateCheckBox as FailedCheckmarkIcon,
 } from '@material-ui/icons';
-import { useUpdateCheckmarkInDb } from 'api/checkmarks';
+import { useUpdateCheckmarkInDbMutate } from 'api/checkmarks';
 import { COMPLETED, EMPTY, FAILED } from 'data/constants';
 import { debounce } from 'lodash';
 
@@ -34,12 +34,17 @@ function Checkmark({ id, initialValue, habitId, date, disabled }) {
     setValue(initialValue);
   }, [initialValue]);
 
-  const updateCheckmarkInDb = useUpdateCheckmarkInDb();
+  const updateCheckmarkInDbMutate = useUpdateCheckmarkInDbMutate();
 
   // Debounced update function
   const debouncedUpdate = React.useRef(
     debounce(({ id, newValue }) => {
-      updateCheckmarkInDb({ checkmarkId: id, value: newValue, habitId, date });
+      updateCheckmarkInDbMutate({
+        checkmarkId: id,
+        value: newValue,
+        habitId,
+        date,
+      });
     }, 200)
   ).current;
 
@@ -49,7 +54,7 @@ function Checkmark({ id, initialValue, habitId, date, disabled }) {
 
     // Update the value locally, so that the icon changes
     setValue(newValue);
-    // Update is debounced so when user is clicking very fast on the checkmark 
+    // Update is debounced so when user is clicking very fast on the checkmark
     // only the last call will be invoked to hit the database.
     debouncedUpdate({ id, newValue });
   };

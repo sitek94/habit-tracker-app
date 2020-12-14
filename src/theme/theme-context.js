@@ -29,7 +29,6 @@ function ThemeProvider({ children }) {
   const resetTheme = React.useCallback(
     () => {
       const { mode } = theme.palette;
-      console.log(mode);
       setTheme(createDefaultTheme(mode))
     }, [theme]
   )

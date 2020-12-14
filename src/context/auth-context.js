@@ -29,7 +29,7 @@ function AuthProvider(props) {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setData(user);
-        navigate('dashboard')
+        navigate('dashboard');
       } else {
         setData(null);
       }
@@ -37,7 +37,7 @@ function AuthProvider(props) {
 
     return () => {
       unsubscribe();
-    }
+    };
   }, [auth, setData, navigate]);
 
   // Sign in (email, password)
@@ -64,6 +64,11 @@ function AuthProvider(props) {
     [firebase, auth]
   );
 
+  // Sign in as guest
+  const signInAsGuest = React.useCallback(() => {
+    return auth.signInAnonymously();
+  }, [auth]);
+
   // Sign up (email, password)
   const signUp = React.useCallback(
     ({ email, password }) => {
@@ -74,10 +79,9 @@ function AuthProvider(props) {
 
   // Sign out
   const signOut = React.useCallback(() => {
-    return auth.signOut()
-      .then(() => {
-        resetTheme();
-      });
+    return auth.signOut().then(() => {
+      resetTheme();
+    });
   }, [auth, resetTheme]);
 
   // Reset password
@@ -98,6 +102,7 @@ function AuthProvider(props) {
       user,
       signIn,
       signInWithAuthProvider,
+      signInAsGuest,
       signUp,
       signOut,
       resetPassword,
@@ -107,6 +112,7 @@ function AuthProvider(props) {
       user,
       signIn,
       signInWithAuthProvider,
+      signInAsGuest,
       signUp,
       signOut,
       resetPassword,

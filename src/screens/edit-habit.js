@@ -7,7 +7,7 @@ import { CheckboxGroup } from 'components/checkbox-group';
 import { FullPageSpinner } from 'components/lib';
 import { useSnackbar } from 'context/snackbar-context';
 import { habitSchema } from 'data/constraints';
-import { useHabitById, useUpdateHabit } from 'api/habits';
+import { useHabitQuery, useUpdateHabitMutation } from 'api/habits';
 import { useLocale } from 'localization';
 import { NotFoundHabitScreen } from './not-found-habit';
 import {
@@ -35,8 +35,8 @@ function EditHabitScreen() {
   const { habitId } = useParams();
   const { openSnackbar } = useSnackbar();
 
-  const { data: habit, error: habitError, isFetching } = useHabitById(habitId);
-  const [updateHabit, { isLoading: isUpdatingHabit }] = useUpdateHabit();
+  const { data: habit, error: habitError, isFetching } = useHabitQuery(habitId);
+  const updateHabitMutation = useUpdateHabitMutation();
 
   // Form
   const {
@@ -54,7 +54,7 @@ function EditHabitScreen() {
 
   // Save edited habit
   const onSubmit = (form) => {
-    updateHabit(
+    updateHabitMutation.mutate(
       { id: habitId, ...form },
       {
         onSuccess: () => {
@@ -96,7 +96,7 @@ function EditHabitScreen() {
   }
 
   // Disable form actions when the habit is updating
-  const disableActions = isUpdatingHabit;
+  const disableActions = updateHabitMutation.isLoading;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -135,7 +135,7 @@ function EditHabitScreen() {
           error={!!errors?.frequency}
         />
 
-        <FormButton type="submit" pending={isUpdatingHabit}>
+        <FormButton type="submit" pending={disableActions}>
           {t('saveHabit')}
         </FormButton>
       </FormBody>

@@ -68,7 +68,6 @@ HabitRow.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     frequency: PropTypes.arrayOf(PropTypes.number).isRequired,
-    position: PropTypes.number.isRequired,
   }).isRequired,
   dates: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

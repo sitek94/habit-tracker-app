@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache, useQuery } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
 import { EMPTY } from 'data/constants';
@@ -6,12 +6,12 @@ import { EMPTY } from 'data/constants';
 /**
  * Returns a function that adds a checkmark
  */
-export function useAddCheckmark() {
+export function useAddCheckmarkMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const addCheckmarkMutation = useMutation(
     (checkmark) => {
       // Get checkmark ref in the database
       const newCheckmarkRef = db.ref(`checkmarks/${user.uid}`).push();
@@ -27,25 +27,27 @@ export function useAddCheckmark() {
       // When mutate is called:
       onMutate: (checkmark) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        cache.cancelQueries('checkmarks');
+        queryClient.cancelQueries('checkmarks');
 
         // Snapshot previous values
-        const previousCheckmarks = cache.getQueryData('checkmarks');
+        const previousCheckmarks = queryClient.getQueryData('checkmarks');
 
         // Optimistically add new checkmark
-        cache.setQueryData('checkmarks', (old) => [...old, checkmark]);
+        queryClient.setQueryData('checkmarks', (old) => [...old, checkmark]);
 
         // Return a context object with the snapshotted value
         return { previousCheckmarks };
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, newCheckmark, context) => {
-        cache.setQueryData('checkmarks', context.previousCheckmarks);
+        queryClient.setQueryData('checkmarks', context.previousCheckmarks);
       },
       // Always refetch after error or success:
-      onSettled: () => cache.invalidateQueries('checkmarks'),
+      onSettled: () => queryClient.invalidateQueries('checkmarks'),
     }
   );
+
+  return addCheckmarkMutation;
 }
 
 /**
@@ -55,7 +57,10 @@ export function useFetchCheckmarks() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return () => {
+  /**
+   * Fetches checkmarks all the user's checkmarks from the database.
+   */
+  const fetchCheckmarks = () => {
     // Get all the user's checkmarks from the database
     return db
       .ref(`checkmarks/${user.uid}`)
@@ -76,6 +81,8 @@ export function useFetchCheckmarks() {
         return checkmarks;
       });
   };
+
+  return fetchCheckmarks;
 }
 
 /**
@@ -83,13 +90,15 @@ export function useFetchCheckmarks() {
  *
  * Returns a react-query query, that fetches the checkmarks using `fetchCheckmark`
  */
-export function useCheckmarks() {
+export function useCheckmarksQuery() {
   const fetchCheckmarks = useFetchCheckmarks();
 
-  return useQuery('checkmarks', fetchCheckmarks, {
+  const checkmarksQuery = useQuery('checkmarks', fetchCheckmarks, {
     initialData: [],
     initialStale: true,
   });
+
+  return checkmarksQuery;
 }
 
 /**
@@ -99,12 +108,12 @@ export function useCheckmarks() {
  * The mutation has to be called with checkmark id.
  *
  */
-export function useDeleteCheckmark() {
+export function useDeleteCheckmarkMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const deleteCheckmarkMutation = useMutation(
     (checkmarkId) => {
       const checkmarkRef = db.ref(`checkmarks/${user.uid}/${checkmarkId}`);
       // Remove the checkmark in the database
@@ -114,13 +123,13 @@ export function useDeleteCheckmark() {
       // When mutate is called:
       onMutate: (checkmarkId) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        cache.cancelQueries('checkmarks');
+        queryClient.cancelQueries('checkmarks');
 
         // Snapshot previous values
-        const previousCheckmarks = cache.getQueryData('checkmarks');
+        const previousCheckmarks = queryClient.getQueryData('checkmarks');
 
-        // Optimistically remove the checkmark from cache
-        cache.setQueryData('checkmarks', (old) =>
+        // Optimistically remove the checkmark from queryClient
+        queryClient.setQueryData('checkmarks', (old) =>
           old.filter((checkmark) => checkmark.id !== checkmarkId)
         );
 
@@ -129,12 +138,14 @@ export function useDeleteCheckmark() {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, checkmarkId, context) => {
-        cache.setQueryData('checkmarks', context.previousCheckmarks);
+        queryClient.setQueryData('checkmarks', context.previousCheckmarks);
       },
       // Always refetch after error or success:
-      onSettled: () => cache.invalidateQueries('checkmarks'),
+      onSettled: () => queryClient.invalidateQueries('checkmarks'),
     }
   );
+
+  return deleteCheckmarkMutation;
 }
 
 /**
@@ -143,12 +154,12 @@ export function useDeleteCheckmark() {
  * Returns a react-query mutation, that updates the checkmark value.
  * The mutation has to be called with checkmark object.
  */
-export function useUpdateCheckmarkValue() {
+export function useUpdateCheckmarkMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const updateCheckmarkMutation = useMutation(
     (checkmark) => {
       // Get checkmark database ref
       const checkmarkRef = db.ref(`checkmarks/${user.uid}/${checkmark.id}`);
@@ -164,13 +175,13 @@ export function useUpdateCheckmarkValue() {
       // When mutate is called:
       onMutate: (newCheckmark) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        cache.cancelQueries('checkmarks');
+        queryClient.cancelQueries('checkmarks');
 
         // Snapshot previous values
-        const previousCheckmarks = cache.getQueryData('checkmarks');
+        const previousCheckmarks = queryClient.getQueryData('checkmarks');
 
         // Optimistically update to the new checkmark value
-        cache.setQueryData('checkmarks', (old) =>
+        queryClient.setQueryData('checkmarks', (old) =>
           old.map((checkmark) => {
             if (checkmark.id === newCheckmark.id) {
               return {
@@ -188,20 +199,27 @@ export function useUpdateCheckmarkValue() {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, newCheckmark, context) => {
-        cache.setQueryData('checkmarks', context.previousCheckmarks);
+        queryClient.setQueryData('checkmarks', context.previousCheckmarks);
       },
       // Always refetch after error or success:
-      onSettled: () => cache.invalidateQueries('checkmarks'),
+      onSettled: () => queryClient.invalidateQueries('checkmarks'),
     }
   );
+
+  return updateCheckmarkMutation;
 }
 
-export function useUpdateCheckmarkInDb() {
-  const [addCheckmark] = useAddCheckmark();
-  const [updateCheckmarkValue] = useUpdateCheckmarkValue();
-  const [deleteCheckmarkById] = useDeleteCheckmark();
+export function useUpdateCheckmarkInDbMutate() {
+  const addCheckmark = useAddCheckmarkMutation();
+  const updateCheckmark = useUpdateCheckmarkMutation();
+  const deleteCheckmark = useDeleteCheckmarkMutation();
 
-  return ({ checkmarkId, habitId, value, date }) => {
+  const updateCheckmarkInDbMutation = ({
+    checkmarkId,
+    habitId,
+    value,
+    date,
+  }) => {
     // Checkmark id is falsy so the checkmark doesn't exists.
     // A new checkmark should be added.
     const shouldAdd = !checkmarkId;
@@ -216,15 +234,21 @@ export function useUpdateCheckmarkInDb() {
 
     // Update
     if (shouldUpdate) {
-      return updateCheckmarkValue({ id: checkmarkId, value });
+      return updateCheckmark.mutate({ id: checkmarkId, value });
 
       // Delete
     } else if (shouldDelete) {
-      return deleteCheckmarkById(checkmarkId);
+      return deleteCheckmark.mutate(checkmarkId);
 
       // Add
     } else if (shouldAdd) {
-      return addCheckmark({ habitId, date, value });
+      return addCheckmark.mutate({ habitId, date, value });
+    } else {
+      throw new Error(
+        'Unhandled case when updating the checkmark in the database.'
+      );
     }
   };
+
+  return updateCheckmarkInDbMutation;
 }

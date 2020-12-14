@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { HabitList } from 'components/habit-list';
 import { FullPageSpinner } from 'components/lib';
-import { useHabits } from 'api/habits';
+import { useHabitsQuery } from 'api/habits';
 import { NoHabitsScreen } from 'screens/no-habits';
 
 /**
@@ -13,7 +13,7 @@ import { NoHabitsScreen } from 'screens/no-habits';
  * ### TODO: Add arrows (or other mechanism) to change a habit position.
  */
 function ManageHabitsScreen() {
-  const { data: habits, isLoading } = useHabits();
+  const { data: habits, isLoading } = useHabitsQuery();
 
   if (isLoading) return <FullPageSpinner />;
 

@@ -1,19 +1,19 @@
 import { useAuth } from 'context/auth-context';
 import { useFirebase } from 'context/firebase-context';
-import { useQueryCache, useQuery, useMutation } from 'react-query';
+import { useQueryClient, useQuery, useMutation } from 'react-query';
 
 /**
- * Use add habit hook
- * 
+ * Use add habit mutation
+ *
  * @returns a react-query mutation that adds a new habit to the database.
  * The mutation takes as an argument a new habit object.
  */
-export function useAddHabit() {
+export function useAddHabitMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const addHabitMutation = useMutation(
     (habit) => {
       const { name, description, frequency, position } = habit;
 
@@ -30,25 +30,27 @@ export function useAddHabit() {
       });
     },
     {
-      onSuccess: () => cache.invalidateQueries('habits'),
+      onSuccess: () => queryClient.invalidateQueries('habits'),
     }
   );
+
+  return addHabitMutation;
 }
 
 /**
  * Use delete habit hook
- * 
+ *
  * @returns a react-query mutation that deletes the habit and all the checkmarks
  * associated with it from the database.
- * 
+ *
  * The mutation takes as an argument habit id.
  */
-export function useDeleteHabit() {
+export function useDeleteHabitMutationMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const deleteHabitMutation = useMutation(
     async (habitId) => {
       // When deleting the habit we have to delete both the habit
       // and all the habit's checkmarks
@@ -82,20 +84,20 @@ export function useDeleteHabit() {
       // When mutate is called:
       onMutate: async (habitId) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        await cache.cancelQueries('habits');
-        await cache.cancelQueries('checkmarks');
+        await queryClient.cancelQueries('habits');
+        await queryClient.cancelQueries('checkmarks');
 
         // Snapshot previous values
-        const previousHabits = cache.getQueryData('habits');
-        const previousCheckmarks = cache.getQueryData('checkmarks');
+        const previousHabits = queryClient.getQueryData('habits');
+        const previousCheckmarks = queryClient.getQueryData('checkmarks');
 
-        // Optimistically remove the habit from cache
-        cache.setQueryData('habits', (old) =>
+        // Optimistically remove the habit from queryClient
+        queryClient.setQueryData('habits', (old) =>
           old.filter((habit) => habit.id !== habitId)
         );
 
-        // Optimistically remove the habit's checkmarks from cache
-        cache.setQueryData('checkmarks', (old) =>
+        // Optimistically remove the habit's checkmarks from queryClient
+        queryClient.setQueryData('checkmarks', (old) =>
           old.filter((checkmark) => checkmark.habitId !== habitId)
         );
 
@@ -104,28 +106,35 @@ export function useDeleteHabit() {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, habitId, context) => {
-        cache.setQueryData('habits', context.previousHabits);
-        cache.setQueryData('checkmarks', context.previousCheckmarks);
+        queryClient.setQueryData('habits', context.previousHabits);
+        queryClient.setQueryData('checkmarks', context.previousCheckmarks);
       },
       // Always refetch after error or success:
-      onSettled: () => { 
-        cache.invalidateQueries('habits');
-        cache.invalidateQueries('checkmarks');
-      }
+      onSettled: () => {
+        queryClient.invalidateQueries('habits');
+        queryClient.invalidateQueries('checkmarks');
+      },
     }
   );
+
+  return deleteHabitMutation;
 }
 
 /**
  * Use fetch habit by id hook
- * 
+ *
  * @returns a function that fetches a habit by id from the database.
  */
-export function useFetchHabitById() {
+export function useFetchHabit() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return (key, { id }) => {
+  /**
+   * Fetch habit
+   *
+   * @param {string} id - ID of the habit to fetch
+   */
+  const fetchHabit = (id) => {
     // Get habit database ref
     const habitRef = db.ref(`habits/${user.uid}/${id}`);
 
@@ -144,34 +153,38 @@ export function useFetchHabitById() {
       }
     });
   };
+
+  return fetchHabit;
 }
 
 /**
  * Use habit by id hook
- * 
+ *
  * @param {string} habitId
- * 
- * @returns a react-query query that fetches the habit by id, using `fetchHabitById`
+ *
+ * @returns a react-query query that fetches the habit by id, using `fetchHabit`
  */
-export function useHabitById(habitId) {
-  const fetchHabitById = useFetchHabitById();
+export function useHabitQuery(id) {
+  const fetchHabit = useFetchHabit();
 
-  return useQuery(habitId && ['habit', { id: habitId }], fetchHabitById, {
-    enabled: habitId !== null,
+  const habitQuery = useQuery(id && ['habit', id], () => fetchHabit(id), {
+    enabled: id !== null,
   });
+
+  return habitQuery;
 }
 
 /**
  * Use habits hook
- * 
+ *
  * @returns react-query query for that fetches all the user's habits from
  * the database.
  */
-export function useHabits() {
+export function useHabitsQuery() {
   const { db } = useFirebase();
   const { user } = useAuth();
 
-  return useQuery('habits', () => {
+  const habitsQuery = useQuery('habits', () => {
     // Get all the user's habits from the database
     return db
       .ref(`habits/${user.uid}`)
@@ -192,20 +205,22 @@ export function useHabits() {
         return fetchedHabits;
       });
   });
+
+  return habitsQuery;
 }
 
 /**
  * Use update habit hook
- * 
+ *
  * @returns a react-query mutation that updates the habit in the database.
  * The mutation takes as an argument habit object.
  */
-export function useUpdateHabit() {
+export function useUpdateHabitMutation() {
   const { db } = useFirebase();
   const { user } = useAuth();
-  const cache = useQueryCache();
+  const queryClient = useQueryClient();
 
-  return useMutation(
+  const updateHabitMutation = useMutation(
     (habit) => {
       const { id, name, description, frequency } = habit;
 
@@ -227,10 +242,10 @@ export function useUpdateHabit() {
     {
       // When mutate is called:
       onMutate: (habit) => {
-        const previousHabit = cache.getQueryData(['habit', { id: habit.id }]);
+        const previousHabit = queryClient.getQueryData(['habit', habit.id]);
 
         // Snapshot previous values
-        cache.setQueryData(['habit', { id: habit.id }], (old) => ({
+        queryClient.setQueryData(['habit', habit.id], (old) => ({
           ...old,
           ...habit,
         }));
@@ -240,13 +255,15 @@ export function useUpdateHabit() {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (error, newCheckmark, context) => {
-        cache.setQueryData('habits', context.previousCheckmarks);
+        queryClient.setQueryData('habits', context.previousCheckmarks);
       },
       // Always refetch after error or success:
       onSuccess: async (habit) => {
-        cache.refetchQueries('habits');
-        await cache.refetchQueries(['habit', { id: habit.id }]);
+        queryClient.refetchQueries('habits');
+        await queryClient.refetchQueries(['habit', habit.id]);
       },
     }
   );
+
+  return updateHabitMutation;
 }

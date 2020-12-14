@@ -22,9 +22,9 @@ function PerformancePanel({ checkmarks, goal }) {
     .map((c) => c.value);
 
   const dataList = [
-    { label: t('today'), data: createPieChartData(todayValues) },
-    { label: t('thisWeek'), data: createPieChartData(thisWeekValues) },
     { label: t('lastWeek'), data: createPieChartData(lastWeekValues) },
+    { label: t('thisWeek'), data: createPieChartData(thisWeekValues) },
+    { label: t('today'), data: createPieChartData(todayValues) },
   ];
 
   // Calculate all time user score
@@ -44,7 +44,7 @@ function PerformancePanel({ checkmarks, goal }) {
       <Grid container justifyContent="space-evenly">
         {dataList.map(({ label, data }) => {
           const completedValue = data[0].value;
-          const hasReachedGoal = completedValue > goal;
+          const hasReachedGoal = completedValue >= goal;
 
           return (
             <Grid item key={label}>

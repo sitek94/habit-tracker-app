@@ -74,6 +74,21 @@ function FormBody({ children }) {
   );
 }
 
+function FormListContainer({ children }) {
+  return (
+    <Box
+      sx={{
+        '& > *:not(:last-child)': {
+          mb: 1,
+        },
+      }}
+    >
+      {children}
+    </Box>
+  );
+}
+
+
 /**
  * Form primary text
  */
@@ -183,6 +198,7 @@ export {
   Form,
   FormBody,
   FormHeader,
+  FormListContainer,
   FormPrimaryText,
   FormSecondaryText,
   FormErrorText,

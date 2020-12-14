@@ -9,6 +9,7 @@ import {
   FormErrorText,
   FormHeader,
   FormLink,
+  FormListContainer,
   FormPrimaryText,
   FormSecondaryText,
 } from 'components/form';
@@ -17,11 +18,12 @@ import { signInSchema } from 'data/constraints';
 import { useTranslation, translations } from 'translations';
 import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
+import { SignInAsGuestButton } from 'components/sign-in-as-guest-button';
 
 function SignInScreen() {
   const t = useTranslation(translations);
 
-  const { signIn, signInWithAuthProvider } = useAuth();
+  const { signIn, signInWithAuthProvider, signInAsGuest } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
   const { register, handleSubmit, errors, reset } = useForm({
@@ -29,16 +31,23 @@ function SignInScreen() {
     reValidateMode: 'onSubmit',
   });
 
+  // Form submit
   const onSubmit = ({ email, password }) => {
     run(signIn({ email, password }));
     reset();
   };
 
+  // Auth provider click
   const handleAuthProviderClick = (event, provider) => {
     // Prevents the form from submitting and triggering the form errors
     event.preventDefault();
 
     run(signInWithAuthProvider(provider));
+  };
+
+  // Sign in as Guest click
+  const handleSignInAsGuestClick = () => {
+    run(signInAsGuest());
   };
 
   const errorMessages = Object.values(errors);
@@ -57,11 +66,19 @@ function SignInScreen() {
       </FormHeader>
 
       <FormBody>
-        <AuthProviderList
-          text={t('signInWith')}
-          onAuthProviderClick={handleAuthProviderClick}
-          disabled={isLoading}
-        />
+        <FormListContainer>
+          <AuthProviderList
+            text={t('signInWith')}
+            onAuthProviderClick={handleAuthProviderClick}
+            disabled={isLoading}
+          />
+
+          <SignInAsGuestButton
+            label={t('signInAsGuest')}
+            disabled={isLoading}
+            onClick={handleSignInAsGuestClick}
+          />
+        </FormListContainer>
 
         <FormDivider />
 

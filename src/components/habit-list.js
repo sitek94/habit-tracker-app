@@ -17,7 +17,7 @@ import {
 } from '@material-ui/icons';
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
-import { useDeleteHabit } from 'api/habits';
+import { useDeleteHabitMutationMutation } from 'api/habits';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'localization';
 import { useTranslation } from 'translations';
@@ -31,7 +31,7 @@ function HabitListItem({ habit }) {
   const { openSnackbar } = useSnackbar();
   const { openDialog } = useDialog();
 
-  const [deleteHabit, { isLoading }] = useDeleteHabit();
+  const deleteHabitMutation = useDeleteHabitMutationMutation();
 
   const handleDeleteClick = () => {
     // Open the dialog to ask the user if they're sure to delete the habit
@@ -40,7 +40,7 @@ function HabitListItem({ habit }) {
       description: t('deleteHabitWarning'),
       confirmText: t('deleteHabitConfirmation'),
       onConfirm: () => {
-        deleteHabit(id, {
+        deleteHabitMutation.mutate(id, {
           onSuccess: () => openSnackbar('success', t('habitDeleted')),
           onError: (error) => openSnackbar('error', error.message),
         });
@@ -50,10 +50,31 @@ function HabitListItem({ habit }) {
   };
 
   // Disable buttons when the habit is being deleted
-  const disableActions = isLoading;
+  const disableActions = deleteHabitMutation.isLoading;
 
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+
+  // Name and description
+  const text = <ListItemText primary={name} secondary={description} />;
+
+  // Frequency
+  const frequencyChips = (
+    <Box
+      sx={{
+        mr: 1,
+      }}
+    >
+      {weekdays.map((day, i) => (
+        <Chip
+          size={isXs ? 'small' : 'medium'}
+          key={day}
+          label={day.slice(0, 1)}
+          color={frequency.includes(i) ? 'primary' : 'default'}
+        />
+      ))}
+    </Box>
+  );
 
   return (
     <ListItem button>
@@ -62,24 +83,21 @@ function HabitListItem({ habit }) {
         <FolderIcon />
       </ListItemIcon> */}
 
-      {/* Name and description */}
-      <ListItemText primary={name} secondary={description} />
+      {/* On small screens display frequency below the text */}
+      {isXs && (
+        <Box sx={{ flex: 1 }}>
+          {text}
+          {frequencyChips}
+        </Box>
+      )}
 
-      {/* Frequency */}
-      <Box
-        sx={{
-          mr: 1,
-        }}
-      >
-        {weekdays.map((day, i) => (
-          <Chip
-            size={isXs ? 'small' : 'medium'}
-            key={day}
-            label={day.slice(0, 1)}
-            color={frequency.includes(i) ? 'primary' : 'default'}
-          />
-        ))}
-      </Box>
+      {/* Small screens and up display frequency next to the text */}
+      {!isXs && (
+        <>
+          {text}
+          {frequencyChips}
+        </>
+      )}
 
       {/* Edit link */}
       <Tooltip title={t('editHabit')}>

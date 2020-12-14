@@ -1,5 +1,6 @@
 import { useFirebase } from 'context/firebase-context';
 import { useAuth } from 'context/auth-context';
+import { useQueryClient } from 'react-query';
 
 /**
  * Use update performance goal hook
@@ -40,6 +41,7 @@ export function useUpdateLocaleCode() {
 export function useDeleteUserData() {
   const { user } = useAuth();
   const { db } = useFirebase();
+  const queryClient = useQueryClient();
 
   return () => {
     const updates = {};
@@ -48,6 +50,33 @@ export function useDeleteUserData() {
     updates[`checkmarks/${user.uid}`] = null;
     updates[`users/${user.uid}`] = null;
 
+    return db.ref().update(updates).then(() => {
+      queryClient.invalidateQueries();
+    });
+  };
+}
+
+/**
+ * Returns a function that updates the user data in the database.
+ */
+export function useUpdateUserData() {
+  const { user } = useAuth();
+  const { db } = useFirebase();
+
+  /**
+   * Updates the user data in the database.
+   * 
+   * @param { {checkmarks: string[]} }
+   */
+  const updateUserData = ({ checkmarks, habits, settings }) => {
+    const updates = {};
+
+    if (checkmarks) updates[`checkmarks/${user.uid}`] = checkmarks;
+    if (habits) updates[`habits/${user.uid}`] = habits;
+    if (settings) updates[`users/${user.uid}`] = settings;
+
     return db.ref().update(updates);
   };
+
+  return updateUserData;
 }

@@ -59,6 +59,11 @@ const translations = {
     es: 'Inicia sesión con',
     en: 'Sign in with',
   },
+  signInAsGuest: {
+    pl: 'Zaloguj się jako Gość',
+    es: 'Inicia sesión como Invitado',
+    en: 'Sign in as Guest'
+  },
 
   // Sign out
   signOut: {
@@ -84,7 +89,7 @@ const translations = {
 
   // Sign up
   signUp: {
-    pl: 'Rejestracja',
+    pl: 'Zarejestruj',
     es: 'Regístrate',
     en: 'Sign up',
   },
@@ -92,6 +97,11 @@ const translations = {
     pl: 'Zarejestruj się przez',
     es: 'Registrarse con',
     en: 'Sign up with',
+  },
+  signUpAsGuest: {
+    pl: 'Zarejestruj się jako Gość',
+    es: 'Registrarse como Invitado',
+    en: 'Sign up as Guest'
   },
 
   // No account

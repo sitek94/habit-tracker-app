@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import { ReactQueryDevtools } from 'react-query-devtools';
-import { ReactQueryCacheProvider, QueryCache } from 'react-query';
+import { QueryClientProvider, QueryClient } from 'react-query'
 import { ThemeProvider } from 'theme';
 import { LocaleProvider } from 'localization';
 import { AuthProvider } from './auth-context';
@@ -10,7 +9,7 @@ import { SnackbarProvider } from './snackbar-context';
 import { DialogProvider } from './dialog-context';
 import { UserProvider } from './user-context';
 
-const queryCache = new QueryCache();
+const queryClient = new QueryClient();
 
 /**
  * Shared context across all app
@@ -18,7 +17,7 @@ const queryCache = new QueryCache();
 function AppProviders({ children }) {
   return (
     <LocaleProvider>
-      <ReactQueryCacheProvider queryCache={queryCache}>
+      <QueryClientProvider client={queryClient}>
         <Router>
           <ThemeProvider>
             <FirebaseProvider>
@@ -30,8 +29,7 @@ function AppProviders({ children }) {
             </FirebaseProvider>
           </ThemeProvider>
         </Router>
-        {/* <ReactQueryDevtools position="bottom-left" /> */}
-      </ReactQueryCacheProvider>
+      </QueryClientProvider>
     </LocaleProvider>
   );
 }

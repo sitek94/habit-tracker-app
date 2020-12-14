@@ -112,7 +112,7 @@ function HabitsTable({ habits, checkmarks, dates }) {
             {datesCells.map(({ date, label }) => (
               <TableCell key={date} align="center">
                 {isToday(date) ? (
-                  <Typography color="primary">{label}</Typography>
+                  <Typography color="primary" noWrap>{label}</Typography>
                 ) : (
                   label
                 )}

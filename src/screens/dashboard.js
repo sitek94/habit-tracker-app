@@ -65,11 +65,12 @@ function DashboardScreen() {
 
   /**
    * Temporary fix
-   * 
+   *
    * Cancelled query is throwing `CancelledError`. In V3 cancellation will not throw an error anymore.
    * https://github.com/tannerlinsley/react-query/discussions/1179
    */
-  const isCancelledError = checkmarksError && checkmarksError.hasOwnProperty('silent');
+  const isCancelledError =
+    checkmarksError && checkmarksError.hasOwnProperty('silent');
 
   // Ignore cancelled errors
   if (error && !isCancelledError) {
@@ -124,25 +125,27 @@ function DashboardScreen() {
   return (
     <Box sx={{ height: '100%' }} clone>
       <Container disableGutters>
-        {/* Mobile screens */}
+        {/* extra small screens */}
         <Hidden smUp>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              {weekPicker}
+          <Box sx={{ overflow: 'hidden' }}>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                {weekPicker}
+              </Grid>
+              <Grid item xs={12}>
+                {habitsTable}
+              </Grid>
+              <Grid item xs={12}>
+                {performancePanel}
+              </Grid>
+              <Grid item xs={12}>
+                {barChart}
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              {habitsTable}
-            </Grid>
-            <Grid item xs={12}>
-              {performancePanel}
-            </Grid>
-            <Grid item xs={12}>
-              {barChart}
-            </Grid>
-          </Grid>
+          </Box>
         </Hidden>
 
-        {/* Small screens */}
+        {/* small screens */}
         <Hidden smDown mdUp>
           <Box sx={{ p: 1 }}>
             <Grid container spacing={1}>
@@ -162,7 +165,7 @@ function DashboardScreen() {
           </Box>
         </Hidden>
 
-        {/* Large screens up */}
+        {/* medium screens and up */}
         <Hidden mdDown>
           <Box sx={{ p: 2 }}>
             <Grid container spacing={2}>

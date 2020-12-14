@@ -55,6 +55,27 @@ function HabitListItem({ habit }) {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only('xs'));
 
+  // Name and description
+  const text = <ListItemText primary={name} secondary={description} />;
+
+  // Frequency
+  const frequencyChips = (
+    <Box
+      sx={{
+        mr: 1,
+      }}
+    >
+      {weekdays.map((day, i) => (
+        <Chip
+          size={isXs ? 'small' : 'medium'}
+          key={day}
+          label={day.slice(0, 1)}
+          color={frequency.includes(i) ? 'primary' : 'default'}
+        />
+      ))}
+    </Box>
+  );
+
   return (
     <ListItem button>
       {/* TODO: Let user choose icon */}
@@ -62,24 +83,21 @@ function HabitListItem({ habit }) {
         <FolderIcon />
       </ListItemIcon> */}
 
-      {/* Name and description */}
-      <ListItemText primary={name} secondary={description} />
+      {/* On small screens display frequency below the text */}
+      {isXs && (
+        <Box sx={{ flex: 1 }}>
+          {text}
+          {frequencyChips}
+        </Box>
+      )}
 
-      {/* Frequency */}
-      <Box
-        sx={{
-          mr: 1,
-        }}
-      >
-        {weekdays.map((day, i) => (
-          <Chip
-            size={isXs ? 'small' : 'medium'}
-            key={day}
-            label={day.slice(0, 1)}
-            color={frequency.includes(i) ? 'primary' : 'default'}
-          />
-        ))}
-      </Box>
+      {/* Small screens and up display frequency next to the text */}
+      {!isXs && (
+        <>
+          {text}
+          {frequencyChips}
+        </>
+      )}
 
       {/* Edit link */}
       <Tooltip title={t('editHabit')}>

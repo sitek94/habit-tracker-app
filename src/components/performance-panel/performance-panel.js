@@ -22,9 +22,9 @@ function PerformancePanel({ checkmarks, goal }) {
     .map((c) => c.value);
 
   const dataList = [
-    { label: t('today'), data: createPieChartData(todayValues) },
-    { label: t('thisWeek'), data: createPieChartData(thisWeekValues) },
     { label: t('lastWeek'), data: createPieChartData(lastWeekValues) },
+    { label: t('thisWeek'), data: createPieChartData(thisWeekValues) },
+    { label: t('today'), data: createPieChartData(todayValues) },
   ];
 
   // Calculate all time user score

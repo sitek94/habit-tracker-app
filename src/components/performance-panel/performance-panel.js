@@ -44,7 +44,7 @@ function PerformancePanel({ checkmarks, goal }) {
       <Grid container justifyContent="space-evenly">
         {dataList.map(({ label, data }) => {
           const completedValue = data[0].value;
-          const hasReachedGoal = completedValue > goal;
+          const hasReachedGoal = completedValue >= goal;
 
           return (
             <Grid item key={label}>

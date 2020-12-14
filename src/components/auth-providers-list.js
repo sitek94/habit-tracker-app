@@ -10,14 +10,6 @@ import {
 import authProviders from 'data/auth-providers';
 
 const useStyles = makeStyles((theme) => ({
-  // list
-  list: {
-    // Target all but last buttons in the list
-    '& > *:not(:last-child)': {
-      marginBottom: theme.spacing(1),
-    },
-  },
-
   // Button
   root: {
     justifyContent: 'flex-start',
@@ -58,26 +50,21 @@ function AuthProviderButton({ providerColor, ...props }) {
 }
 
 function AuthProviderList({ text, disabled, onAuthProviderClick }) {
-  const classes = useStyles();
   const { palette } = useTheme();
 
-  return (
-    <div className={classes.list}>
-      {authProviders.map(({ id, name, color, icon, scopes }) => (
-        <AuthProviderButton
-          key={id}
-          providerColor={color}
-          onClick={(event) => onAuthProviderClick(event, { id, scopes })}
-          disabled={disabled}
-          startIcon={icon}
-          variant={palette.mode === 'dark' ? 'contained' : 'outlined'}
-          fullWidth
-        >
-          {text} {name}
-        </AuthProviderButton>
-      ))}
-    </div>
-  );
+  return authProviders.map(({ id, name, color, icon, scopes }) => (
+    <AuthProviderButton
+      key={id}
+      providerColor={color}
+      onClick={(event) => onAuthProviderClick(event, { id, scopes })}
+      disabled={disabled}
+      startIcon={icon}
+      variant={palette.mode === 'dark' ? 'contained' : 'outlined'}
+      fullWidth
+    >
+      {text} {name}
+    </AuthProviderButton>
+  ));
 }
 
 AuthProviderList.defaultProps = {

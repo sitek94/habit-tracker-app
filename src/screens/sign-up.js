@@ -8,6 +8,7 @@ import {
   FormErrorText,
   FormHeader,
   FormLink,
+  FormListContainer,
   FormPrimaryText,
   FormSecondaryText,
 } from 'components/form';
@@ -17,27 +18,35 @@ import { useForm } from 'react-hook-form';
 import { useAsync } from 'utils/hooks';
 import { AuthProviderList } from 'components/auth-providers-list';
 import { useTranslation } from 'translations';
+import { SignInAsGuestButton } from 'components/sign-in-as-guest-button';
 
 function SignUpScreen() {
   const t = useTranslation();
 
-  const { signUp, signInWithAuthProvider } = useAuth();
+  const { signUp, signInWithAuthProvider, signInAsGuest } = useAuth();
   const { isLoading, isError: isAuthError, error: authError, run } = useAsync();
 
   const { register, handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(signUpSchema),
   });
 
+  // Form submit
   const onSubmit = ({ email, password }) => {
     run(signUp({ email, password }));
     reset();
   };
 
+  // Auth provider click
   const handleAuthProviderClick = (event, provider) => {
     // Prevents the form from submitting and triggering the form errors
     event.preventDefault();
 
     run(signInWithAuthProvider(provider));
+  };
+
+  // Sign up as Guest click
+  const handleSignInAsGuestClick = () => {
+    run(signInAsGuest());
   };
 
   const errorMessages = Object.values(errors);
@@ -55,11 +64,19 @@ function SignUpScreen() {
       </FormHeader>
 
       <FormBody>
+        <FormListContainer>
+
         <AuthProviderList
           text={t('signUpWith')}
           onAuthProviderClick={handleAuthProviderClick}
           disabled={isLoading}
         />
+        <SignInAsGuestButton
+            label={t('signUpAsGuest')}
+            disabled={isLoading}
+            onClick={handleSignInAsGuestClick}
+          />
+        </FormListContainer>
 
         <FormDivider />
 

@@ -9,6 +9,7 @@ import {
   FormErrorText,
   FormHeader,
   FormLink,
+  FormListContainer,
   FormPrimaryText,
   FormSecondaryText,
 } from 'components/form';
@@ -30,11 +31,13 @@ function SignInScreen() {
     reValidateMode: 'onSubmit',
   });
 
+  // Form submit
   const onSubmit = ({ email, password }) => {
     run(signIn({ email, password }));
     reset();
   };
 
+  // Auth provider click
   const handleAuthProviderClick = (event, provider) => {
     // Prevents the form from submitting and triggering the form errors
     event.preventDefault();
@@ -42,6 +45,7 @@ function SignInScreen() {
     run(signInWithAuthProvider(provider));
   };
 
+  // Sign in as Guest click
   const handleSignInAsGuestClick = () => {
     run(signInAsGuest());
   };
@@ -62,16 +66,19 @@ function SignInScreen() {
       </FormHeader>
 
       <FormBody>
-        <AuthProviderList
-          text={t('signInWith')}
-          onAuthProviderClick={handleAuthProviderClick}
-          disabled={isLoading}
-        />
+        <FormListContainer>
+          <AuthProviderList
+            text={t('signInWith')}
+            onAuthProviderClick={handleAuthProviderClick}
+            disabled={isLoading}
+          />
 
-        <SignInAsGuestButton
-          disabled={isLoading}
-          onClick={handleSignInAsGuestClick}
-        />
+          <SignInAsGuestButton
+            label={t('signInAsGuest')}
+            disabled={isLoading}
+            onClick={handleSignInAsGuestClick}
+          />
+        </FormListContainer>
 
         <FormDivider />
 

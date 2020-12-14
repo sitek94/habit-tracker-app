@@ -2,13 +2,10 @@ import * as React from 'react';
 import { Incognito as IncognitoIcon } from 'mdi-material-ui';
 import { AuthProviderButton } from './auth-providers-list';
 import { useTheme } from '@material-ui/core';
-import { useTranslation } from 'translations';
 import { blueGrey } from '@material-ui/core/colors';
 
-
-function SignInAsGuestButton(props) {
+function SignInAsGuestButton({ label, ...props }) {
   const { palette } = useTheme();
-  const t = useTranslation();
 
   return (
     <AuthProviderButton
@@ -18,7 +15,7 @@ function SignInAsGuestButton(props) {
       fullWidth
       {...props}
     >
-      {t('signInAsGuest')}
+      {label}
     </AuthProviderButton>
   )
 }

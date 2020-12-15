@@ -1,11 +1,37 @@
+<a name="habit-tracker"/>
+
 # Habit Tracker
 
-## About
-
 **Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science). 
-What can I say, **Habit Tracker** lets you keep track of your habits :fireworks: :ok_hand: :tada:
+What can I say, **Habit Tracker** keeps track of your habits :fireworks: :ok_hand: :tada:
 
-### Screenshots
+<a name="table-of-contents"/>
+
+## Table of Contents
+
+* [Habit Tracker](#habit-tracker)
+* [Table of Contents](#table-of-contents)
+* [Screenshots](#screenshots)
+* [Technologies and Libraries](#technologies-and-libraries)
+* [Challenges](#challenges)
+* [Available scripts](#available-scripts)
+
+<a name="technologies-and-libraries"/>
+
+## Technologies and libraries
+
+* React
+* React Query
+* React Router
+* React Hook Form
+* Material UI
+* Firebase
+  * Authentication
+  * Realtime Database
+
+<a name="screenshots"/>
+
+## Screenshots
 
 * Landing Page
 
@@ -35,17 +61,7 @@ What can I say, **Habit Tracker** lets you keep track of your habits :fireworks:
 
 ![Custom theme](screenshots/layout-theme.png)
 
-
-## Technologies and libraries used
-
-* React
-* React Query
-* React Router
-* React Hook Form
-* Material UI
-* Firebase
-  * Authentication
-  * Realtime Database
+<a name="challenges"/>
 
 ## Challenges
 
@@ -116,6 +132,8 @@ function App() {
 I've never before implemented this in an app and I really wanted to give it a try. My main goal was to give the user an option to change their locale and language.
 Although this goal was achieved, the solution is far from ideal. First of all, I think that it would be better to split these two layers. For example in YouTube one
 can open settings and change either Language or Location.
+
+<a name="available-scripts"/>
 
 ## Available Scripts
 

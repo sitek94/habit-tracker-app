@@ -2,14 +2,42 @@
 
 # Habit Tracker
 
-**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science). 
+<a name="about"/>
+
+## About
+
+**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science).
 What can I say, **Habit Tracker** keeps track of your habits :fireworks: :ok_hand: :tada:
+
+<a name="video-presentation"/>
+
+### Video presentation
+
+[![Habit Tracker presentation video](https://i.ytimg.com/an_webp/zIr_d1ZsIGQ/mqdefault_6s.webp?du=3000&sqp=CITF5P4F&rs=AOn4CLDMGHborT8DVJjKo2PM38x4c2nf3Q)](https://www.youtube.com/watch?v=zIr_d1ZsIGQ)
+
+<a name="features"/>
+
+### Features
+
+* create an account with using email and password
+* authenticate using Facebook, GitHub or Google
+* login as a guest
+* add, edit and delete habits
+* mark the habits as `completed`, `failed` or `skipped`
+* weekly performancee is visualized in a bar chart
+* brief summary of performance for last week, current week, current day and all time
+* customize the app by changing `primary` and `secondary` color
+* toggle dark mode
+* choose your language: `ES | EN | PL`
 
 <a name="table-of-contents"/>
 
 ## Table of Contents
 
 * [Habit Tracker](#habit-tracker)
+* [About](#about)
+  * [Video presentation](#video-presentation)
+  * [Features](#features)
 * [Table of Contents](#table-of-contents)
 * [Screenshots](#screenshots)
 * [Technologies and Libraries](#technologies-and-libraries)

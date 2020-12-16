@@ -6,7 +6,7 @@ import { format, parseISO } from 'date-fns';
 import { COMPLETED, FAILED } from 'data/constants';
 import { useLocale } from 'localization';
 
-function WeekBarChart({ checkmarks, dates }) {
+function WeekBarChart({ checkmarks, dates, goal }) {
   // Style
   const { palette } = useTheme();
   const { primary, secondary, getContrastText, text } = palette;
@@ -17,16 +17,16 @@ function WeekBarChart({ checkmarks, dates }) {
     const values = checkmarks
       .filter((checkmark) => checkmark.date === date)
       .map((checkmark) => checkmark.value);
-    
+
     // There are no checkmarks for this date
     if (!values.length) {
       return {
         date,
         completed: null,
-        failed: null
-      }
-    } 
-    
+        failed: null,
+      };
+    }
+
     // Count completed and failed values
     const counts = countBy(values);
 
@@ -49,7 +49,7 @@ function WeekBarChart({ checkmarks, dates }) {
   const xValueFormat = (date) => format(parseISO(date), 'd-MMM', { locale });
 
   // Check if value exists to prevent funny outputs like `null%`
-  const yValueFormat = (v) => v ? v + '%' : '';
+  const yValueFormat = (v) => (v ? v + '%' : '');
 
   return (
     <ResponsiveBar
@@ -57,7 +57,7 @@ function WeekBarChart({ checkmarks, dates }) {
       keys={['completed', 'failed']}
       indexBy="date"
       margin={{ top: 16, right: 16, bottom: 32, left: 16 }}
-      padding={0.3}
+      padding={0.4}
       colors={[primary.main, secondary.main]}
       theme={{
         textColor: text.secondary,
@@ -69,12 +69,27 @@ function WeekBarChart({ checkmarks, dates }) {
         tickSize: 0,
         tickPadding: 12,
       }}
-      // Horizontal line between positive and negative bars
       markers={[
+        // Positive and negative bars separator
         {
           axis: 'y',
           value: 0,
           lineStyle: { stroke: secondary.main, strokeWidth: 1 },
+        },
+        // Performance goal marker
+        {
+          axis: 'y',
+          value: goal,
+          lineStyle: {
+            stroke: text.secondary,
+            strokeWidth: 1,
+            strokeDasharray: '5,5',
+          },
+          // Performance marker legend
+
+          // legend: t('goal'),
+          // legendOrientation: 'vertical',
+          // textStyle: { fill: text.secondary },
         },
       ]}
       enableGridX={false}
@@ -88,6 +103,7 @@ function WeekBarChart({ checkmarks, dates }) {
 
       // Interactivity - for the moment disabled. In the future might add some details.
       isInteractive={false}
+      motionStiffness={140}
     />
   );
 }

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useAuth } from 'context/auth-context';
 // import { FullPageSpinner } from 'components/lib';
 import AuthenticatedApp from './authenticated-app';
-import UnathenticatedApp from './unauthenticated-app';
+import { UnathenticatedApp } from './unathenticated-app';
 import { AuthenticatedAppProviders } from 'context';
 
 // const AuthenticatedApp = React.lazy(() => import('./authenticated-app'));

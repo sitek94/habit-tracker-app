@@ -1,6 +1,6 @@
 {
   "name": "habit-tracker",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.1.1",
@@ -21,6 +21,7 @@
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
     "firebase": "^8.0.0",
+    "fontsource-roboto": "^3.1.5",
     "history": "^5.0.0",
     "lodash": "^4.17.20",
     "mdi-material-ui": "^6.20.0",

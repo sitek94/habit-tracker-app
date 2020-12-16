@@ -1,3 +1,5 @@
+import * as React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Chip,
@@ -15,10 +17,10 @@ import {
   Edit as EditIcon,
   // Folder as FolderIcon,
 } from '@material-ui/icons';
+
 import { useDialog } from 'context/dialog-context';
 import { useSnackbar } from 'context/snackbar-context';
 import { useDeleteHabitMutationMutation } from 'api/habits';
-import { Link as RouterLink } from 'react-router-dom';
 import { useLocale } from 'localization';
 import { useTranslation } from 'translations';
 
@@ -63,15 +65,23 @@ function HabitListItem({ habit }) {
     <Box
       sx={{
         mr: 1,
+        display: 'flex',
       }}
     >
       {weekdays.map((day, i) => (
-        <Chip
-          size={isXs ? 'small' : 'medium'}
+        <Box
+          clone
           key={day}
-          label={day.slice(0, 1)}
-          color={frequency.includes(i) ? 'primary' : 'default'}
-        />
+          sx={{
+            minWidth: 32,
+          }}
+        >
+          <Chip
+            size={isXs ? 'small' : 'medium'}
+            label={day.slice(0, 1)}
+            color={frequency.includes(i) ? 'primary' : 'default'}
+          />
+        </Box>
       ))}
     </Box>
   );

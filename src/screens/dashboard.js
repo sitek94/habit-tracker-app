@@ -86,6 +86,7 @@ function DashboardScreen() {
   const barChart = (
     <SmallPaper>
       <WeekBarChart
+        goal={performanceGoal}
         dates={selectedDates}
         checkmarks={selectedDatesCheckmarks}
         habitsCount={habits.length}

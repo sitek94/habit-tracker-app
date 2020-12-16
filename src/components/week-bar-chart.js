@@ -5,11 +5,8 @@ import { countBy } from 'lodash';
 import { format, parseISO } from 'date-fns';
 import { COMPLETED, FAILED } from 'data/constants';
 import { useLocale } from 'localization';
-import { useTranslation } from 'translations';
 
 function WeekBarChart({ checkmarks, dates, goal }) {
-  const t = useTranslation();
-
   // Style
   const { palette } = useTheme();
   const { primary, secondary, getContrastText, text } = palette;
@@ -89,7 +86,7 @@ function WeekBarChart({ checkmarks, dates, goal }) {
             strokeDasharray: '5,5',
           },
           // Performance marker legend
-          
+
           // legend: t('goal'),
           // legendOrientation: 'vertical',
           // textStyle: { fill: text.secondary },

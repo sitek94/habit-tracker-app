@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClientProvider, QueryClient } from 'react-query'
+// import { ReactQueryDevtools }  from 'react-query/devtools';
 import { ThemeProvider } from 'theme';
 import { LocaleProvider } from 'localization';
 import { AuthProvider } from './auth-context';
@@ -29,6 +30,7 @@ function AppProviders({ children }) {
             </FirebaseProvider>
           </ThemeProvider>
         </Router>
+        {/* <ReactQueryDevtools position="bottom-left" /> */}
       </QueryClientProvider>
     </LocaleProvider>
   );

@@ -4,7 +4,6 @@ import { Link as RouterLink, useMatch } from 'react-router-dom';
 import {
   AppBar,
   Box,
-  CssBaseline,
   Drawer,
   Hidden,
   IconButton,

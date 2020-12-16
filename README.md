@@ -13,7 +13,9 @@ What can I say, **Habit Tracker** keeps track of your habits :fireworks: :ok_han
 
 ### Video presentation
 
-[![Habit Tracker presentation video](https://i.ytimg.com/an_webp/zIr_d1ZsIGQ/mqdefault_6s.webp?du=3000&sqp=CITF5P4F&rs=AOn4CLDMGHborT8DVJjKo2PM38x4c2nf3Q)](https://www.youtube.com/watch?v=zIr_d1ZsIGQ)
+A short video (2 minutes in length) where I present the project.
+
+[![Video presentation](https://i.gyazo.com/e642a79e194b30fa3deaa050e0c4b0f5.png)](https://www.youtube.com/watch?v=zIr_d1ZsIGQ)
 
 <a name="features"/>
 

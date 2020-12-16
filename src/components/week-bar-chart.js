@@ -60,7 +60,7 @@ function WeekBarChart({ checkmarks, dates, goal }) {
       keys={['completed', 'failed']}
       indexBy="date"
       margin={{ top: 16, right: 16, bottom: 32, left: 16 }}
-      padding={0.3}
+      padding={0.4}
       colors={[primary.main, secondary.main]}
       theme={{
         textColor: text.secondary,
@@ -88,8 +88,11 @@ function WeekBarChart({ checkmarks, dates, goal }) {
             strokeWidth: 1,
             strokeDasharray: '5,5',
           },
-          legend: t('goal'),
-          textStyle: { fill: text.secondary },
+          // Performance marker legend
+          
+          // legend: t('goal'),
+          // legendOrientation: 'vertical',
+          // textStyle: { fill: text.secondary },
         },
       ]}
       enableGridX={false}

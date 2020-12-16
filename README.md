@@ -1,11 +1,67 @@
+<a name="habit-tracker"/>
+
 # Habit Tracker
+
+<a name="about"/>
 
 ## About
 
-**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science). 
-What can I say, **Habit Tracker** lets you keep track of your habits :fireworks: :ok_hand: :tada:
+**Habit Tracker** is my final project for [CS50's Introduction to Computer Science Course](https://www.edx.org/course/cs50s-introduction-to-computer-science).
+What can I say, **Habit Tracker** keeps track of your habits :fireworks: :ok_hand: :tada:
 
-### Screenshots
+<a name="video-presentation"/>
+
+### Video presentation
+
+A short video (2 minutes in length) where I present the project.
+
+[![Video presentation](https://i.gyazo.com/e642a79e194b30fa3deaa050e0c4b0f5.png)](https://www.youtube.com/watch?v=zIr_d1ZsIGQ)
+
+<a name="features"/>
+
+### Features
+
+* create an account with using email and password
+* authenticate using Facebook, GitHub or Google
+* login as a guest
+* add, edit and delete habits
+* mark the habits as `completed`, `failed` or `skipped`
+* weekly performancee is visualized in a bar chart
+* brief summary of performance for last week, current week, current day and all time
+* customize the app by changing `primary` and `secondary` color
+* toggle dark mode
+* choose your language: `ES | EN | PL`
+
+<a name="table-of-contents"/>
+
+## Table of Contents
+
+* [Habit Tracker](#habit-tracker)
+* [About](#about)
+  * [Video presentation](#video-presentation)
+  * [Features](#features)
+* [Table of Contents](#table-of-contents)
+* [Screenshots](#screenshots)
+* [Technologies and Libraries](#technologies-and-libraries)
+* [Challenges](#challenges)
+* [Available scripts](#available-scripts)
+
+<a name="technologies-and-libraries"/>
+
+## Technologies and libraries
+
+* React
+* React Query
+* React Router
+* React Hook Form
+* Material UI
+* Firebase
+  * Authentication
+  * Realtime Database
+
+<a name="screenshots"/>
+
+## Screenshots
 
 * Landing Page
 
@@ -35,17 +91,7 @@ What can I say, **Habit Tracker** lets you keep track of your habits :fireworks:
 
 ![Custom theme](screenshots/layout-theme.png)
 
-
-## Technologies and libraries used
-
-* React
-* React Query
-* React Router
-* React Hook Form
-* Material UI
-* Firebase
-  * Authentication
-  * Realtime Database
+<a name="challenges"/>
 
 ## Challenges
 
@@ -116,6 +162,8 @@ function App() {
 I've never before implemented this in an app and I really wanted to give it a try. My main goal was to give the user an option to change their locale and language.
 Although this goal was achieved, the solution is far from ideal. First of all, I think that it would be better to split these two layers. For example in YouTube one
 can open settings and change either Language or Location.
+
+<a name="available-scripts"/>
 
 ## Available Scripts
 

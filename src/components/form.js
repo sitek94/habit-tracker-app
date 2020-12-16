@@ -19,24 +19,21 @@ function Form({ children, ...props }) {
     <Box
       component={Paper}
       sx={{
-        height: { xs: '100%', sm: 'auto' },
+        flex: { xs: 1, sm: 0 },
         width: { xs: '100%', sm: 'auto' },
         mx: 'auto',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: { xs: 'center' },
-        boxShadow: 5,
+        boxShadow: { xs: 0, sm: 5 },
+        borderRadius: { xs: 0, sm: 1 },
+        px: { sm: 14 },
+        py: { xs: 6 },
       }}
     >
-      <Box
-        sx={{
-          maxWidth: 320,
-          mx: { sm: 14 },
-          my: { sm: 6 },
-        }}
-      >
-        <form {...props}>{children}</form>
+      <Box component="form" sx={{ maxWidth: 320 }} {...props}>
+        {children}
       </Box>
     </Box>
   );
@@ -74,6 +71,9 @@ function FormBody({ children }) {
   );
 }
 
+/**
+ * Applies margin bottom to its children except for the last one
+ */
 function FormListContainer({ children }) {
   return (
     <Box
@@ -87,7 +87,6 @@ function FormListContainer({ children }) {
     </Box>
   );
 }
-
 
 /**
  * Form primary text
@@ -118,8 +117,6 @@ function FormSecondaryText({ children, ...props }) {
 }
 
 /**
- * Form link
- *
  * Combined Material-ui Link and RouterLink.
  */
 function FormLink(props) {
@@ -137,7 +134,7 @@ function FormLink(props) {
 }
 
 /**
- * Form button
+ * Uses `MuiLoadingButton`
  */
 function FormButton(props) {
   return <LoadingButton fullWidth variant="contained" {...props} />;

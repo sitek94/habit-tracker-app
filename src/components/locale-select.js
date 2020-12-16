@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import { useTranslation } from 'translations';
+import { MobileMenuItem } from 'components/mobile-menu';
 import TranslateIcon from '@material-ui/icons/Translate';
 
 function LocaleSelect({ variant = 'icon', onLocaleClick = () => {} }) {
@@ -49,16 +50,16 @@ function LocaleSelect({ variant = 'icon', onLocaleClick = () => {} }) {
       )}
 
       {variant === 'item' && (
-        <MenuItem onClick={openMenu}>
+        <MobileMenuItem onClick={openMenu}>
           <IconButton
-            color="inherit"
+            edge="start"
             aria-controls="select-language"
             aria-haspopup="true"
           >
             <TranslateIcon />
           </IconButton>
           <p>{t('selectLanguage')}</p>
-        </MenuItem>
+        </MobileMenuItem>
       )}
 
       <Menu

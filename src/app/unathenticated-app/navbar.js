@@ -14,10 +14,10 @@ function Navbar({ children }) {
 }
 
 /**
- * Pushes other elements to the right.
+ * Uses `margin-rigth: auto` to push other elements to the right.
  */
 function NavbarStartItem({ children }) {
-  return <Box sx={{ arginRight: 'auto' }}>{children}</Box>;
+  return <Box sx={{ marginRight: 'auto' }}>{children}</Box>;
 }
 
 /**

@@ -39,7 +39,6 @@ function Layout({ children }) {
 
   return (
     <LayoutContext.Provider value={context}>
-      <CssBaseline />
       <Box sx={{ height: '100vh', display: 'flex' }}>{children}</Box>
     </LayoutContext.Provider>
   );

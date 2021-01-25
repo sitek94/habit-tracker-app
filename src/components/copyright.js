@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 function Copyright(props) {
   return (
     <Typography variant="subtitle2" component="div" {...props}>
-      Copyright © 2020 Maciek Sitkowski
+      Copyright © {new Date().getFullYear()} Maciek Sitkowski
     </Typography>
   );
 }

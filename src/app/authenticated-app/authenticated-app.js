@@ -1,19 +1,7 @@
 import * as React from 'react';
-import { useTranslation } from 'translations';
+import { useQueryClient } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Route, Routes } from 'react-router-dom';
-import { AddHabitScreen } from 'screens/add-habit';
-import { DashboardScreen } from 'screens/dashboard';
-import { EditHabitScreen } from 'screens/edit-habit';
-import { ManageHabitsScreen } from 'screens/manage-habits';
-import { NotFoundScreen } from 'screens/not-found';
-import { UserSettingsScreen } from 'screens/user-settings';
-import { useUpdateLocaleCode, useUpdateUserData } from 'api/user-data';
-import { FullPageErrorFallback, ErrorFallback } from 'components/lib';
-import { LocaleSelect } from 'components/locale-select';
-import { useAuth } from 'context/auth-context';
-import { useDialog } from 'context/dialog-context';
-import { useQueryClient } from 'react-query';
 import { Divider, List, Toolbar, Typography } from '@material-ui/core';
 import {
   Add as AddIcon,
@@ -22,17 +10,33 @@ import {
   List as ListIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
-import {
-  Layout,
-  Content,
-  Navbar,
-  Sidebar,
-  SidebarButton,
-  SidebarLink,
-} from 'layout/authenticated-layout';
-import { GithubRepoLink } from 'components/github-repo-link';
-import { useDeleteUserData } from 'api/user-data';
+
 import * as guestData from 'data/guest';
+
+import { AddHabitScreen } from 'screens/add-habit';
+import { DashboardScreen } from 'screens/dashboard';
+import { EditHabitScreen } from 'screens/edit-habit';
+import { ManageHabitsScreen } from 'screens/manage-habits';
+import { NotFoundScreen } from 'screens/not-found';
+import { UserSettingsScreen } from 'screens/user-settings';
+
+import { FullPageErrorFallback, ErrorFallback } from 'components/lib';
+import { LocaleSelect } from 'components/locale-select';
+import { GithubRepoLink } from 'components/github-repo-link';
+
+import { useTranslation } from 'translations';
+import { useAuth } from 'context/auth-context';
+import { useDialog } from 'context/dialog-context';
+import {
+  useUpdateLocaleCode,
+  useUpdateUserData,
+  useDeleteUserData,
+} from 'api/user-data';
+
+import { Drawer, DrawerButton, DrawerLink } from './drawer';
+import { Layout } from './layout';
+import { Navbar } from './navbar';
+import { MainContent } from './main-content';
 
 /**
  * Authenticated App
@@ -60,7 +64,6 @@ function AuthenticatedApp() {
      * If they've already have the data in cache it means that it has already been initialized
      * and there is no need to do it again.
      */
-
     if (user.isAnonymous) {
       const { habits, dbHabits, checkmarks, dbCheckmarks } = guestData;
 
@@ -117,8 +120,8 @@ function AuthenticatedApp() {
           <GithubRepoLink color="inherit" />
         </Navbar>
 
-        {/* Sidebar */}
-        <Sidebar>
+        {/* Drawer */}
+        <Drawer>
           <Toolbar>
             <Typography variant="h6" color="inherit" noWrap>
               Habit tracker
@@ -126,31 +129,31 @@ function AuthenticatedApp() {
           </Toolbar>
           <Divider />
           <List>
-            <SidebarLink to="/dashboard" icon={<DashboardIcon />}>
+            <DrawerLink to="/dashboard" icon={<DashboardIcon />}>
               Dashboard
-            </SidebarLink>
+            </DrawerLink>
 
-            <SidebarLink to="/add-habit" icon={<AddIcon />}>
+            <DrawerLink to="/add-habit" icon={<AddIcon />}>
               {t('addHabit')}
-            </SidebarLink>
+            </DrawerLink>
 
-            <SidebarLink to="/manage-habits" icon={<ListIcon />}>
+            <DrawerLink to="/manage-habits" icon={<ListIcon />}>
               {t('manageHabits')}
-            </SidebarLink>
+            </DrawerLink>
           </List>
           <Divider />
           <List>
-            <SidebarLink to="/settings" icon={<SettingsIcon />}>
+            <DrawerLink to="/settings" icon={<SettingsIcon />}>
               {t('settings')}
-            </SidebarLink>
-            <SidebarButton onClick={handleLogoutClick} icon={<ExitIcon />}>
+            </DrawerLink>
+            <DrawerButton onClick={handleLogoutClick} icon={<ExitIcon />}>
               {t('signOut')}
-            </SidebarButton>
+            </DrawerButton>
           </List>
-        </Sidebar>
+        </Drawer>
 
         {/* Content */}
-        <Content>
+        <MainContent>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Routes>
               <Route path="/dashboard" element={<DashboardScreen />} />
@@ -164,10 +167,10 @@ function AuthenticatedApp() {
               <Route path="*" element={<NotFoundScreen />} />
             </Routes>
           </ErrorBoundary>
-        </Content>
+        </MainContent>
       </Layout>
     </ErrorBoundary>
   );
 }
 
-export default AuthenticatedApp;
+export { AuthenticatedApp };

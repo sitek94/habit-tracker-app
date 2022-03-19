@@ -97,15 +97,15 @@ While you’re waiting for the dependencies to install, you can set up the Fireb
 1. Login to [Firebase](https://console.firebase.google.com/)
 2. Create project
 3. Create Realtime Database
-1. In step 2, check “Start in **test mode”**
+   1. In step 2, check “Start in **test mode”**
 4. Authentication > Sign-in method > Sign-in providers, and add the following:
-1. Email/Password
-2. Google
-3. Anonymous
-4. (Optional)**:** If you want to add Facebook and/or GitHub, you’ll have to get Client IDs and secrets from these services
+   1. Email/Password
+   2. Google
+   3. Anonymous
+   4. (Optional): If you want to add Facebook and/or GitHub, you’ll have to get Client IDs and secrets from these services
 5. Go to Project Overview and add a web app
-1. You don’t need to run `npm install firebase`, it’s already installed
-6. You should see a `firebaseConfig` similar to this:
+6. You don’t need to run `npm install firebase`, it’s already installed
+7. You should see a `firebaseConfig` similar to this:
 
     ```bash
     const firebaseConfig = {
@@ -120,7 +120,7 @@ While you’re waiting for the dependencies to install, you can set up the Fireb
     };
     ```
 
-7. Create `.env.local` file, by duplicating `.env.local.example`, and use config above to fill it out
+8. Create `.env.local` file, by duplicating `.env.local.example`, and use config above to fill it out
 
 ### Start the app
 
@@ -128,6 +128,7 @@ While you’re waiting for the dependencies to install, you can set up the Fireb
 # Start development server
 yarn start
 ```
+The app should be running at: [http://localhost:3000](http://localhost:3000/)
 
 ## Challenges
 
@@ -197,8 +198,6 @@ function App() {
 I've never before implemented this in an app, and I really wanted to give it a try. My main goal was to give the user an option to change their locale and language.
 Although this goal was achieved, the solution is far from ideal. First, I think that it would be better to split these two layers. For example in YouTube one
 can open settings and change either Language or Location.
-
-The app should be running at: [http://localhost:3000](http://localhost:3000/)
 
 ## Bootstrapped with Create React App
 

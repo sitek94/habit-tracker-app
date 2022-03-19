@@ -5,7 +5,7 @@
 * [About](#about)
 * [Features and Stack](#features-and-stack)
 * [Screenshots](#screenshots)
-* [Getting Started](#Getting started)
+* [Getting Started](#getting-started)
 * [Challenges](#challenges)
 * [Create React App](#bootstrapped-with-create-react-app)
 

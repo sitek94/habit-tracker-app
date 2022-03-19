@@ -77,7 +77,9 @@ A short video (2 minutes in length) where I present the project.
 
 ## Getting started
 
-How to get started and run this project locally.
+Below you'll find the instructions for setting up the project locally and a walkthrough video, where I'm following these instructions. 
+
+[![local-dev-thumbnail](https://user-images.githubusercontent.com/58401630/159131748-9181af46-22c3-4648-ae18-e82572f4843c.png)](https://youtu.be/-Iv88vi71gM)
 
 ### Clone repo and install dependencies
 
